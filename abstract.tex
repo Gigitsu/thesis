@@ -1,0 +1,10 @@
+Innumerevoli compiti richiedono la consapevolezza del tempo. Ad esempio l'assegnare didascialia ad immagini, effettuare una sintesi vocale o giocare ad un video gioco sono tutti compiti che richiedono un modello in grado di generare delle sequenze di output. In altri ambiti, come la predizione ti time series o l'analisi video sono richiesti modelli capaci di apprendere da sequenze di input. Inoltre compiti di gran lunga pi\`u interattivi come la traduzione di testi in linguaggio naturale richiedono modelli che apprendano da sequenze di input e generino sequenze di output.
+
+
+Le Reti Neurali Ricorrenti (o Recurrent Neural Networks RNNs) costituiscono un sottoinsieme di reti neurali in grado di catturare le dinamiche temporali attraverso l'uso di cicli nel grafo delle connessioni. A differenza delle reti neurali tradizionali, le reti ricorrenti possono analizzare i campioni uno alla volta mantenendo uno stato, o memoria, che riflette una finestra contestuale arbitrariamente lunga. Mentre queste reti sono state a lungo ritenute troppo difficili da addestrare dato che spesso contengono milioni di parametri, i recenti progressi nelle architetture di rete, nelle tecniche di ottimizzazione e nella computazione parallela hanno reso possibile l'apprendimento su larga scala con le RNNs.
+
+
+Negli ultimi anni sistemi basati su architetture di reti ricorrenti come Long Short Term Memory (LSTM) hanno dimostrato delle performance da record in vari compiti come l'image captioning, traduzioni linguistiche e riconoscimento della scrittura.
+
+
+In questa tesi utilizzeremo una LSTM per creare un Part-Of-Speech (POS) Tagger. In linguistica il pos tagging \`e un processo che assegna ad ogni parola di un testo una particolare parte del discorso (es. sostantivio, aggettivo, pronome ecc..). Questa assegnazione viene fatta basandosi sia sulla parola stessa che sul contesto. L'addestramente della rete avverr\`a a livello di carattere e non di parola. Il dataset di training, infatti, verr\`a passato alla rete un carattere alla volta. Lo scopo \`e quello di valutare le performance della rete LSTM cos\`i addestrata.
