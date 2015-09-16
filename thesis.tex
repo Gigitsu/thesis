@@ -1,0 +1,201 @@
+%
+% ----------------------------------------------------------------
+% *************************PhD Thesis ************************
+% ----------------------------------------------------------------
+%\documentclass[twoside,openright,a4paper,fleqn]{book}
+%\usepackage{a4}
+\documentclass[final,a4paper]{book}
+\usepackage[T1]{fontenc}
+\usepackage[ansinew]{inputenc}
+\usepackage{latexsym,amssymb}
+\usepackage{makeidx}
+\usepackage[chapter]{tocbibind}
+\renewcommand{\figurename}{\footnotesize\sc Figure\rm}
+\renewcommand{\tablename}{\footnotesize\sc Table\rm}
+
+\usepackage[active]{srcltx}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+%\usepackage[refpages]{gloss}
+
+%\usepackage{subfigure} % was: subfignarms.sty
+%\usepackage{psfig}
+
+
+\usepackage{layout}
+%Theorem
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{notation}{Notation}
+
+% ----------------------------------------------------------------
+\vfuzz2pt % Don't report over-full v-boxes if over-edge is small
+\hfuzz2pt % Don't report over-full h-boxes if over-edge is small
+
+% ENVIRONMENTS --------------------------------------------------
+\newlength{\larghezza}
+\newlength{\inizio}
+
+
+% ---------- intro -----------------------------------------------
+
+\makeindex
+
+% ---------- Glossary -------------------------------------
+%\makegloss
+
+% ---------- End Glossary ---------------------------------------
+
+\linespread {1.3}
+
+\oddsidemargin=54pt
+\evensidemargin=54pt
+
+\begin{document}
+%\layout
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RL]{\rightmark}
+\fancyhead[LO]{\leftmark}
+\fancyhead[LE,RO]{\small \thepage}
+
+\renewcommand{\chaptermark}[1]{\markboth{\sc\small #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\sc\small \thesection\ #1}}
+
+%\pagenumbering{Roman}
+
+%Titolo da rivedere e confermare
+\title{\sc \LARGE Classification and Prediction on sequential data using Recurrent Neural Networks}
+\author{\LARGE \textit{Luigi Clemente}\\
+Dipartimento di Informatica\\
+Dottorato in Informatica XXIII ciclo\\
+\sc Universit\`a degli Studi di Bari ``Aldo Moro''\\
+\sl Via E. Orabona, 4 - 70125 Bari, \sc Italy\\
+\tt luigi.clemente@gsquare.it
+}
+\date{
+%\begin{figure}[h]
+ % \centering
+  %\includegraphics[width=3cm]{fig/eu-flag.png}
+%\end{figure}
+\vspace{1cm}
+S.S.D.: INF/01\\
+\vspace{2cm}
+Supervisore: Prof. Donato Malerba\\
+\vspace*{\fill}
+\begin{tabular}{c}
+	\hline
+	\it A dissertation submitted in partial fulfillment \\
+	\it of the requirements for the degree of\\
+	{\sc Doctor of Philosophy in Computer Science}\\
+	\hline	\\
+	16 Ottobre 2015
+\end{tabular}
+}
+
+% ----------------------------------------------------------------
+
+\pagenumbering{roman}
+
+\maketitle
+
+\clearpage
+
+\section*{Credits}
+Questa tesi \`e stata impaginata usando i seguenti programmi open-source:
+\begin{itemize}
+  \item [$\circ$] TeXShop LaTeX Editor \\
+	available at: {\tt http://www.uoregon.edu/$\sim$koch/texshop/}
+  \item [$\circ$] MacTex Distribution \\
+	available at: {\tt http://www.tug.org/mactex/}
+\end{itemize}
+\vspace*{\fill}
+
+
+\noindent
+\begin{tabular}{p{185pt} p{110pt}}
+Supervisore Tesi \hskip 3cm \ & \\ \cline{2-2} & Prof. Donato Malerba \\
+\end{tabular}
+
+\vspace{2cm}
+
+\noindent
+\begin{tabular}{p{185pt} p{110pt}}
+Presidente del Comitato di Supervisione \hskip 2cm \ & \\ \cline{2-2}
+\end{tabular}
+\vspace{1cm}
+
+\noindent
+\begin{tabular}{p{185pt} p{110pt}}
+Membro  del Comitato di Supervisione \hskip 2cm \ & \\ \cline{2-2}
+\end{tabular}
+\vspace{1cm}
+
+\noindent
+\begin{tabular}{p{185pt} p{110pt}}
+Membro  del Comitato di Supervisione  \hskip 2cm \ & \\ \cline{2-2}
+\end{tabular}
+\vspace{2cm}
+
+
+\vspace*{\fill} \noindent \hrule
+\begin{tabular}{l}
+	Presentato il {\sl XXXX Date to define}\\
+	Copyright {\copyright} 2015 Luigi Clemente\\
+\end{tabular}
+\hrule
+
+
+% ----------------------------------------------------------------
+% insert toc
+\tableofcontents
+% ----------------------------------------------------------------
+% insert Lists
+\listoffigures
+\listoftables
+% ----------------------------------------------------------------
+% insert Acknowledgments
+
+\chapter*{Acknowledgments}
+\addcontentsline{toc}{chapter}{Riconoscimenti}
+\pagenumbering{arabic}
+\markboth{\sc Riconoscimenti}{\sc Riconoscimenti}
+
+\input{ack}
+% ----------------------------------------------------------------
+% insert Abstract
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Sommario}
+\markboth{\sc Sommario}{\sc Sommario}
+\input{abstract}
+% ----------------------------------------------------------------
+\clearpage
+% ----------------------------------------------------------------
+
+
+\chapter {Capitolo 1}\label{chap:chap_1}
+%Introduzione al WSD, Intelligent Information Access and +
+\input{chap_1}
+
+
+% ----------------------------------------------------------------
+
+\bibliographystyle{alpha} %mettere plain o alpha
+\bibliography{bibliography}
+
+% ----------------- Insert index
+%\addcontentsline{toc}{chapter}{Index of terms}
+%\printindex
+%\input{tesi.ind}
+\clearpage
+\vspace*{6cm}
+
+% ----------------------------------------------------------------
+\end{document}
+% ----------------------------------------------------------------
