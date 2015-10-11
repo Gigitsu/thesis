@@ -1,1 +1,76 @@
-\section{Section 1}
+Fin dagli albori dell'informatica l'uomo \`e sempre stato affascinato dalla possibilit\`a di creare un'intelligenza artificiale - macchine in grado di riprodurre la complessit\`a dei comportamenti umani.
+Alan Turing, uno dei padri dell'informatica moderna, ha dimostrato come qualsiasi problema computabile pu\`o essere eseguito da una Macchina di Touring Universale~\cite{wiki:MacchinaTuring} - quindi, se la mente umana pu\`o essere descritta da un algoritmo allora una qualsiasi Macchina di Turing \`e abbastanza potente da rappresentarla.
+
+Tutti i computer odierni sono Turing Completi, il che significa che possono rappresentare ogni tipo di algoritmo computabile.
+Il problema quindi \`e trovare il giusto algoritmo capace di simulare il comportamento umano; tuttavia, questo risulta troppo complesso per essere risolto nell'immediato ma possiamo pensarea a diversi approcci - ad esempio - possiamo partire creando macchine in grado di riconoscere semplici immagini come numeri scritti, migliorarle rendendole capaci di riconoscere volti umani e proseguendo cos\`i fino alla creazione di macchine con la stessa abilit\`a umana di riconoscere oggetti nel mondo reale.
+
+Un approccio alternativo consiste nel simulare il cervello umano a livello di neuroni.
+Con la tecnologia attuale possiamo simulare la realt\`a in modo molto realistico, basti pensare ai progressi fatti in campo videoludico o cinematografico; risulta perci\`o abbastanza realistico ipotizzare che, con la giusta rappresentazione di un neurone e sufficiente capacit\`a di calcolo, sia possibile simulare un cervello umano e creare macchine intelligienti.
+
+Ed \`e proprio da questa intuizione che nasce il concetto di reti neurali artificiali.
+
+\section{Reti Neurali}
+Gli studi sul sistmea nervoso umano hanno ispirato il concetto di rete neurale artificiale.
+In una rete neurale artificiale, dei semplici nodi artificiali (detti "neuroni" o "unit\`a") sono collegati gli uni agli altri in modo da formare una rete che imitia una rete neurale biologica.
+
+Non esiste un'unica definizione formale di cosa \`e una rete neurale.
+Comunque, una classe di modelli statistici possono essere chiamati "neurali" se hanno le seguenti caratteristiche:
+
+\begin{itemize}
+  \item contengono un insieme di pesi, ad esempio dei parametri numerici che vengono regolati tramite un algoritmo di apprendimento
+  \item sono capaci di approssimare una funzione non lineare degli input
+\end{itemize}
+
+Si pu\`o pensare a questi pesi come la forza con cui i singoli neuroni sono collegati gli uni con gli altri, collegamenti che vengono attivati durante le fasi di addestramento e predizione.
+
+Nelle attuali implementazioni software delle reti neurali, l'approccio ispirato alla biologia \`e stato per lo pi\`u abbandonato in favore di un'approccio pi\`u pratico basado sulla statistica e sulla teoria dei segnali.
+
+La prima e pi\`u semplice tipologia di rete neurale ideata \`e stata la \emph{feedforward neural network}.
+In queste reti le infomrazioni viaggiano in una sola direzione, in avanti (forward) dall'input verso l'output attraversando eventuali nodi nascosti.
+Le connessioni tra le unit\`a della rete non formano cicli diretti.
+
+\mytodo{Aggiungere un'immagine per le ffnn!} %TODO immagine ffn
+
+\section{Il Tempo}
+Un grosso limite delle reti neurali feedforward \`e l'incapacit\`a di modellare esplicitamente il tempo.
+Tutta via le reti feedforward, cos\`i come altri modelli per l'apprendimento automatizzato (es. support vector machine), si sono dimostrate estremamente capaci anche senza una modellazione esplicita del tempo.
+Anzi, probabilmente \`e proprio grazie a questa assunzione di indipendenza fra i campioni di una sequenza di input che negli ultimi anni siamo stati in grado di avanzare cos\`i tanto nel campo del machine learning.
+In pi\`u molti modelli cercando di catturare il tempo concatenando i singoli input o con un valore numerico, a rappresentare l'ordine temporale, o con i suoi diretti successori o predecessori nella sequenza degli input fornendo cos\`i una sorta di contesto.
+
+Sfortunatamente, nonostante l'utilit\`a dell'assunzione di indipendenza, questa rende impossibile modellare delle dipendenze temporali a lungo termine.
+Ad esempio, un modello addestrato con una finestra contestuale di lunghezza finita pari a 5 non sar\`a mai in grado di rispondere a semplici domande del tipo ``\emph{qual \`e stata l'informazione vista 10 unit\`a temporali fa?}''.
+Per applicazioni pratiche, come ad esempio l'automatizzazione di un call center, un sistema limitato come questo potrebbe riuscire ad indirizzare correttamente le chiamate ma non potrebbe mai partecipare ad una coversazione.
+
+Fin dai primi modelli di intelligenza artificiale, abbiamo cercato di creare sistemi capaci di interagire con gli esserei umani.
+Alan Turing, nel suo saggio \emph{Computing Machinery and Intelligence}, propose un ``Gioco dell'Imitazione'' con il quale giudicare l'intelligenza di una macchina in base alla sua abilit\`a di sostenere un dialogo convincente con un essere umano \cite{Turing:1950}.
+Oltre a sistemi in grado di sostenere un dialogo convincente, ne esistono molti altri la cui realizzazione sarebbe altrettanto utile ed importante (es. automobili capaci di spostarsi in autonomia e sistemi di chirurgia robotica) e sembra molto improbabile riuscire a raggiungere certi risultati senza utlizzare una modellazione esplicita del tempo.
+
+Le \emph{reti neurali ricorrenti} (\emph{RNN}) sono state pensate proprio per superare questi limiti.
+Si tratta di un sovrainsieme delle reti neurali feedforward con la capacit\`a di passare informazioni attraverso fasi temporali e, per questo, in grado di eseguire quasi ogni tipo di computazione.
+
+Un noto risultato di Siegelman and Sontag del 1991 dimostra come una rete neurale ricorrente di dimensione finita e con delle funzioni sigmoide come funzioni di attivazione possa simulare una macchina di Turing universale \cite{Siegelmann:1991}.
+In pratica, l'abilit\`a di modellare dipendenze temporali rende le reti neurali particolarmente adatta a compiti dove i dati in input e/o output sono costutiti da sequeze di valori che sono dipendenti gli uni dagli altri.
+
+\mytodo{Aggiungere un'immagine per le rnn!} %TODO immagine rnn
+
+\section{Modelli di Markov} %TODO pensare ad un titolo piu' appropiato
+Le reti neurali ricorrenti per\`o non sono stati i primi modelli a catturare le dipendenze temporali.
+Le \emph{catene di Markov}, che modellano le transizioni tra sequenze di stati $(s^{(1)}, s^{(2)}, \dots, s^{(T)},)$, sono state inizialmente descritte dal matematico Andrey Markov nel 1906.
+I \emph{modelli di Markov nascosti} (\emph{HMM}), che modellano i dati osservati $(o^{(1)}, o^{(2)}, \dots, o^{(T)},)$ come probabilisticamente dipendenti da stati non osservati, sono stati descritti nel 1950 e sono stati largamente studiati fino agli anni '60.
+In ogni caso, l'approccio tradizionale con il modello di Markov \`e piuttosto limitato perch\`e i possibili stati possono essere presi solo da un piccolo spazio discreto di stati $ s_j \in S$.
+L'algoritmo Viterbi, usato in fase di apprendimento, ha una complessit\`a in tempo pari ad $O(|S|^2)$.
+In pi\`u la matrice di transizione, che cattura la probabilit\`a di muoversi da uno stato in uno dei possibili stati adiacenti, ha dimensione $|S|^2$.
+Quindi, risulta impossibile utilizzare un HMM quando l'insieme dei possibili stati nascosti \`e pi\`u grande di circa 106.
+Inoltre, ciascun stato nascosto $s^{(t)}$ pu\`o dipendere solo dallo stato precedente $s^{(t+1)}$
+E nonostante sia possibile estendere il modello di Markov in modo da gestire pi\`u di un solo stato precedente aumentando cos\`i la finestra contestuale usata per l'apprendimento, questo porterebbe anche ad una crescita esponenziale dello spazio degli stati, rendendo il modello di Markov computazionalmente impraticabile per modelli con dipendenze a lungo termine.
+
+Queste limitazioni invece non si pongono per le reti neurali ricorrenti.
+Le reti neurali ricorrenti, infatti, possono catturare dipendenze temporali a lungo termine, superando le limitazioni imposte dal modello di Markov.
+Cos\`i come nei modelli di Markov, ogni stato in una RNN tradizionale dipende solo dai valori di input correnti e dallo stato della rete nella precedente fase temporale\footnote{Le \emph{reti neurali ricorrenti bidirezionali} (\emph{BRNN})\cite{Schuster:1997} estendono le RNN per modellare dipendenze con osservazioni passate e future mentre le tradizionali RNN modellano dipendenze solo con osservazioni passate.}.
+Tuttavia, gli stati nascosti possono contenere, ad ogni fase temporale, informazioni provenienta da una finestra contestuale arbitrariamente lunga.
+Questo \`e possibile grazie al fatto che il numero di stati distinti che possono essere rappresentati da un livello nascosto di nodi cresce in maniera esponenziale all'aumentare del numero dei nodi presenti nel livello.
+Anche se ciascun nodo pu\`o rappresentare solo valor binari, un singolo livello nascosto pu\`o rappresentare $2^N$ stati distinti dove $n$ \`e il numero di nodi presenti.
+Con dei valori reali invece, anche tenendo conto del limite imposta dalla rappresentazione a 64 bit dei numeri, un singolo livello nascosto pu\`o rappresentare $2^64N$ stati distinti.
+Nonostante il potenziale potere espressivo della rete cresce in maniera esponenziale, la complessit\`a di addestramento e predizione cresce in ordine quadratico.
+
+\mytodo{aggiungere altro?} %TODO aggiungere altro?
