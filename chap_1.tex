@@ -37,7 +37,7 @@ Tutta via le reti feedforward, cos\`i come altri modelli per l'apprendimento aut
 Anzi, probabilmente \`e proprio grazie a questa assunzione di indipendenza fra i campioni di una sequenza di input che negli ultimi anni siamo stati in grado di avanzare cos\`i tanto nel campo del machine learning.
 In pi\`u molti modelli cercando di catturare il tempo concatenando i singoli input o con un valore numerico, a rappresentare l'ordine temporale, o con i suoi diretti successori o predecessori nella sequenza degli input fornendo cos\`i una sorta di contesto.
 
-Sfortunatamente, nonostante l'utilit\`a dell'assunzione di indipendenza, questa rende impossibile modellare delle dipendenze temporali a lungo termine.
+Sfortunatamente, nonostante l'utilit\`a dell'assunzione di indipendenza, questa rende impossibile modellare delle dipendenze temporali a lungo raggio.
 Ad esempio, un modello addestrato con una finestra contestuale di lunghezza finita pari a 5 non sar\`a mai in grado di rispondere a semplici domande del tipo ``\emph{qual \`e stata l'informazione vista 10 unit\`a temporali fa?}''.
 Per applicazioni pratiche, come ad esempio l'automatizzazione di un call center, un sistema limitato come questo potrebbe riuscire ad indirizzare correttamente le chiamate ma non potrebbe mai partecipare ad una coversazione.
 
@@ -62,10 +62,10 @@ L'algoritmo Viterbi, usato in fase di apprendimento, ha una complessit\`a in tem
 In pi\`u la matrice di transizione, che cattura la probabilit\`a di muoversi da uno stato in uno dei possibili stati adiacenti, ha dimensione $|S|^2$.
 Quindi, risulta impossibile utilizzare un HMM quando l'insieme dei possibili stati nascosti \`e pi\`u grande di circa 106.
 Inoltre, ciascun stato nascosto $s^{(t)}$ pu\`o dipendere solo dallo stato precedente $s^{(t+1)}$
-E nonostante sia possibile estendere il modello di Markov in modo da gestire pi\`u di un solo stato precedente aumentando cos\`i la finestra contestuale usata per l'apprendimento, questo porterebbe anche ad una crescita esponenziale dello spazio degli stati, rendendo il modello di Markov computazionalmente impraticabile per modelli con dipendenze a lungo termine.
+E nonostante sia possibile estendere il modello di Markov in modo da gestire pi\`u di un solo stato precedente aumentando cos\`i la finestra contestuale usata per l'apprendimento, questo porterebbe anche ad una crescita esponenziale dello spazio degli stati, rendendo il modello di Markov computazionalmente impraticabile per modelli con dipendenze a lungo raggio.
 
 Queste limitazioni invece non si pongono per le reti neurali ricorrenti.
-Le reti neurali ricorrenti, infatti, possono catturare dipendenze temporali a lungo termine, superando le limitazioni imposte dal modello di Markov.
+Le reti neurali ricorrenti, infatti, possono catturare dipendenze temporali a lungo raggio, superando le limitazioni imposte dal modello di Markov.
 Cos\`i come nei modelli di Markov, ogni stato in una RNN tradizionale dipende solo dai valori di input correnti e dallo stato della rete nella precedente fase temporale\footnote{Le \emph{reti neurali ricorrenti bidirezionali} (\emph{BRNN})~\cite{Schuster:1997} estendono le RNN per modellare dipendenze con osservazioni passate e future mentre le tradizionali RNN modellano dipendenze solo con osservazioni passate.}.
 Tuttavia, gli stati nascosti possono contenere, ad ogni fase temporale, informazioni provenienta da una finestra contestuale arbitrariamente lunga.
 Questo \`e possibile grazie al fatto che il numero di stati distinti che possono essere rappresentati da un livello nascosto di nodi cresce in maniera esponenziale all'aumentare del numero dei nodi presenti nel livello.
