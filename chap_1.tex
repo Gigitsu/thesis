@@ -42,13 +42,13 @@ Ad esempio, un modello addestrato con una finestra contestuale di lunghezza fini
 Per applicazioni pratiche, come ad esempio l'automatizzazione di un call center, un sistema limitato come questo potrebbe riuscire ad indirizzare correttamente le chiamate ma non potrebbe mai partecipare ad una coversazione.
 
 Fin dai primi modelli di intelligenza artificiale, abbiamo cercato di creare sistemi capaci di interagire con gli esserei umani.
-Alan Turing, nel suo saggio \emph{Computing Machinery and Intelligence}, propose un ``Gioco dell'Imitazione'' con il quale giudicare l'intelligenza di una macchina in base alla sua abilit\`a di sostenere un dialogo convincente con un essere umano \cite{Turing:1950}.
+Alan Turing, nel suo saggio \emph{Computing Machinery and Intelligence}, propose un ``Gioco dell'Imitazione'' con il quale giudicare l'intelligenza di una macchina in base alla sua abilit\`a di sostenere un dialogo convincente con un essere umano~\cite{Turing:1950}.
 Oltre a sistemi in grado di sostenere un dialogo convincente, ne esistono molti altri la cui realizzazione sarebbe altrettanto utile ed importante (es. automobili capaci di spostarsi in autonomia e sistemi di chirurgia robotica) e sembra molto improbabile riuscire a raggiungere certi risultati senza utlizzare una modellazione esplicita del tempo.
 
 Le \emph{reti neurali ricorrenti} (\emph{RNN}) sono state pensate proprio per superare questi limiti.
 Si tratta di un sovrainsieme delle reti neurali feedforward con la capacit\`a di passare informazioni attraverso fasi temporali e, per questo, in grado di eseguire quasi ogni tipo di computazione.
 
-Un noto risultato di Siegelman and Sontag del 1991 dimostra come una rete neurale ricorrente di dimensione finita e con delle funzioni sigmoide come funzioni di attivazione possa simulare una macchina di Turing universale \cite{Siegelmann:1991}.
+Un noto risultato di Siegelman and Sontag del 1991 dimostra come una rete neurale ricorrente di dimensione finita e con delle funzioni sigmoide come funzioni di attivazione possa simulare una macchina di Turing universale~\cite{Siegelmann:1991}.
 In pratica, l'abilit\`a di modellare dipendenze temporali rende le reti neurali particolarmente adatta a compiti dove i dati in input e/o output sono costutiti da sequeze di valori che sono dipendenti gli uni dagli altri.
 
 \mytodo{Aggiungere un'immagine per le rnn!} %TODO immagine rnn
@@ -66,7 +66,7 @@ E nonostante sia possibile estendere il modello di Markov in modo da gestire pi\
 
 Queste limitazioni invece non si pongono per le reti neurali ricorrenti.
 Le reti neurali ricorrenti, infatti, possono catturare dipendenze temporali a lungo termine, superando le limitazioni imposte dal modello di Markov.
-Cos\`i come nei modelli di Markov, ogni stato in una RNN tradizionale dipende solo dai valori di input correnti e dallo stato della rete nella precedente fase temporale\footnote{Le \emph{reti neurali ricorrenti bidirezionali} (\emph{BRNN})\cite{Schuster:1997} estendono le RNN per modellare dipendenze con osservazioni passate e future mentre le tradizionali RNN modellano dipendenze solo con osservazioni passate.}.
+Cos\`i come nei modelli di Markov, ogni stato in una RNN tradizionale dipende solo dai valori di input correnti e dallo stato della rete nella precedente fase temporale\footnote{Le \emph{reti neurali ricorrenti bidirezionali} (\emph{BRNN})~\cite{Schuster:1997} estendono le RNN per modellare dipendenze con osservazioni passate e future mentre le tradizionali RNN modellano dipendenze solo con osservazioni passate.}.
 Tuttavia, gli stati nascosti possono contenere, ad ogni fase temporale, informazioni provenienta da una finestra contestuale arbitrariamente lunga.
 Questo \`e possibile grazie al fatto che il numero di stati distinti che possono essere rappresentati da un livello nascosto di nodi cresce in maniera esponenziale all'aumentare del numero dei nodi presenti nel livello.
 Anche se ciascun nodo pu\`o rappresentare solo valor binari, un singolo livello nascosto pu\`o rappresentare $2^N$ stati distinti dove $n$ \`e il numero di nodi presenti.
