@@ -26,9 +26,9 @@ Associato ad ogni arco dal nodo $j^{'}$ al nodo $j$ vi \`e un peso $w_{jj^{'}}$.
 \`E importante notare che in altri documenti e libri, come ad esempio su Wikipedia, gli indici dei pesi sono invertiti e che $w_{j^{'}j} \neq w_{jj^{'}}$ indica il peso sull'arco diretto dal nodo $j^{'}$ al nodo $j$.
 
 Il valore $v_j$ di ciascun neurone $j$ \`e calcolato applicando la sua funzione di attivazione ad una somma pesata dei suoi valori di input (\mytodo{Aggiungere un'immagine!}): %TODO pensare ad un titolo piu' appropiato
-\begin{equation*}
+\begin{equation} % \begin{equantion*} per non numerare l'equazione
   v_j = l_j\left( \sum_{j^{'}} w_{jj^{'}} \cdot v_{j^{'}} \right)
-\end{equation*}
+\end{equation}
 Per comodit\`a, ci riferiremo alla somma pesata all'interno delle parentesi come l'\emph{attivazione in arrivo} e la indicheremo con $a_j$. Rappresentiamo l'intero processo in figura disegnando i neuromi coe dei cerchi mentre gli archi come delle frecce che li collegano.
 Quando possibile, verr\`a utilizato un simbolo per indicare l'esatta funzione di attivazione utilizzata, ad esempio $\sigma$ per la fnzione sigmoide.
 
@@ -39,9 +39,9 @@ Questa funzione ha dimostrato di poter migliorare le prestazioni di molte reti n
 La funzione di attivazione da applicare sui nodi di output dipende dall'applicazione.
 Per una classificazione a pi\`u classi, applichiamo al livello di output una funzione non lineare softmax.
 La funzione softmax calcola l'output come:
-\begin{equation*}
+\begin{equation}
   \hat{y_k} = \frac{e^{a_k}}{\sum_{k^{'}=1}^{K} e^{a_{k^{'}}}}
-\end{equation*}
+\end{equation}
 dove $K$ \`e il numero totale di possibili output (classi). Il denominatore \`e una funzione di normalizzazione che consiste nella somma di funzioni esponenziali dei valori dati in output da tutti i nodi e serve per assicrarsi che l'output totale sommi ad 1.
 Nel caso di regressioni invece viene comunemente utilizzata una funzione lineare come output.
 Dato che nella maggioranza dei casi le reti neurali, specialmente quelle ricorrenti, vengono utilizzate per applicazioni che coinvolgono la classificazione, durante questa tesi, a meno che diversamente specificato, daremo per scontato l'uso della funzioen softmax come output.
@@ -49,7 +49,7 @@ Dato che nella maggioranza dei casi le reti neurali, specialmente quelle ricorre
 \section{Reti Neurali Feedforward}
 Con un modello computazionale a rete neurali, \`e necessario determinare l'ordine con cui la computazione dovrebbe procedere.
 I nodi dovrebbero essere calcolati uno alla volta e poi aggiornati, oppure i valori di tutti i nodi dovrebbero essere calcolati iniseme per poi applicare tutti gli aggiornamenti simultaneamente?
-Le \emph{reti neurali feedforward} (\mytodo{aggiungere figura ffnn}) sono una classe ristretta di reti neurali che affrontano questo prolema proibnedo i cicli dal grafo delle connessioni neurali.
+Le \emph{reti neurali feedforward} (\mytodo{aggiungere figura ffnn}) sono una classe ristretta di reti neurali che affrontano questo prolema proibnedo i cicli dal grafo delle connessioni neurali. %TODO aggiungere immagine
 In questo modo tutti i nodi possono essere disposti in livelli.
 I valori in output di ciascun livello possono essere calcolati solo a partire dai valori di output dei livelli precedenti.
 
@@ -80,19 +80,21 @@ L'output $\hat(y^{(t)})$ \`e poi calcolato in base allo stato nascosto $h^{(t)}$
 Quindi, l'input $x^({t})$ al tempo $t-1$ pu\`o influenzare l'output $\hat(y^{(t)})$ al tempo $t$ proprio grazie a queste connessioni ricorrenti.
 
 Le seguenti due equazioni, mostrano i calcoli necessari per eseguire, per ogni fase temporale, il passaggio in avanti dei dati di una semplice rete neurale ricorrente:
-\begin{equation*}
+\begin{equation}
   h^{(t)} = \sigma(W_{hx}x + W_{hh}h^{(t-1)} + b_h)
-  \hat{y^{(t)}} = \operatorname{W_{yh}h^{(t)} + b_y}
-\end{equation*}
+\end{equation}
+\begin{equation}
+  \hat{y}^{(t)} = \operatorname{softmax}(W_{yh}h^{(t)} + b_y)
+\end{equation}
 
 dove $W_{hx}$ \`e la matrice dei pesi tra il livello di input e il livelo nascosto mentre $W_{hh}$ \`e la matrice dei pesi ricorrenti fra i livelli nascosti di due fasi temporali adiacenti.
-I vettori $b_h$ e $b_y$ rappresentano uno scostamento (bias) che permettono a ciascun nodo di apprendere un offset.
+I vettori $b_h$ e $b_y$ rappresentano uno scostamento (\emph{bias}) che permettono a ciascun nodo di apprendere un offset.
 
 I modelli discussi in questa tesi consistono in reti con livelli nascosti ricorrenti.
 Tuttavia, sono stati proposti modelli, come la rete di Jordan, che ammettono la presenza di connessioni tra gli output della rete in uno stato e il livello nascosto della rete nello stato successivo.
 
-Una semplice rete neurale \`e mostrata in \mytodo{aggiungere immagine rnn}.
-La dinamica di questa rete attravesso pi\`u fasi temporali pu\`o essere visualizzata \emph{dispiegando} la rete (\mytodo{aggiungere immagine}).
+Una semplice rete neurale \`e mostrata in \mytodo{aggiungere immagine rnn}. %TODO aggiungere immagine
+La dinamica di questa rete attravesso pi\`u fasi temporali pu\`o essere visualizzata \emph{dispiegando} la rete (\mytodo{aggiungere immagine}). %TODO aggiungere immagine
 Con questa visualizzazione, il modello pu\`o essere interpretata come una rete non ciclica, ma piuttosto come una rete con un livello per intervallo di tempo a dei pesi condivisi tra gli intervalli temporali.
 Diventa quindi chiaro come una rete dispiegata in questo modo pu\`o essere addestrata attraverso pi\`u fasi temporali usando l'algoritmo di backpropagation.
 Questo algoritmo viene chiamato \emph{backpropagation through time} (BPTT, backpropagation attraverso il tempo), ed \`e stata introdotta nel 1990~\cite{Werbos:1990}
@@ -102,5 +104,16 @@ L'apprendimento con le reti neurali ricorrenti \`e stato a lungo visto come qual
 Cos\`i come per tutte le reti neurali, l'ottimizzazione della funzione di perdita \`e un problema NP-Completo.
 Ma l'apprendimento con le reti ricorrenti pu\`o essere reso ancora pi\`u complesso a causa della difficolt\`a nell'apprendere delle dipendenze a lungo raggio.
 Il noto problema della \emph{scomparsa} ed \emph{esplosione} dei gradienti si verifica quando l'errore viene propagato attraverso molte fasi temporali.
-L'impatto dell'input al tempo $\mathcal{T}$ sull'output al tempo $t$ esploder\`a esponenzialmente oppure raggiunger\`a rapidamente zero al crescere di $\mathcal{T} - t$, a seconda se il peso $\abs{w_{jj}}>1$ oppure $\abs{w_{jj}}<1$ e anche in base alla funzione di attivazione utilizzata
-(ad esempio con data la funzione di attivazione $l_j = \sigma$ si verificher\`a maggiormente il problema della sparizione del gradeinte, viceversa con la funzione ReLU $\operatorname{max}(0, x)$ il gradiente esploder\`a).
+\mytodo{dire di pi\`u a riguardo?} L'impatto dell'input al tempo $\mathcal{T}$ sull'output al tempo $t$ esploder\`a esponenzialmente oppure raggiunger\`a rapidamente zero al crescere di $\mathcal{T} - t$, a seconda se il peso $\abs{w_{jj}}>1$ oppure $\abs{w_{jj}}<1$ ma anche in base alla funzione di attivazione utilizzata %TODO dire di piu
+(ad esempio con una funzione di attivazione $l_j = \sigma$ si verificher\`a maggiormente il problema della sparizione del gradeinte, viceversa con la funzione ReLU $\operatorname{max}(0, x)$ il gradiente esploder\`a).
+
+Una possibile soluzione al problema consiste nell'usare una versione leggermente modificate dell'algoritmo BPTT che prende il nome di \emph{truncated backpropagation through time} (TBPTT)~\cite{Williams:1989}.
+Con l'algoritmo TBPTT viene impostato un valore che indicia il numero massimo di temporali lungo le quali pu\`o essere propagato l'errore.
+In questo modo si attenua il problema dell'esplosione del gradiente perdendo, tuttavia, la capacit\`a di apprendere dipendenze a lungo raggio.
+
+Il problema dell'ottimizzazione rappresenta un fondamentale ostacolo che non pu\`o essere risolto semplicemente modificando l'architettura della rete.
+\`E noto dal 1993 che ottimizzare una rete neurale di anche solo 3 livelli costituisce un problema NP-Completo.
+Tuttavia, recenti studi sia teorici che empirici, suggeriscono che il problema non \`e cos\`i insormontabile nella pratica come si potrebbe pensare.
+
+Inoltre implementazioni sempre pi\`u performanti ed migliorate euristiche per il calcolo dei gradienti hanno reso l'addestramento delle RNN fattibile.
+Ad esempio, implementazioni degli algorotmi di forward a backward propagation che sfruttano la GPU, come Theano e Torch (strumento utilizzato per gli esperimenti di questa tesi), hanno semplificato la realizzazione di veloci algoritmi di apprendimento.
