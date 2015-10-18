@@ -14,9 +14,6 @@
 \renewcommand{\figurename}{\footnotesize\sc Figure\rm}
 \renewcommand{\tablename}{\footnotesize\sc Table\rm}
 
-\newcommand\mytodo[1]{\textbf{\textcolor{red}{TODO: #1}}}
-%\renewcommand\mytodo[1]{} %uncommento to remove todos
-
 \usepackage[active]{srcltx}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
@@ -35,6 +32,13 @@
 
 
 \usepackage{layout}
+
+\newcommand\mytodo[1]{\textbf{\textcolor{red}{TODO: #1}}}
+%\renewcommand\mytodo[1]{} %uncommento to remove todos
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+
 %Theorem
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
