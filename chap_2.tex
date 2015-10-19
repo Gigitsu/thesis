@@ -257,7 +257,7 @@ Queste equazioni forniscono l'algoritmo completo per una moderna LSTM, comprensi
 
 dove $\odot$ sta per moltiplicazione elemento per elemento.
 Il calcolo di una LSTM semplice, senza forget gate, \`e dato impostando $f^{(t)} = 1$ per ogni $t$.
-Seguendi l'ultimo stato dell'arte abbiamo usato la funzione tanh $\phi$ per i nodi di input $g$, nonostante l'implementazione originale del modello LSTM prevedesse l'uso di una funzione sigmoide $\sigma$.
+Seguendi l'ultimo stato dell'arte abbiamo usato la funzione tanh $\phi$ per i nodi di input $g$, nonostante l'implementazione originale del modello LSTM prevedesse l'uso di una funzione sigmoide $\sigma$~\cite{Hochreiter:1997}.
 Ancora, $h^{(t-1)}$ \`e un vettore contenente i valori $v_c$ dati in output da ciascuna cella di memoria $c$ del livello nascosto dalla precedente fase temporale.
 
 Intuitivamente, in termini di forward pass dei dati, il modello LSTM pu\`o apprendere quando lasciar passare l'attivazione nello stato interno.
@@ -271,3 +271,4 @@ Di conseguenza, questo modello, \`e diventato l'attuale stato dell'arte nel camp
 
 \section{Torch}
 \label{sec:torch}
+\nocite{Collobert:2011}
