@@ -25,10 +25,19 @@ In questa tesi user\`o la notazione ``$l_j$'' invece di ``$h_j$'' (notazione usa
 Associato ad ogni arco dal nodo $j^{'}$ al nodo $j$ vi \`e un peso $w_{jj^{'}}$. Seguento la convenzione adottata in molti altri documenti che trattano reti neurali, indicheremo i neuroni con $j$ e $j^{'}$ mentre, con $w_{jj^{'}}$, indicheremo il peso corrispondente all'arco diretto che parte dal nodo $j^{'}$ e arriva al nodo $j$.
 \`E importante notare che in altri documenti e libri, come ad esempio su Wikipedia, gli indici dei pesi sono invertiti e che $w_{j^{'}j} \neq w_{jj^{'}}$ indica il peso sull'arco diretto dal nodo $j^{'}$ al nodo $j$.
 
-Il valore $v_j$ di ciascun neurone $j$ \`e calcolato applicando la sua funzione di attivazione ad una somma pesata dei suoi valori di input (\mytodo{Aggiungere un'immagine!}): %TODO pensare ad un titolo piu' appropiato
+Il valore $v_j$ di ciascun neurone $j$ \`e calcolato applicando la sua funzione di attivazione ad una somma pesata dei suoi valori di input (Fugura~\ref{fig:artificialNeuron}): %TODO pensare ad un titolo piu' appropiato
 \begin{equation} % \begin{equantion*} per non numerare l'equazione
   v_j = l_j\left( \sum_{j^{'}} w_{jj^{'}} \cdot v_{j^{'}} \right)
 \end{equation}
+
+\begin{figure}[tp]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/artificialNeuron.png}
+  \end{center}
+  \caption{Un neurone artificiale calcona una funzione non lineare della somma pesata dei suoi input}
+  \label{fig:artificialNeuron}
+\end{figure}
 Per comodit\`a, ci riferiremo alla somma pesata all'interno delle parentesi come l'\emph{attivazione in arrivo} e la indicheremo con $a_j$. Rappresentiamo l'intero processo in figura disegnando i neuromi coe dei cerchi mentre gli archi come delle frecce che li collegano.
 Quando possibile, verr\`a utilizato un simbolo per indicare l'esatta funzione di attivazione utilizzata, ad esempio $\sigma$ per la fnzione sigmoide.
 
@@ -49,9 +58,19 @@ Dato che nella maggioranza dei casi le reti neurali, specialmente quelle ricorre
 \section{Reti Neurali Feedforward}
 Con un modello computazionale a rete neurali, \`e necessario determinare l'ordine con cui la computazione dovrebbe procedere.
 I nodi dovrebbero essere calcolati uno alla volta e poi aggiornati, oppure i valori di tutti i nodi dovrebbero essere calcolati iniseme per poi applicare tutti gli aggiornamenti simultaneamente?
-Le \emph{reti neurali feedforward} (\mytodo{aggiungere figura ffnn}) sono una classe ristretta di reti neurali che affrontano questo prolema proibnedo i cicli dal grafo delle connessioni neurali. %TODO aggiungere immagine
+Le \emph{reti neurali feedforward} (Figura~\ref{fig:feedforwardNeuralNetwork}) sono una classe ristretta di reti neurali che affrontano questo prolema proibnedo i cicli dal grafo delle connessioni neurali.
 In questo modo tutti i nodi possono essere disposti in livelli.
 I valori in output di ciascun livello possono essere calcolati solo a partire dai valori di output dei livelli precedenti.
+\begin{figure}[tp]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/feedForwardNeuralNetwork.png}
+  \end{center}
+  \caption{Un modello di rete feedforward.
+  Un campione \`e dato in pasto alla rete impostando i valori dei nodi blu.
+  Ogni livello successivo \`e poi calcolato come una funzione dei livelli precedenti finch\`e non si raggiunge il livello pi\`u in alto.}
+  \label{fig:feedforwardNeuralNetwork}
+\end{figure}
 
 L'input $x$ viene dato in pasto ad una rete neurale feedforward impostando i valori dei nodi del livello pi\`u in basso.
 I valori dei nodi di ciascuno dei livelli superiori non potranno essere calcolati finch\`e non saranno disponibili i valori in output $\hat{y}$ dei livelli inferiori.
@@ -93,11 +112,31 @@ I vettori $b_h$ e $b_y$ rappresentano uno scostamento (\emph{bias}) che permetto
 I modelli discussi in questa tesi consistono in reti con livelli nascosti ricorrenti.
 Tuttavia, sono stati proposti modelli, come la rete di Jordan, che ammettono la presenza di connessioni tra gli output della rete in uno stato e il livello nascosto della rete nello stato successivo.
 
-Una semplice rete neurale \`e mostrata in \mytodo{aggiungere immagine rnn}. %TODO aggiungere immagine
-La dinamica di questa rete attravesso pi\`u fasi temporali pu\`o essere visualizzata \emph{dispiegando} la rete (\mytodo{aggiungere immagine}). %TODO aggiungere immagine
+\begin{figure}[tp]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/simpleRecurrentNeuralNetwork.png}
+  \end{center}
+  \caption{Un seplice rete neuralie ricorrente.
+  Ad ogni passo temporle $t$, l'attivazione viene passata lungo gli archi continui, cos\`i come accadrebbe per una normale rete feedforward.
+  Gli archi tratteggiati collegano il nodo sorgente $j^{'}$ al tempo $t$, quindi $j^{'(t)}$, al nodo target del successivo passo temporale $j^{(t+1)}$.}
+  \label{fig:simpleRecurrentNeuralNetwork}
+\end{figure}
+
+Una semplice rete neurale \`e mostrata in Figura~\ref{fig:simpleRecurrentNeuralNetwork}.
+La dinamica di questa rete attravesso pi\`u fasi temporali pu\`o essere visualizzata \emph{dispiegando} la rete (Figura~\ref{fig:unfoldedSimpleRecurrentNeuralNetwork}).
 Con questa visualizzazione, il modello pu\`o essere interpretata come una rete non ciclica, ma piuttosto come una rete con un livello per intervallo di tempo a dei pesi condivisi tra gli intervalli temporali.
 Diventa quindi chiaro come una rete dispiegata in questo modo pu\`o essere addestrata attraverso pi\`u fasi temporali usando l'algoritmo di backpropagation.
 Questo algoritmo viene chiamato \emph{backpropagation through time} (BPTT, backpropagation attraverso il tempo), ed \`e stata introdotta nel 1990~\cite{Werbos:1990}
+
+\begin{figure}[tp]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/unfoldedSimpleRecurrentNeuralNetwork.png}
+  \end{center}
+  \caption{Visualizzazione della rete \emph{dispiegata}.}
+  \label{fig:unfoldedSimpleRecurrentNeuralNetwork}
+\end{figure}
 
 \subsection{Addestramento}
 L'apprendimento con le reti neurali ricorrenti \`e stato a lungo visto come qualcosa di difficile.
@@ -116,7 +155,7 @@ Il problema dell'ottimizzazione rappresenta un fondamentale ostacolo che non pu\
 Tuttavia, recenti studi sia teorici che empirici, suggeriscono che il problema non \`e cos\`i insormontabile nella pratica come si potrebbe pensare.
 
 Inoltre implementazioni sempre pi\`u performanti ed migliorate euristiche per il calcolo dei gradienti hanno reso l'addestramento delle RNN fattibile.
-Ad esempio, implementazioni degli algorotmi di forward a backward propagation che sfruttano la GPU, come Theano e Torch (strumento utilizzato per gli esperimenti di questa tesi), hanno semplificato la realizzazione di veloci algoritmi di apprendimento.
+Ad esempio, implementazioni degli algorotmi di forward a backward propagation che sfruttano la GPU, come Theano e Torch (Sezione~\ref{sec:torch}), hanno semplificato la realizzazione di veloci algoritmi di apprendimento.
 
 \subsection{Architetture moderne}
 Sono due le architetture RNN di maggior successo per l'apprendimento di dati sequenziali e risalgono entrambe al 1997.
@@ -130,8 +169,21 @@ Nel corso di questa tesi ci concentreremo sull'architettura \emph{Long Short-Ter
 
 \section{Long Short-Term Memory (LSTM)}
 Nel 1997, per superare il problema della scomparsa del gradiente, Hochreiter e Schmidhuber introdussero il modello LSTM.
-Questo modello somiglia ad una rete neurale standard con un livello nascosto ricorrente, con l'unica differenza che i normali nodi di un livello nascosto \mytodo{riferimento all'immagine della rete neurale semplice} sono rimpiazzati da celle di memoria \mytodo{immagine}. %TODO immagini
+Questo modello somiglia ad una rete neurale standard con un livello nascosto ricorrente, con l'unica differenza che i normali nodi di un livello nascosto (Figura~\ref{fig:artificialNeuron}) sono rimpiazzati da celle di memoria (Figura~\ref{fig:memoryCell}). %TODO immagini
 La cella di memoria contiene un nodo sul quale insiste un un arco ricorrente connesso a se stesso con peso pari ad 1, assicurandosi, in questo modo, che il gradiente possa passare attraverso molte fasi temporali senza scomparire o esplodere.
+
+\begin{figure}[tp]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/memoryCell.png}
+  \end{center}
+  \caption{Una cella di memoria del modello LSTM cos\`i come descritta inizialmente da Hochreiter et al. in~\cite{Hochreiter:1997}.
+  Il nodo con l'arco ricorrente rappresenta lo stato interno $s$.
+  La linea diagonale sta ad indicare che si tratta di una funzione lineare, non \`e applicata nessuna funzione di attivazione.
+  I nodi con il simbolo ``$\prod$'' danno in output il prodotto degli input.
+  Le linee tratteggiate indicano archi ricorrenti mentre quelle rosa hanno un peso costante pari ad 1.}
+  \label{fig:memoryCell}
+\end{figure}
 
 Per distinguere la presenza di una cella di memoria da un nodo normale, indicheremo queste celle con $c$.
 
@@ -167,6 +219,15 @@ Di seguito sono descritti tutti gli elementi che compongono una cella di memoria
   Questi cancelli vengono indicati con $y_{in}$ e $y_{out}$, tuttavia questa notazione genera confusione perch\`e $y$ \`e solitamente utilizzato per indicare l'output nella letteratura di machine learning.
   Per questo motivo utilizzeremo le notazioni $i$, $o$ ed $f$ per indicare i cancelli di \emph{input}, \emph{output} e \emph{forget} (di cui pareler\`o a breve).
 \end{itemize}
+
+\begin{figure}[tp]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/memoryCellWithForgetGate.png}
+  \end{center}
+  \caption{Una cella di memoria del modello LSTM con il \emph{forget gate} cos\`i come descritta da Gers et al. in~\cite{Gers:2000}.}
+  \label{fig:memoryCellWithForgetGate}
+\end{figure}
 
 Fin da quando \`e stato proposto il modello LSTM originale, molte varianto sono state proposte.
 Il \emph{forget gate}, proposti nel 2000 da Gers e Schmidhuber~\cite{Gers:2000}, aggiunge un cancello simile a quelli di input e output che permette, alla rete neurale, di svuotare le informazioni presenti nel \emph{constant error carousel}.
@@ -207,3 +268,6 @@ In terminidi backward pass, il \emph{constant error carousel} permette al gradie
 In quest'ottica, quindi, i cancelli apprendono quando lasciar entrare l'\emph{errore} e quando lasciarlo uscire.
 Nella pratica, il modello LSTM ha dimostrato un'abilit\`a superiore nell'apprendere dinepndenze a lungo raggio, rispetto alle normali RNN.
 Di conseguenza, questo modello, \`e diventato l'attuale stato dell'arte nel campo delle reti neurali.
+
+\section{Torch}
+\label{sec:torch}
