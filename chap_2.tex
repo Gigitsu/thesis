@@ -117,3 +117,93 @@ Tuttavia, recenti studi sia teorici che empirici, suggeriscono che il problema n
 
 Inoltre implementazioni sempre pi\`u performanti ed migliorate euristiche per il calcolo dei gradienti hanno reso l'addestramento delle RNN fattibile.
 Ad esempio, implementazioni degli algorotmi di forward a backward propagation che sfruttano la GPU, come Theano e Torch (strumento utilizzato per gli esperimenti di questa tesi), hanno semplificato la realizzazione di veloci algoritmi di apprendimento.
+
+\subsection{Architetture moderne}
+Sono due le architetture RNN di maggior successo per l'apprendimento di dati sequenziali e risalgono entrambe al 1997.
+La prima, \emph{Long Short-Term Memory}, ideata da Hochreiter e Schmidhuber, introduce il concetto di cella di memoria, un'unit\`a computazionale che rimpiazza il tradizionale neurone artificiale nei livelli nascosti della rete.
+Con queste celle di memoria, la rete \`e in grado di superare le difficolt\`a incontrate dalle precedenti implementazioni durante la fase di apprendimento.
+La seconda, \emph{Bidirectional Recurrent Neural Network}, ideata da Schuster e Paliwal, introduce invece l'architettura BRNN nella quale, per calcolare l'output del tempo $t$, vengono usate tanto le informazioni provenenti dal passato quanto quelle provenienti dal futuro.
+Questo approccio \`e in contrasto con i sistemi precedenti, dove solo gli input provenienti da fasi temporali passate potevano influenzare gli output.
+Fortunatamente, le due architetture non sono mutuamente esclusive e sono state combinate con successo.
+
+Nel corso di questa tesi ci concentreremo sull'architettura \emph{Long Short-Term Memory}.
+
+\section{Long Short-Term Memory (LSTM)}
+Nel 1997, per superare il problema della scomparsa del gradiente, Hochreiter e Schmidhuber introdussero il modello LSTM.
+Questo modello somiglia ad una rete neurale standard con un livello nascosto ricorrente, con l'unica differenza che i normali nodi di un livello nascosto \mytodo{riferimento all'immagine della rete neurale semplice} sono rimpiazzati da celle di memoria \mytodo{immagine}. %TODO immagini
+La cella di memoria contiene un nodo sul quale insiste un un arco ricorrente connesso a se stesso con peso pari ad 1, assicurandosi, in questo modo, che il gradiente possa passare attraverso molte fasi temporali senza scomparire o esplodere.
+
+Per distinguere la presenza di una cella di memoria da un nodo normale, indicheremo queste celle con $c$.
+
+Il termine ``Long Short-Term Memory'' deriva dalla seguente intuizione.
+Le reti neurali ricorrenti pi\`u semplici hanno una \emph{memoria a lungo termine} (\emph{long term memory}) sotto forma di pesi.
+I pesi, durante l'apprendimento, cambiano molto lentamente, codificando, in questo modo, la conoscenza.
+Queste hanno anche una \emph{memoria a breve termine} (\emph{short term memory}) sotto forma di attivazioni effimere, che passano dall'output di ciascun nodo nei nodi successivi.
+Il modello LSTM introduce una sorta di memoria intermedia tramite l'uso delle celle di memoria.
+Una cella di memoria \`e una composizione di unit\`a pi\`u semplici con la nuova aggiunta di nodi moltiplicativi, indicati nel diagramma con il simbolo $\prod$.
+Di seguito sono descritti tutti gli elementi che compongono una cella di memoria.
+\begin{itemize}
+  \item \emph{Internal State:} Il cuore di ogni cella di memoria \`e un nodo $s$ con una funzione di attivazione lineare.
+  Dato che indichiamo con $c$ una cella di memoria, il suo stato interno sar\`a indicato con $c_s$.
+  \item \emph{Constant Error Carousel:} Lo stato interno $c_s$ ha un arco connesso a se stesso (ricorrente) con peso pari ad 1.
+  Quest'arco, chiamato \emph{constant error carousel}, si estende tra fasi temporali adiacenti con un peso costante, questo assicura che l'errore possa passare attraverso le fasi temporali senza sparire o esplodere.
+  \item \emph{Input Node:} Questo nodo si comporta come un normale nodo, prendendo gli input tanto dal resto della rete alla fase temporale precedente quanto dagli input al tempo corrente.
+  Solitamente questo nodo viene indicato con $g$ e questa tesi non far\`a eccezione, anche se potrebbe generare confusione dato che sarebbe pi\`u appropiato usare $g$ per indicare i cancelli.
+  \`E importante notare che quando usiamo la notazione vettoriale ci riferiamo ad un intero livello di celle.
+  Ad esempio, $g$ \`e un vettore che contiene i valori di $g_c$ di tutte le celle in un dato livello.
+  Quando, invece, usiamo il pedice $c$, allora ci riferiamo ad una singola cella di memoria.
+  \item \emph{Multiplicative Gating:} I ``cancelli'' moltiplicativi (gates) sono una peculiarit\`a dei modelli LSTM.
+  Qu\`i un'unit\`a sigmoidale chiamata \emph{gate} viene addestrata dato l'input e una connessione ricorrente in arrivo dal passo temporale precedente.
+  Alcuni valori di interesse sono poi moltiplicati per l'output di questa unit\`a.
+  Se il cancello da in output 0, allora questo \`e chiuso e il flusso dei dati viene interrotto.
+  Se, invece, da in output 1 allora in cancello \`e aperto e il flusso dei dati pu\`o passarci attraverso.
+  Il modello LSTM originale prevedeva due cancelli:
+  \begin{itemize}
+    \item \emph{Input Gate:} Il primo \`e l'\emph{input gate} $i_c$, che \`e moltiplicato per il nodo input $g_c$
+    \item \emph{Output Gate:} Il secondo cancello \`e chiamato \emph{output gate} $o_c$.
+    Questo viene moltiplicato per il valore dello stato intenro $s_c$ per produrre il valore in output $v_c$ della cella di memoria.
+    Questo poi viene dato in pasto al livello nascosto della LSTM nel prossimo passo temporale $h^{(t+1)}$ insieme all'output $\hat{y}^(t)$ generato al passo corrente.
+  \end{itemize}
+  Questi cancelli vengono indicati con $y_{in}$ e $y_{out}$, tuttavia questa notazione genera confusione perch\`e $y$ \`e solitamente utilizzato per indicare l'output nella letteratura di machine learning.
+  Per questo motivo utilizzeremo le notazioni $i$, $o$ ed $f$ per indicare i cancelli di \emph{input}, \emph{output} e \emph{forget} (di cui pareler\`o a breve).
+\end{itemize}
+
+Fin da quando \`e stato proposto il modello LSTM originale, molte varianto sono state proposte.
+Il \emph{forget gate}, proposti nel 2000 da Gers e Schmidhuber~\cite{Gers:2000}, aggiunge un cancello simile a quelli di input e output che permette, alla rete neurale, di svuotare le informazioni presenti nel \emph{constant error carousel}.
+In altre parole, questo ulteriore cancello da alla LSTM la capacit\`a di apprendere quando ``dimenticare'' le informazioni ottenute dalle precendit fasi temporali.
+Il \emph{forget gate} \`e diventato di uso comune, un pilastro dei sucessivi lavori sulle LSTM.
+
+Formalmente, la computazione in una LSTM procede in accordo ai seguenti calcoli che devono essere valutati ad ogni fase temporale.
+Queste equazioni forniscono l'algoritmo completo per una moderna LSTM, comprensiva di forget gate.
+\begin{equation}
+  g^{(t)} = \phi(W_{gx}x^{(t)} + W_{ih}h^{(t-1)} + b_g)
+\end{equation}
+\begin{equation}
+  i^{(t)} = \sigma(W_{ix}x^{(t)} + W_{ih}h^{(t-1)} + b_i)
+\end{equation}
+\begin{equation}
+  f^{(t)} = \sigma(W_{fx}x^{(t)} + W_{fh}h^{(t-1)} + b_f)
+\end{equation}
+\begin{equation}
+  o^{(t)} = \sigma(W_{ox}x^{(t)} + W_{oh}h^{(t-1)} + b_o)
+\end{equation}
+\begin{equation}
+  s^{(t)} = g^{(t)} \odot i^{(t)} + s^{(t-1)} \odot f^{(t)}
+\end{equation}
+\begin{equation}
+  h^{(t)} = s^{(t)} \odot o^{(t)}
+\end{equation}
+
+dove $\odot$ sta per moltiplicazione elemento per elemento.
+Il calcolo di una LSTM semplice, senza forget gate, \`e dato impostando $f^{(t)} = 1$ per ogni $t$.
+Seguendi l'ultimo stato dell'arte abbiamo usato la funzione tanh $\phi$ per i nodi di input $g$, nonostante l'implementazione originale del modello LSTM prevedesse l'uso di una funzione sigmoide $\sigma$.
+Ancora, $h^{(t-1)}$ \`e un vettore contenente i valori $v_c$ dati in output da ciascuna cella di memoria $c$ del livello nascosto dalla precedente fase temporale.
+
+Intuitivamente, in termini di forward pass dei dati, il modello LSTM pu\`o apprendere quando lasciar passare l'attivazione nello stato interno.
+Finttantoch\`e il cancello di input (\emph{input gate}) resta chiuso (da in output 0), nessuna attivazione pu\`o passare.
+Allo stesso modo, il cancello di output (\emph{output gate}) apprende quando lasciar uscire il valore dello stato intenro.
+Quando entrambi i cancelli sono \emph{chiusi}, l'attivazione rimane confinata, senza subire modifiche ne, tantomeno, influenzare l'output delle fasi temporali intermedie.
+In terminidi backward pass, il \emph{constant error carousel} permette al gradiente di poter essere propagato attraverso molte fasi temporali, senza sparire o esplodere.
+In quest'ottica, quindi, i cancelli apprendono quando lasciar entrare l'\emph{errore} e quando lasciarlo uscire.
+Nella pratica, il modello LSTM ha dimostrato un'abilit\`a superiore nell'apprendere dinepndenze a lungo raggio, rispetto alle normali RNN.
+Di conseguenza, questo modello, \`e diventato l'attuale stato dell'arte nel campo delle reti neurali.
