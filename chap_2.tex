@@ -269,6 +269,35 @@ In quest'ottica, quindi, i cancelli apprendono quando lasciar entrare l'\emph{er
 Nella pratica, il modello LSTM ha dimostrato un'abilit\`a superiore nell'apprendere dinepndenze a lungo raggio, rispetto alle normali RNN.
 Di conseguenza, questo modello, \`e diventato l'attuale stato dell'arte nel campo delle reti neurali.
 
-\section{Torch}
+\section{Torch7}
 \label{sec:torch}
 \nocite{Collobert:2011}
+
+Torch7 \`e un framework di cumputazione numerica e una libreria di machine learning che estende \emph{Lua}, progettato per rispondere, principalmente, a tre esigenze:
+\begin{enumerate}
+  \item deve permettere un \emph{facile sviluppo di algoritmi numerici}
+  \item deve essere \emph{facile da estendere} (incluso l'uso di altre librerie)
+  \item deve essere \emph{veloce}
+\end{enumerate}
+
+\subsection{Perch\`e Lua?}
+L'uso di un linguaggio di scripting (interpretato) con \emph{buone API C} sembra essere la scelta migliore per soddisfare il requisito (2).
+Innanzitutto, un linguaggio ad alto livello rende lo sviluppo di programmi pi\`u semplice e pi\`u comprensibile rispetto ad uno a basso livello.
+In secondo luigo, se il linguaggio di programmazione \`e \emph{interpretato}, diventa pi\`u facile provare velocemente varie idee in maniera interattiva.
+In fine, con la presenza di buone API C, il linguaggio di scripting diventa il ``collante'' fra varie librerie in diversi linguaggi: differenti modellazioni dello stesso concetto (provenienti da diverse librerie) possono essere nascoste dietro un unico modello realizzato con il linguaggi di scripting, pur mantenendo tutte le funzionalit\`a di tutte le librerie.
+
+Fra tutti i linguaggi di scripting l'unico che pu\`o soddisfare il vincolo (3) \`e Lua.
+Lua \`e, infatti, il linguaggio interpretato pi\`u veloce (con anche il pi\`u veloce compilatore Just In Time (JIT)).
+Lua ha anche il vantaggio di essere stato progettato per essere facilmente \emph{incorporato} in applicazioni scritti in C, e fornisce dele ottime API C.
+
+\textbf{Lua} \`e stato pensato per essere usato come un potente e leggero linguaggio di scripting per ogni programma che ne avesse bisogno, ed \`e stato implementato a mo' di una libreria scritta in C.
+Citando la pagina web di lua:
+
+\begin{quote}
+Lua combines simple procedural syntax with powerful data description constructs based on associative arrays and extensible semantics. Lua is dynamically typed, runs by interpreting bytecode for a register-based virtual machine, and has auto- matic memory management with incremental garbage collection, making it ideal for configuration, scripting, and rapid prototyping.
+\end{quote}
+
+Lua offre un discreto supporto alla programmazione object-oriented, alla programmazione funzionale e alla programmazione data-driven.
+Il tipo principale di Lua \`e la tabella, che implementa un array associativo in maniera molto efficiente.
+Un array associativo altro non \`e che un array i cui indici possono essere non solo numeri, ma anche stringhe o qualsiasi altro dipo di valore che il linguaggio mette a disposizione.
+Le tabelle non hanno una dimensione fissa, possono essere ridimensionate in maniera dinamica, e possono essere usate come ``tabelle virtuali'' per altre tabelle, permettendo, in questo modo, di simulare alcune delle caratteristiche del paradigma object-oriented (come ad esempio l'ereditariet\`a).
