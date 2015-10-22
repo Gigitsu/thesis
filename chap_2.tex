@@ -94,9 +94,9 @@ I fotogrammi di un video o le parole di una frase rappresentano situazioni in cu
 Le \emph{reti neurali ricorrenti} costituiscono un sovrainsieme proprio delle reti neurali feedforward che, a differenza di quest'ultime, includono degli archi ricorrenti.
 Questi archi ricorrenti si estendono su intervalli temporali adiacenti e introducono il concetto di tempo nel modello.
 Mentre le RNN possono non contenere cicli tra gli archi convenzionali, gli archi ricorrenti possono formare cicli.
-Al tempo $t$, i nodi che ricevono un input da un arco ricorrente, ricevono un \emph{input di attivazione} sia dal campione corrente $x^({t})$ che dai nodi nascosti $h^{(t-1)}$ del precedente stato della rete.
-L'output $\hat(y^{(t)})$ \`e poi calcolato in base allo stato nascosto $h^{(t)}$ del tempo $t$.
-Quindi, l'input $x^({t})$ al tempo $t-1$ pu\`o influenzare l'output $\hat(y^{(t)})$ al tempo $t$ proprio grazie a queste connessioni ricorrenti.
+Al tempo $t$, i nodi che ricevono un input da un arco ricorrente, ricevono un \emph{input di attivazione} sia dal campione corrente $x^{(t)}$ che dai nodi nascosti $h^{(t-1)}$ del precedente stato della rete.
+L'output $\hat{y}^{(t)}$ \`e poi calcolato in base allo stato nascosto $h^{(t)}$ del tempo $t$.
+Quindi, l'input $x^{(t)}$ al tempo $t-1$ pu\`o influenzare l'output $\hat{y}^{(t)}$ al tempo $t$ proprio grazie a queste connessioni ricorrenti.
 
 Le seguenti due equazioni, mostrano i calcoli necessari per eseguire, per ogni fase temporale, il passaggio in avanti dei dati di una semplice rete neurale ricorrente:
 \begin{equation}
@@ -300,4 +300,64 @@ Lua combines simple procedural syntax with powerful data description constructs 
 Lua offre un discreto supporto alla programmazione object-oriented, alla programmazione funzionale e alla programmazione data-driven.
 Il tipo principale di Lua \`e la tabella, che implementa un array associativo in maniera molto efficiente.
 Un array associativo altro non \`e che un array i cui indici possono essere non solo numeri, ma anche stringhe o qualsiasi altro dipo di valore che il linguaggio mette a disposizione.
-Le tabelle non hanno una dimensione fissa, possono essere ridimensionate in maniera dinamica, e possono essere usate come ``tabelle virtuali'' per altre tabelle, permettendo, in questo modo, di simulare alcune delle caratteristiche del paradigma object-oriented (come ad esempio l'ereditariet\`a).
+Queste tabelle non hanno una dimensione fissa, possono essere ridimensionate in maniera dinamica, e possono essere usate come ``tabelle virtuali'' per altre tabelle, permettendo, in questo modo, di simulare alcune delle caratteristiche del paradigma object-oriented (come ad esempio l'ereditariet\`a).
+Inoltre \`e l'unica struttura dati presente in Lua, ma \`e molto potente e flessibile, viene utilizzata per rappresentare semplici array, insiemi, record, code e molte altre strutture dati, in maniera semplice, unoforme ed efficiente.
+
+\subsection{La Classe Tensor}
+Torch7 si basa fortemente sulla sua classe \emph{Tensor} (Tensore), che estende l'insieme dei tipi di base di Lua, fornendo un'efficiente implementazione di un array multi dimensionale.
+Gran parte delle librerie scritte per Torch7 usano la sua classe Tensor per rappresentare dati come segnali, immagini, video ecc. .
+La libreria Tensor di Torch7 fornisce numerose operazioni (fra cui molte operazioni di algebra lineare), implementate efficientemente in C, che sfruttano l'insieme di istruzioni SSE su piattaforma Intel e, optionalmente, sfruttando le performanti implementazioni BLAS/Lapack (come Intel MKL) per eseguire operazioni di algebra lineare.
+
+Di seguito alcune operazioni standard eseguibili con la classe Tensor:
+
+\lstinputlisting[language={[5.0]Lua}]{snippets/tensor.lua}
+
+Inoltre, cos\`i come in matlab, pi\`u tipi possono coesistere in Torch7 ed \`e semplice passare da un tipo ad un altro:
+
+\lstinputlisting[language={[5.0]Lua}]{snippets/tensor_conversions.lua}
+
+\subsection{Pacchetti utilizzati}
+
+Di seguito la lista delle librerie utilizzate nel coros di questa tes:
+
+\subsubsection{torch}
+La libreria principale di Torch7: fornisce la class Tensor, strumenti per la serializzazione e altre funzionalit\`a di base.
+
+\subsubsection{nn}
+La libreria \emph{nn} fornisce un insieme di moduli standard per il calcolo di reti neurali, oltre ad un insieme di moduli contenitori che possono essere usati per definire qualsivoglia grafo diretto (aciclico o no).
+Tramite una descrizione diretta dell'architettura dei grafi, usando dei moduli che sono componibili, si evita la complessit\`a di utilizzare un parser per interpretare il grafo o di creare un compilatore middle-ware.
+In pratica, la maggior parte delle reti sono o sequenziali, o hanno una struttura ad albero semplice con ricorsioni.
+Il seguente esempio descrive un percettrone multi livello:
+
+\lstinputlisting[language={[5.0]Lua}]{snippets/multilayer_perceptron.lua}
+
+Dove \lstinline[language={[5.0]Lua}]|nn.Sequential()| \`e un contenitore che definisce una rete neurale sequenziale, mentre \lstinline[language={[5.0]Lua}]|nn.Linera()|, \lstinline[language={[5.0]Lua}]|nn.Tanh()| e \lstinline[language={[5.0]Lua}]|nn.SoftMax()| sono i moduli che definiscono i singoli livelli del percettrone.
+Ogni modulo, o contenitore, mette a disposizione delle funzioni standard per calcolare il suo output, e funzioni per calcolare le derivate da propagare indietro verso propri input e i prori parametri interni durante la backward pass.
+Data la rete definita in precedenza, un input $X$, il gradiente $\partial E / \partial \hat{Y}$ calcolato da un errore $E$ e da un output generato $\hat{Y}$, queste tre funzioni possono essere eseguiti nel seguente modo:
+
+\lstinputlisting[language={[5.0]Lua}]{snippets/forward_backward_pass.lua}
+
+Dove \lstinline[language={[5.0]Lua}]|loss| \`e una qualche funzione di perdita.
+
+\subsubsection{nngraph}
+Un estensione della libreria \emph{nn} che semplifica la creazione di architetture neurali complesse.
+
+\subsubsection{optim}
+Una librerie che fornisce implementazioni per la discesa del gradiente, per il metodo del gradiente coniugato e altri algoritmi di ottimizzazione.
+
+\subsection{Efficienza}
+
+Torch7 \`e stato progettato pensando principalmente all'efficienza, infatti sfrutta, quando \`e possibile, l'insieme di istruzione \emph{SSE} e supporta due meccanismi di parallelizzazione: \emph{OpenMP} e \emph{CUDA}.
+La libreria Tensor fa un uso massiccio di queste tecniche.
+Dal punto di vista dell'utente, abilitare CUDA e OpenMP pu\`o portare ad un massiccio incremento delle prestazioni con qualsiasi script ``Lua'', senza alcuno sforzo aggiuntivo, proprio perch\`e la maggior parte delle librerie dipendono dalla libreria Tensor.
+Altre libreria (come la libreria \emph{nn}) fanno comunque uso di OpenMP e CUDA anche quando non fanno uso della libreria Tensor.
+
+\subsubsection{CUDA}
+Per gli esperimenti svolti durante questa tesi \`e stata utilizzata la tecnologia CUDA.
+CUDA (Compute Unified Device Architecture) \`e un framework proprietario nVidia, utilizzato per programmare i loro processori grafici e sfruttarli per eseguire calcoli general purpose, non legati strettamente alla grafica.
+CUDA permette di controllare l'intera gerarchia di memoria disponibile al processore grafico, di cui, i due maggiori componento sono la DRAM, una grande memoria esterna ad alta latenza, e la memoria interna al processore, a bassa latenza ma dell'ordine di qualche KB.
+Inoltre permette di controllare anche l'intera gerarchida dei core del processore, nonch\`e i meccanismi di interazione con ciascun core, e con le differenti tipologie di memoria.
+
+Per sfruttare CUDA, Torch7 mette a disposizione un nuovo tipo di tensore: \lstinline[language={[5.0]Lua}]|torch.CudaTensor|.
+Una volta creato, questo tensore viene memorizzato nella memora DRAM della GPU.
+Tutte le operazioni valide per un normale Tensor lo sono anche per un CudaTensor, che astrae completamente l'uso del processore grafico.

@@ -1,0 +1,5 @@
+mlp = nn.Sequential()
+mlp:add(nn.Linear(100,1000))
+mlp:add(nn.Tanh())
+mlp:add(nn.Linear(1000,10))
+mlp:add(nn.SoftMax())
