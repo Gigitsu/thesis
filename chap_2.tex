@@ -41,7 +41,7 @@ Il valore $v_j$ di ciascun neurone $j$ \`e calcolato applicando la sua funzione 
 Per comodit\`a, ci riferiremo alla somma pesata all'interno delle parentesi come l'\emph{attivazione in arrivo} e la indicheremo con $a_j$. Rappresentiamo l'intero processo in figura disegnando i neuromi coe dei cerchi mentre gli archi come delle frecce che li collegano.
 Quando possibile, verr\`a utilizato un simbolo per indicare l'esatta funzione di attivazione utilizzata, ad esempio $\sigma$ per la fnzione sigmoide.
 
-Scelte abbastanza comuni per la funzione di attivazione includono la funzione sigmoide $\sigma(z) = 1/(1+e^{-z})$ e la funzione \emph(tanh) $\phi(z)=(e^z-e^{-z})/(e^z+e^{-z})$ che \`e diventata molto comune nelle reti neurali di tipo \emph{feedforward} ma \`e stata utilizzata anche in reti neurali ricorrenti~\cite{Sutskever:2011}.
+Scelte abbastanza comuni per la funzione di attivazione includono la funzione sigmoide $\sigma(z) = 1/(1+e^{-z})$ e la funzione \emph{tanh} $\phi(z)=(e^z-e^{-z})/(e^z+e^{-z})$ che \`e diventata molto comune nelle reti neurali di tipo \emph{feedforward} ma \`e stata utilizzata anche in reti neurali ricorrenti~\cite{Sutskever:2011}.
 Un'altra funzione di attivazione che \`e diventata lo stato dell'arte nella ricerca di deep learning \`e la funzione ReLU (\emph{rectified linear unit}) $l_j(z)=\operatorname{max}(0, z)$.
 Questa funzione ha dimostrato di poter migliorare le prestazioni di molte reti neurali in una grande variet\`a di applicazioni, che spaziano dal riconoscimento vocale al riconoscimento di oggetti, ed \`e stata utilizzata anche in reti neurali ricorrenti~\cite{Bengio:2013}.
 

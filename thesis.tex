@@ -11,8 +11,6 @@
 \usepackage{makeidx}
 \usepackage[chapter]{tocbibind}
 \usepackage{color}
-\renewcommand{\figurename}{\footnotesize\sc Figure\rm}
-\renewcommand{\tablename}{\footnotesize\sc Table\rm}
 
 \usepackage[active]{srcltx}
 \usepackage{fancyhdr}
@@ -23,6 +21,8 @@
 \usepackage{url}
 \usepackage{mathtools}
 \usepackage{listings}
+\usepackage{eso-pic}
+\usepackage{transparent}
 
 \usepackage[italian]{babel}
 
@@ -33,9 +33,6 @@
 
 
 \usepackage{layout}
-
-\newcommand\mytodo[1]{\textbf{\textcolor{red}{TODO: #1}}}
-%\renewcommand\mytodo[1]{} %uncommento to remove todos
 
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}
@@ -79,39 +76,20 @@
 \fancyhead[LO]{\leftmark}
 \fancyhead[LE,RO]{\small \thepage}
 
+\renewcommand{\figurename}{\footnotesize\sc Figure\rm}
+\renewcommand{\tablename}{\footnotesize\sc Table\rm}
+
 \renewcommand{\chaptermark}[1]{\markboth{\sc\small #1}{}}
 \renewcommand{\sectionmark}[1]{\markright{\sc\small \thesection\ #1}}
 
-%\pagenumbering{Roman}
+\newcommand\mytodo[1]{\textbf{\textcolor{red}{TODO: #1}}}
+%\renewcommand\mytodo[1]{} %uncommento to remove todos
 
-%TODO Titolo da rivedere e confermare
-\title{\sc \LARGE Classificazione e Predizione di dati sequenziali usando Reti Neurali Ricorre}
-\author{\LARGE \textit{Luigi Clemente}\\
-Dipartimento di Informatica\\
-Dottorato in Informatica XXIII ciclo\\
-\sc Universit\`a degli Studi di Bari ``Aldo Moro''\\
-\sl Via E. Orabona, 4 - 70125 Bari, \sc Italy\\
-\tt luigi.clemente@gsquare.it
-}
-\date{
-%\begin{figure}[h]
- % \centering
-  %\includegraphics[width=3cm]{fig/eu-flag.png}
-%\end{figure}
-\vspace{1cm}
-S.S.D.: INF/01\\
-\vspace{2cm}
-Supervisore: Prof. Donato Malerba\\
-\vspace*{\fill}
-\begin{tabular}{c}
-	\hline
-	\it A dissertation submitted in partial fulfillment \\
-	\it of the requirements for the degree of\\
-	{\sc Doctor of Philosophy in Computer Science}\\
-	\hline	\\
-	XXX
-\end{tabular}
-}
+% ----------------------------------------------------------------
+% frontpage
+
+\input{frontpage/g2}
+% \input{frontpage/uniba}
 
 % ----------------------------------------------------------------
 
@@ -180,7 +158,6 @@ Membro  del Comitato di Supervisione  \hskip 2cm \ & \\ \cline{2-2}
 
 \chapter*{Riconoscimenti}
 \addcontentsline{toc}{chapter}{Riconoscimenti}
-\pagenumbering{arabic}
 \markboth{\sc Riconoscimenti}{\sc Riconoscimenti}
 
 \input{ack}
@@ -196,6 +173,9 @@ Membro  del Comitato di Supervisione  \hskip 2cm \ & \\ \cline{2-2}
 % ----------------------------------------------------------------
 \clearpage
 % ----------------------------------------------------------------
+
+
+\pagenumbering{arabic}
 
 \chapter {Introduzione}\label{chap:chap_1}
 \input{chap_1}
