@@ -1,0 +1,43 @@
+\AddToShipoutPicture*{ %filigrana
+	\put(0,0){
+	  \parbox[b][\paperheight]{\paperwidth}{ %
+	    \vfill
+	    \centering
+	    \includegraphics[width=0.9\paperwidth]{images/logo.png} %
+	    \vfill
+    }
+  }
+  \put(0,0){%
+    \transparent{0.95}\textcolor{white}{\rule{\paperwidth}{\paperheight}}
+  }
+}
+
+\title{
+	\vspace{-1.5cm}
+	\sc \LARGE \input{frontpage/title}
+}
+\author{
+	\vfill{}
+	\sc \normalsize Tesi di laurea in\\
+	\sc \normalsize Algoritmi e Strutture Dati\\
+	\vspace{0.5cm}\\
+	\LARGE \textit{Luigi Clemente}\\
+	\tt luigi.clemente@gsquare.it\\
+	\vspace{0.5cm}\\
+	\begin{tabular}{rl}
+  	\normalsize Relatori:  & \normalsize Prof. Donato Malerba \tabularnewline
+  	\normalsize & \normalsize Prof. Fabio Fumarola
+	\end{tabular}
+	\vfill{}
+}
+\date{
+	\begin{figure}[h]
+	 \centering
+		\includegraphics[width=3cm]{images/logo.png}
+	\end{figure}
+	\large Universit\`a degli Studi di Bari ``Aldo Moro''\\
+	\normalsize Dipartimenti di informatica\\
+	\normalsize Corso di Laurea Triennale in Informatica e Tecnologie per la produzione del software \\
+	\noindent\rule{\textwidth}{0.4mm}\\
+	\input{frontpage/date}
+}
