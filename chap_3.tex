@@ -31,7 +31,7 @@ In linguistica sono previste classi morfologiche per vari livelli di dettaglio, 
 Solitamente, in sistemi di PoS tagging computerizzati, vengono adottati modelli di classificazione che prevedono un numero elevato di classi (da 50 o pi\`u) e variano in base alla lingua adottata.
 Esistono vari modelli comunemente accettati, quelli utilizzati per gli esperimenti di questa tesi sono:
 \begin{itemize}
-  \item Penn Treebank Tagset, composto da 45 classi e usato per la lingua inglese.
+  \item Penn Treebank Tagset, composto da 42 classi e usato per la lingua inglese.
   \item Tanll Tagset, che conta fino a 328 classi ed \`e usato per la lingua italiana.
 \end{itemize}
 
@@ -40,6 +40,91 @@ Esistono vari modelli comunemente accettati, quelli utilizzati per gli esperimen
 \nocite{Attardi:2008}
 
 \subsection{CoNLL 2000}
+CoNLL (\emph{Conference on Natural Language Learning}), \`e una conferenza organizzata annualmente dal gruppo \emph{SIGNLL}, a partire dal 1999.
+Per ogni edizione della conferenza, sono state proposte delle attivit\`a condivise, ciascuna delle quali comprendeva dati di test e di training forniti direttamente dagli organizzatori.
+In questo modo i partecipanti potevano essere valutati e confrontati in maniera sistematica.
+
+Per gli esperimenti di questa tesi, sono stati usati i dataset do training e test forniti durante la quarta edizione della conferenza, tenutasi nel 2000.
+I dati forniti consistono in file di testo dove ogni riga corrisponde ad una parola, mentre una riga vuota denota la fine di una frase.
+Ciascuna riga \`e costituita, a sua volta, da 3 colonne:
+\begin{itemize}
+  \item la prima colonna contiene la parola corrente
+  \item la seconda colonna la classe morfologica della parola
+  \item la terza riga contiene un tag che indica la parte della frase a cui, la parola corrente, appartiene
+\end{itemize}
+
+Di seguito un esempio:
+
+\begin{center}
+  \begin{minipage}{5cm}
+    \begin{verbatim}
+     He        PRP  B-NP
+     reckons   VBZ  B-VP
+     the       DT   B-NP
+     current   JJ   I-NP
+     account   NN   I-NP
+     deficit   NN   I-NP
+     will      MD   B-VP
+     narrow    VB   I-VP
+     to        TO   B-PP
+     only      RB   B-NP
+     #         #    I-NP
+     1.8       CD   I-NP
+     billion   CD   I-NP
+     in        IN   B-PP
+     September NNP  B-NP
+     .         .    O
+    \end{verbatim}
+  \end{minipage}
+\end{center}
+
+Di seguito la lista completa di classi del modello PennTreebank (Tabell~\ref{tab:penn-tagset}):
+
+\begin{longtable}{| c | p{.40\textwidth} | p{.50\textwidth} |} \hline
+  \thead{Tag} & \thead{Descrizione} & \thead{Esempio} \\ \hline
+  CC & conjunction, coordinating & and, or, but \\ \hline
+  CD & cardinal number & five, three, 13\% \\ \hline
+  DT & determiner & the, a, these  \\ \hline
+  EX & existential there & there were six boys  \\ \hline
+  FW & foreign word & mais  \\ \hline
+  IN & conjunction, subordinating or preposition & of, on, before, unless  \\ \hline
+  JJ & adjective & nice, easy \\ \hline
+  JJR & adjective, comparative & nicer, easier \\ \hline
+  JJS & adjective, superlative & nicest, easiest  \\ \hline
+  LS & list item marker &   \\ \hline
+  MD & verb, modal auxillary & may, should  \\ \hline
+  NN & noun, singular or mass & tiger, chair, laughter  \\ \hline
+  NNS & noun, plural & tigers, chairs, insects  \\ \hline
+  NNP & noun, proper singular & Germany, God, Alice  \\ \hline
+  NNPS & noun, proper plural & we met two Christmases ago  \\ \hline
+  PDT & predeterminer & both his children  \\ \hline
+  POS & possessive ending & 's \\ \hline
+  PRP & pronoun, personal & me, you, it  \\ \hline
+  PRP\$ & pronoun, possessive & my, your, our  \\ \hline
+  RB & adverb & extremely, loudly, hard   \\ \hline
+  RBR & adverb, comparative & better  \\ \hline
+  RBS & adverb, superlative & best  \\ \hline
+  RP & adverb, particle & about, off, up  \\ \hline
+  SYM & symbol & \%  \\ \hline
+  TO & infinitival to & what to do?  \\ \hline
+  UH & interjection & oh, oops, gosh  \\ \hline
+  VB & verb, base form & think  \\ \hline
+  VBZ & verb, 3rd person singular present & she thinks  \\ \hline
+  VBP & verb, non-3rd person singular present & I think  \\ \hline
+  VBD & verb, past tense & they thought  \\ \hline
+  VBN & verb, past participle & a sunken ship  \\ \hline
+  VBG & verb, gerund or present participle & thinking is fun  \\ \hline
+  WDT & wh-determiner & which, whatever, whichever  \\ \hline
+  WP & wh-pronoun, personal & what, who, whom  \\ \hline
+  WP\$ & wh-pronoun, possessive & whose, whosever  \\ \hline
+  WRB & wh-adverb & where, when  \\ \hline
+  . & punctuation mark, sentence closer & .;?*  \\ \hline
+  , & punctuation mark, comma & ,  \\ \hline
+  : & punctuation mark, colon & :  \\ \hline
+  ( & contextual separator, left paren & (  \\ \hline
+  ) & contextual separator, right paren & ) \\ \hline
+  \caption{Tagset Penn Treebank} \label{tab:penn-tagset}
+\end{longtable}
 
 \subsection{Evalita 2009}
 \emph{Evalita} nasce grazie all'iniziativa dell'\emph{Italian Association for Computational Linguistics} (ALIC),
@@ -95,23 +180,23 @@ Al termine di ogni frase \`e presenta una riga vuota. Ad esempio:
 \begin{center}
   \begin{minipage}{5cm}
     \begin{verbatim}
-      A E
-      ben B
-      pensarci  Vfc
-      , FF
-      l'  RDns
-      intervista  Sfs
-      dell' EAns
-      on. SA
-      Formica SP
-      e' VAip3s
-      stata VApsfs
-      accolta Vpsfs
-      in  E
-      genere  Sms
-      con E
+      A             E
+      ben           B
+      pensarci      Vfc
+      ,             FF
+      l'            RDns
+      intervista    Sfs
+      dell'         EAns
+      on.           SA
+      Formica       SP
+      e'            VAip3s
+      stata         VApsfs
+      accolta       Vpsfs
+      in            E
+      genere        Sms
+      con           E
       disinteresse  Sms
-      . FS
+      .             FS
 
     \end{verbatim}
   \end{minipage}
