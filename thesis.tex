@@ -25,6 +25,9 @@
 \usepackage{transparent}
 
 \usepackage[italian]{babel}
+\usepackage{courier}
+\usepackage{longtable}
+\usepackage{multirow}
 
 %\usepackage[refpages]{gloss}
 
@@ -84,6 +87,8 @@
 
 \newcommand\mytodo[1]{\textbf{\textcolor{red}{TODO: #1}}}
 %\renewcommand\mytodo[1]{} %uncommento to remove todos
+
+\newcommand*{\thead}[1]{\multicolumn{1}{c}{\bfseries #1}}
 
 % ----------------------------------------------------------------
 % frontpage
@@ -151,7 +156,7 @@ Membro  del Comitato di Supervisione  \hskip 2cm \ & \\ \cline{2-2}
 % ----------------------------------------------------------------
 % insert Lists
 \listoffigures
-%\listoftables
+\listoftables
 
 % ----------------------------------------------------------------
 % insert Acknowledgments

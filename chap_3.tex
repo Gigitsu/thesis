@@ -1,1 +1,211 @@
-\section{Section 1}
+In questo capitolo parler\`o dei dataset utilizzati e di come \`e stato impostato l'esperimento.
+
+\section{Part-of-Speech tagging}
+In linguistica, il PoS tagging, \`e un processo che consisite nel raggruppare le parole di una frase in calssi dette, appunto, \emph{Part of Speech} o \emph{classi morfologiche}.
+Questo raggruppamento, viene fatto sia in base alla definizione della parola stessa che al contesto in cui si trova.
+
+Nella grammatica tradizionale, esistono un numero limitato di classi morfologiche (sostantivo, verbo, aggettivo, articolo, pronome, avverbo, congiunzione, preposizione, ecc..).
+
+Ad esempio, possiamo classificare la frase \emph{Il cane abbaia.} in questo modo:
+
+\centerline{Il\textbf{/ART} cane\textbf{/SOST} abbaia\textbf{/V} .\textbf{/PUNT}}
+
+Tuttavia, chiaramente, esistono molte pi\`u classi di queste.
+Per il pronome, possiamo trattare le forme singolari, plurali e possessive come classi distinte.
+In molti linguaggi, inoltre, le parole possono essere distinte in base al loro ``caso'' o in base al genere.
+
+Un esempio di classificazione pi\`u dettagliata pu\`o essere:
+
+\begin{center}
+Il\textbf{/ART:m:s}
+
+cane\textbf{/SOST:m:s}
+
+abbaia\textbf{/V:ind:pr:3:s}
+
+.\textbf{/PUNT:sent}
+\end{center}
+
+In linguistica sono previste classi morfologiche per vari livelli di dettaglio, in base al modello di classificazione scelto.
+
+Solitamente, in sistemi di PoS tagging computerizzati, vengono adottati modelli di classificazione che prevedono un numero elevato di classi (da 50 o pi\`u) e variano in base alla lingua adottata.
+Esistono vari modelli comunemente accettati, quelli utilizzati per gli esperimenti di questa tesi sono:
+\begin{itemize}
+  \item Penn Treebank Tagset, composto da 45 classi e usato per la lingua inglese.
+  \item Tanll Tagset, che conta fino a 328 classi ed \`e usato per la lingua italiana.
+\end{itemize}
+
+\section{Dataset utilizzati}
+\nocite{Zanchetta:2005}
+\nocite{Attardi:2008}
+
+\subsection{CoNLL 2000}
+
+\subsection{Evalita 2009}
+\emph{Evalita} nasce grazie all'iniziativa dell'\emph{Italian Association for Computational Linguistics} (ALIC),
+ed \`e stato approvato dall'\emph{Italian Association for Artificial Intelligence} (AI*IA)
+e dall'\emph{Italian Association for Speech Science} (AISV).
+Lo scopo del progetto \`e quello di promuovere lo sviluppo di tecnologie in ambito linguistico,
+scritto e parlato, per la lingua italiana, fornendo un ambiente condiviso nel quale
+differenti sistemi e approcci, possono essere sviluppati e valutati in maniera consistente.
+
+La diffusione di attivit\`a e di metodologie di valutazione condivise costituisce un passo fondamentale
+verso lo sviluppo di risorse e tecnologie di Natural Language Processing. Il buon riscontro
+ottenuto da Evalita, sia in termini di partecipanti che in termini di qualit\`a dei risultati ottenuti,
+ha dimostranto che vale la pena perseguire tali obiettivi anche per la lingua italiana.
+Inoltre, i dati di test e di training per le attivit\`a proposte, vengono resi disponibili alla
+comunit\`a scientifica come punto di riferimenti per futuri miglioramenti.
+
+In particolare, per questa tesi, si far\`a riferimenti all'attivit\`a di
+PoS-Tagging proposta da Evalita nel 2009.
+
+I dataset forniti dagli organizzatori sono costituiti da articoli tratti dall'edizione
+online del giornale \emph{La Repubblica} (http://www.repubblica.it).
+
+L'intero corpus \`e formato da 108,874 parole divise in 3,719 frasi.
+
+Questo \`e stato annotato in pi\`u passaggi: il primo \`e stato portato a termina dal
+gruppo di Andrea Baroni, dell'Universit\`a di Bologna, che ha classificato manualmente
+l'intero corpus adottando un modello di classificazione con poche classi; successivamente
+\`e stato utilizzato \emph{MorphIt!}, uno strumento automatizzato, per assegnare una lista di
+possibili classi morfologiche a ciascuna parola; il risultato \`e stato poi convertito, per mezzo
+di uno script, nel modello di classificazione \emph{Tanl}.
+
+Infine, l'intero corpus \`e stato revisionato manualmente.
+
+\subsubsection{Formato dei dati}
+Il dataset di training \`e formato da un unico file di testo, con codifica UTF-8,
+dove ogni riga costituisce un token seguito dalla sua classe, separati da una tabulazione,
+secondo il seguente schema:
+
+\begin{center}
+  \begin{minipage}{5cm}
+    \begin{verbatim}
+    <TOKEN_1> <TAG1>
+    <TOKEN_2> <TAG2>
+    ...
+    <TOKEN_N> <TAGN>
+    <RIGA VUOTA>
+    \end{verbatim}
+  \end{minipage}
+\end{center}
+
+Al termine di ogni frase \`e presenta una riga vuota. Ad esempio:
+
+\begin{center}
+  \begin{minipage}{5cm}
+    \begin{verbatim}
+      A E
+      ben B
+      pensarci  Vfc
+      , FF
+      l'  RDns
+      intervista  Sfs
+      dell' EAns
+      on. SA
+      Formica SP
+      e' VAip3s
+      stata VApsfs
+      accolta Vpsfs
+      in  E
+      genere  Sms
+      con E
+      disinteresse  Sms
+      . FS
+
+    \end{verbatim}
+  \end{minipage}
+\end{center}
+
+Nell'esempio precedente vengono mostrati alcuni fra i pi\`u comuni problemi di tokenizzazione:
+\begin{itemize}
+  \item Le abbreviazioni vengono trattate come token (\emph{on.})
+  \item Possibili espressioni multi parola non vengono trattate come un unico token (\emph{in\_genere})
+  \item I clitici non vengono separati dal token (\emph{pensarci})
+\end{itemize}
+
+\subsubsection{Il modello di classificazione Tanl}
+Il modello \emph{Tanl} in base alle linee guida di \emph{EAGLES}, uno standard
+comunemente accettato dalla comunit\`a NLP, ed \`e derivato dalla classificazione
+morfologica adottata dal corpus ISST.
+
+Tanl \`e composto da tre livelli di classi morfologiche, ciascun livello aggiunge maggior
+dettaglio alla classificazione.
+
+Il primo livello \`e composto da 14 classi (Tabella~\ref{tab:tanl-coarse}):
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{| c || l |}
+    \hline
+    \thead{Tag} & \thead{Descrizione} \\
+    \hline
+    A & adjective \\
+    B & adverb \\
+    C & conjunction \\
+    D & determiner \\
+    E & preposition \\
+    F & punctuation \\
+    I & interjection \\
+    N & numeral \\
+    P & pronoun \\
+    R & article \\
+    S & noun \\
+    T & predeterminer \\
+    V & verb \\
+    X & residual class \\ \hline
+  \end{tabular}
+  \caption{Tagset Tanl, primo livello} \label{tab:tanl-coarse}
+\end{table}
+
+Il secondo livello del modello Tanl contiene 36 classi, di seguito riportate, con relativi esempi (Tabella~\ref{tab:tanl-fine}):
+\begin{longtable}{| c | p{.20\textwidth} | p{.30\textwidth} | p{.40\textwidth} |} \hline
+  \thead{Tag} & \thead{Descrizione} & \thead{Esempio} & \thead{Contesto} \\ \hline
+  A & adjective & bello, buono, pauroso, ottimo  & \parbox[t]{.40\textwidth}{una \emph{bella} passeggiata\\un \emph{ottimo} attaccante\\una persona \emph{paurosa}}\\ \hline
+  AP & possessive adjective & mio, tuo, nostro, loro & \parbox[t]{.40\textwidth}{a \emph{mio} parere\\il \emph{tuo} libro}\\ \hline
+  B & adverb & bene, fortemente, malissimo, & \parbox[t]{.40\textwidth}{arrivo \emph{domani}\\sto \emph{bene}}\\ \hline
+  BN  & negation adverb & non & \emph{non} sto bene\\ \hline
+  CC & coordinative conjunction & e, o, ma & \parbox[t]{.40\textwidth}{i libri \emph{e} i quaderni\\vengo \emph{ma} non rimango}\\ \hline
+  CS & subordinative conjunction & mentre, quando & \parbox[t]{.40\textwidth}{\emph{quando} ho finito vengo\\\emph{mentre} scrivevo ho finito l'inchiostro}\\ \hline
+  DD  & demonstrative determiner & questo, codesto, quello & \parbox[t]{.40\textwidth}{\emph{questo} denaro\\\emph{quella} famiglia}\\ \hline
+  DE & exclamative determiner & che, quale, quanto & \parbox[t]{.40\textwidth}{\emph{che} disastro!\\\emph{quale} catastrofe!}\\ \hline
+  DI & indefinite determiner & alcuno, certo, tale, parecchio, qualsiasi & \parbox[t]{.40\textwidth}{\emph{alcune} telefonate\\\emph{parecchi} giornali\\\emph{qualsiasi} persona}\\ \hline
+  DQ & interrogative determiner & cui, quale & i \emph{cui} libri\\ \hline
+  DR & relative determiner & che, quale, quanto & \parbox[t]{.40\textwidth}{\emph{che} cosa\\\emph{quanta} strada\\\emph{quale} formazione}\\ \hline
+  E & preposition & di, a, da, in, su, attraverso, verso, prima\_di & \parbox[t]{.40\textwidth}{\emph{a} casa\\\emph{prima\_di} giorno\\\emph{verso} sera}\\ \hline
+  EA & articulated preposition & alla, del, nei & \emph{nel} posto\\ \hline
+  FB & balanced punctuation & ( ) [ ] { } - \_ ` & \emph{(}sempre\emph{)}\\ \hline
+  FF & comma, hyphen & , - & carta, penna, 30\emph{-}40 persone\\ \hline
+  FS & sentence boundary punctuation & . ? ! ... & cosa\emph{?}\\ \hline
+  I & interjection & ahim\`e, beh, ecco, grazie & \emph{Beh}, che vuoi?\\ \hline
+  N & cardinal number & uno, due, cento, mille, 28, 2000 & \parbox[t]{.40\textwidth}{\emph{due} partite\\\emph{28} anni}\\ \hline
+  NO & ordinal number & primo, secondo, centesimo & \emph{secondo} posto\\ \hline
+  PC & clitic pronoun &mi, ti, ci, si, te, ne, lo, la, gli & \parbox[t]{.40\textwidth}{me \emph{ne} vado\\\emph{si} sono rotti\\\emph{mi} lavo\\\emph{gli} parlo}\\ \hline
+  PD & demonstrative pronoun & questo, quello, costui, ci\`o & \parbox[t]{.40\textwidth}{\emph{quello} di Roma\\\emph{costui} uccide}\\ \hline
+  PE & personal pronoun & io, tu, egli, noi, voi & \parbox[t]{.40\textwidth}{\emph{io} parto\\\emph{noi} scriviamo}\\ \hline
+  PI & indefinite pronoun & chiunque, ognuno, molto & \parbox[t]{.40\textwidth}{\emph{chiunque} venga\\i diritti di \emph{ognuno}}\\ \hline
+  PP & possessive pronoun & mio, tuo, suo, loro, proprio & \parbox[t]{.40\textwidth}{il \emph{mio} \`e qui\\pi\`u bella della \emph{loro}}\\ \hline
+  PQ & interrogative pronoun & che, chi, quanto & \parbox[t]{.40\textwidth}{non so \emph{chi} parta\\\emph{quanto} costa?\\\emph{che} ha fatto ieri?}\\ \hline
+  PR & relative pronoun & che, cui, quale ci\`o & \parbox[t]{.40\textwidth}{\emph{che} dice\\il \emph{quale} afferma\\a \emph{cui} parlo}\\ \hline
+  RD & determinative article & il, lo, la, i, gli, le & \parbox[t]{.40\textwidth}{\emph{il} libro\\\emph{i} gatti}\\ \hline
+  RI & indeterminative article & uno, un, una & \parbox[t]{.40\textwidth}{\emph{un} amico\\\emph{una} bambina}\\ \hline
+  S & common noun & amico, insegnante, verit\`a & \parbox[t]{.40\textwidth}{l'\emph{amico}\\la \emph{verit\`a}}\\ \hline
+  SA & abbreviation & ndr, a.C., d.o.c., km & \parbox[t]{.40\textwidth}{30 \emph{km}\\sesto secolo \emph{a.C.}}\\ \hline
+  SP & proper noun & Monica, Pisa, Fiat, Sardegna & \emph{Monica} scrive\\ \hline
+  T & predeterminer & tutto, entrambi & \parbox[t]{.40\textwidth}{\emph{tutto} il giorno\\\emph{entrambi} i bambini}\\ \hline
+  V & main verb & mangio, passato, camminando & \parbox[t]{.40\textwidth}{\emph{mangio} la sera\\il peggio \`e \emph{passato}\\ho \emph{scritto} una lettera}\\ \hline
+  VA & auxiliary verb & avere, essere, venire & \parbox[t]{.40\textwidth}{il peggio \`e \emph{passato}\\ho \emph{scritto} una lettera\\viene \emph{fatto} domani}\\ \hline
+  VM & modal verb & volere, potere, dovere, solere & \parbox[t]{.40\textwidth}{non posso \emph{venire}\\vuole \emph{comprare} il libro}\\ \hline
+  X & residual class  & it includes formulae, unclassified words, alphabetic symbols and the like & \parbox[t]{.40\textwidth}{distanziare di \emph{43''}\\mi \emph{piacce}}\\ \hline
+  \caption{Tagset Tanl, secondo livello} \label{tab:tanl-fine}
+\end{longtable}
+
+Nella forma pi\`u completa Tanl conta 328 classi che includono informazioni morfologiche, codificate in questo modo:
+\begin{itemize}
+  \item \emph{genere}: m (maschile), f (femminile), n (non specificato)
+  \item \emph{numero}: s (singolare), p (plurale), n (non specificato)
+  \item \emph{persona}: 1 (prima), 2 (seconda), 3 (terza)
+  \item \emph{modo}: i (indicativo), m (imperativo), c (congiuntivo), d (condizionale), g (gerundio), f (infinito), p (participio)
+  \item \emph{tempo}: p (presente), i (imperfetto), s (passato), f (futuro)
+  \item \emph{clitico}: c segnala la presenza di clitici aggiuntivi
+\end{itemize}
