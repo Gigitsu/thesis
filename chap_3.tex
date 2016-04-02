@@ -219,7 +219,7 @@ dettaglio alla classificazione.
 
 Il primo livello \`e composto da 14 classi (Tabella~\ref{tab:tanl-coarse}):
 
-\begin{table}[!htbp]
+\begin{table}[H]
   \centering
   \begin{tabular}{| c || l |}
     \hline
@@ -294,3 +294,116 @@ Nella forma pi\`u completa Tanl conta 328 classi che includono informazioni morf
   \item \emph{tempo}: p (presente), i (imperfetto), s (passato), f (futuro)
   \item \emph{clitico}: c segnala la presenza di clitici aggiuntivi
 \end{itemize}
+
+\section{Esperimenti}
+
+Il codice per l'esperimento \`e stato scritto interamente in Lua, utilizza Torch come framework ed \`e stato eseguito in ambiente linux.
+
+\subsection{Configurazione dell'ambiente}
+Torch \`e stato installato nella cartella home, seguendo la documentazione ufficiale:
+
+\lstinputlisting[language={bash}]{snippets/torch_install.sh}
+
+Dopo aver installato Torch, \`e necessario installare alcuni pacchetti aggiuntivi per lua:
+
+\lstinputlisting[language={bash}]{snippets/luarocks_packages.sh}
+
+\subsubsection{luautf8}
+Lua offre un supporto solo parziale alla codifica utf8.
+Questo, nella maggior parte dei casi, non rappresenta un grosso problema.
+Tuttavia, sviluppando un algoritmo che deve operare sui singoli caratteri di frasi scritte anche in lingua italiana, mi sono imbattuto in alcune limitazioni di Lua.
+
+Prendiamo, ad esempio, il codice seguente
+
+\lstinputlisting[language={[5.0]Lua}]{snippets/gmatch_english.lua}
+
+La funzione \emph{gmatch} prende in input una espressione regolare e restituisce un iteratore che scorre tutta la stringa cercando tutte le possibili stringhe che combaciano con l'espressione regolare.
+In questo caso l'espressione regolare \`e ``.'', quindi, l'iteratore restituito, trova tutti i singoli caratteri di cui \`e composta la stringa.
+In altre parole, il codice precedente, equivale alla funzione \emph{split('')} comune in altri linguaggi ma assente in Lua.
+
+Eseguendo questo codice in una REPL Lua, otteniamo come output:
+
+\lstinputlisting[language={[5.0]Lua}]{snippets/gmatch_english_output.lua}
+
+che \`e esattamente ci\`o che ci si aspetterebbe.
+
+Tuttavia, eseguendo questo codice
+
+\begin{samepage}
+\lstset{inputencoding=utf8/latin1}
+\lstinputlisting[language={[5.0]Lua}]{snippets/gmatch_italian.lua}
+\end{samepage}
+
+otteniamo come output
+
+\begin{minipage}{\textwidth}
+\lstset{inputencoding=utf8/latin1}
+\lstinputlisting[language={[5.0]Lua}]{snippets/gmatch_italian_output.lua}
+\end{minipage}
+
+al posto delle lettere accentate di cui \`e composta la stringa.
+Inoltre, nonostante la stringa sia composta da 5 caratteri, l'iteratore ne ha restituiti 10.
+
+Tutto ci\`o \`e dovuto al fatto che lua \`e, come viene definito nella documentazione ufficiale, unicode-agnostic.
+Questo significa che lua tratta tutte le stringhe come una sequenza arbitraria di byte, quindi pu\`o contenere qualsiasi carattere in qualsiasi codifica, utf8 compresa.
+Tuttavia la maggior parte delle funzioni che lua mette a disposizione per manipolare le stringhe, compresa la funzione \emph{gmatch}, trattano queste ultime come sequenze di byte, mentre utf8 prevede l'uso di 2 byte per codificare i caratteri accentati.
+
+La stringa ``\`a\`e\`i\`o\`u'' \`e quindi composta da 10 byte, per questo motivo l'iteratore restituito da \emph{gmatch} trova 10 caratteri invece di 5, che, per di pi\`u, sono caratteri non stampabili.
+
+Questo problema \`e stato risolto utilizzando la libreria \emph{luautf8}, che mette a disposizione implementazioni delle funzioni di manipolazioni di stringhe compatibili con la codifica utf8.
+
+\subsubsection{nn}
+La libreria \emph{nn} mette a disposizione una serie di classi con le quali \`e possibile costruire ed addestrare reti neurali, di qualsiasi complessit\`a, in maniera modulare.
+Queste possono essere suddivise in tre macro categorie: moduli, contenitori e criteri.
+
+I moduli costituiscono i mattoni con cui \`e possibile costruire reti neurali.
+Ognuno di essi espone i metodi necessari per definire un un livello della rete neurale e fra questi \`e possibile individuarne due di fondamentale importanza (per una descrizione degli altri metodi, rimando alla documentazione ufficiale):
+
+\begin{itemize}
+  \item il metodo \emph{forward(input)} che prende in pasto i dati di input e calcola i corrispondenti dati di output
+  \item il metodo \emph{backward(input, gradOutput)} che effettua un passaggio di retro propagazione attraverso il modulo, in base ai dati di input forniti
+\end{itemize}
+
+Ciascun modulo \`e, a sua volta, una rete neurale e pu\`o essere combinato con altri moduli per creare reti neurali pi\`u complesse, tramite l'uso di contenitori.
+Questi ultimi sono simili ai moduli, e infatti espongono gli stessi metodi esposti dai moduli, tuttavia il loro scopo non \`e quello di applicare una trasformazione ai dati di input, bens\`i di orchestrare le interazioni fra i moduli contenuti.
+Metodi \emph{forward(input)} e \emph{backward(input, gradOutput)} di un contenitore, infatti, non lavorano direttamente sui dati ma si occupano di chiamare i rispettivi metodi dei moduli contienuti con modalit\`a che dipendono dalla particolare implementazione del contenitore.
+
+Esistono diverse implementazioni di moduli e contenitori, nella libreria \emph{nn}, con le quali \`e possibile costruire reti neurali complesse a piacere.
+
+Per descriverne l'utilizzo consideriamo il seguente esempio:
+\lstinputlisting[language={[5.0]Lua}]{snippets/linear.lua}
+
+Questa porzione di codice crea una semplice rete neurale di tipo \emph{feed-forward} con un solo livello, utilizzando un modulo di tipo \texttt{Linear} ed un contenitore di tipo \texttt{Sequential}.
+
+Nella prima riga viene creato il modulo \texttt{nn.Linear}, che rappresenta l'unico livello della rete.
+Questo prende in input due parametri, rispettivamente il numero di dati in intput e il numero di dati in output, e restituisce un modulo il cui metodo \texttt{forward} calcola l'output applicando una trasformazione lineare ai dati di input (es. $\vec{y} = \vec{a}\vec{x} + b$ )
+
+Nella seconda e terza riga viene creato il contenitore \texttt{nn.Sequential} e a quest'ultimo viene aggiunto il modulo \texttt{nn.Linear} appena creato.
+Il metodo \texttt{forward} del contenitore \texttt{nn.Sequetial} non fa altro che chiamare i metodi \texttt{forward} dei moduli contenuti, che rappresentano i livelli della rete, in maniera sequenziale e rispettando l'ordine con cui sono stati aggiunti.
+L'output del modulo $l_n$ costituisce l'input del modulo $l_{n+1}$.
+
+Una propagazione in avanti \`e eseguita in questo modo:
+
+\lstinputlisting[language={[5.0]Lua}]{snippets/linear_forward.lua}
+
+Mentre, per effettuare una retro propagazione:
+
+\lstinputlisting[language={[5.0]Lua}]{snippets/linear_backward.lua}
+
+La libreria mette a disposizione molti altri moduli, come ad esempio:
+
+\begin{itemize}
+    \item \emph{Identity}: restituisce in output qualsiasi valore passato in input, senza applicare alcuna trasformazione. Utile per creare il livello di input di una rete neurale.
+    \item \emph{Add}: aggiunge un valore di distorsione ai dati di input, es. $y_i = x_i + b_i$ oppure, se $scalar = true$, utilizza un unico valore di distorsione $y_i = x_i + b$.
+    \item \emph{Mul}: moltiplica i dati di input per uno scalare $w$, es. $y = wx$
+\end{itemize}
+
+\subsubsection{nngraph}
+
+\subsubsection{optim}
+
+\subsection{Cuda e OpenCL}
+
+\lstinputlisting[language={bash}]{snippets/luarocks_cuda.sh}
+
+\lstinputlisting[language={bash}]{snippets/luarocks_cltorch.sh}
