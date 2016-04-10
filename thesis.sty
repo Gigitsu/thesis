@@ -8,12 +8,17 @@
 %% make the quotation appear next to the chapter number
 \renewcommand\chapterheadstartvskip{\vspace*{-5\baselineskip}}
 
+\makeatletter
+\let\size@chapter\huge
+\makeatother
+\renewcommand*{\sectfont}{\sffamily\bfseries\selectfont}
+
 %% now change the section heading to have a line beneath it
 %% load up the fancy title-style package
-%\RequirePackage[calcwidth]{titlesec}
+\RequirePackage[calcwidth]{titlesec}
 
-%\titleformat{\section}[hang]{\sffamily\bfseries}
-%{\Large\thesection}{12pt}{\Large}[{\titlerule[0.5pt]}]
+\titleformat{\section}[hang]{\sffamily\bfseries}
+{\Large\thesection}{12pt}{\Large}[{\titlerule[0.5pt]}]
 
 %%
 %% End of file `phdthesis.sty`

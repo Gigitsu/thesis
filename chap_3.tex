@@ -1,6 +1,6 @@
 In questo capitolo parler\`o dei dataset utilizzati e di come \`e stato impostato l'esperimento.
 
-\section{Part-of-Speech tagging}
+\section{Part-of-Speech (PoS) tagging}
 In linguistica, il PoS tagging, \`e un processo che consisite nel raggruppare le parole di una frase in calssi dette, appunto, \emph{Part of Speech} o \emph{classi morfologiche}.
 Questo raggruppamento, viene fatto sia in base alla definizione della parola stessa che al contesto in cui si trova.
 
@@ -45,7 +45,7 @@ Per ogni edizione della conferenza, sono state proposte delle attivit\`a condivi
 In questo modo i partecipanti potevano essere valutati e confrontati in maniera sistematica.
 
 Per gli esperimenti di questa tesi, sono stati usati i dataset di training e test forniti durante la quarta edizione della conferenza, tenutasi nel 2000.
-I dati forniti consistono in file di testo contenente $253\,906$ parole che formano $10\,729$ frasi, ogni riga corrisponde ad una parola, mentre una riga vuota denota la fine di una frase.
+I dati forniti consistono in file di testo contenenti, complessivamente, $253\,906$ parole che formano $10\,729$ frasi, ogni riga di ciascun file di testo corrisponde ad una parola, mentre una riga vuota denota la fine di una frase.
 Ciascuna riga \`e costituita, a sua volta, da 3 colonne:
 \begin{itemize}
   \item la prima colonna contiene la parola corrente
@@ -481,3 +481,104 @@ Per il supporto alla piattaforma CUDA.
 \lstinputlisting[language={bash}]{snippets/luarocks_cltorch.sh}
 
 Per il supporto al framework OpenCL.
+
+\section{Algoritmo utilizzato}
+
+Tutti i PoS tagger esistenti, considerano la parola, o pi\`u generalmente il \emph{token}, come l'unit\`a fondamentale dell'apprendimento.
+Molti algoritmi prevedono delle fasi di preprocessing del testo atte a semplificarlo, eliminando molte delle varianti tipiche di una lingua naturale, come ad esempio la \emph{lemmatizzazione}.
+
+La lemmatizzazione consiste nel ridurre una forma \emph{flessa}\footnote{In linguistica si chiama \emph{flessione} una qualsiasi variazione morfologica delle parole realizzata per indicarne i tratti grammaticali o sintattici. Avremo ad esempio diverse forme flesse di un verbo (\emph{io lavoro}, \emph{tu lavori}) oppure di un nome (\emph{il lavoro}, \emph{i lavori}).} di una parola alla sua forma canonica (non marcata), detta \emph{lemma}\footnote{In linguistica si dice lemma la citazione di una parola, ossia quella parola che per convenzione è scelta per rappresentare tutte le forme di una flessione.}.
+Esistono numerosi algoritmi di lemmatizzazione come, ad esempio, \emph{Lovins} e \emph{Porter}.
+Entrambi sono algoritmi di \emph{suffix stripping} che rimuovono, quindi, i suffissi alle parole a partire da un dizionario di suffissi comuni.
+
+Altro problema \`e la tokenizzazione, ossia la suddivisione del testo in token. Processo che all'apparenza sembra di semplice soluzione ma che nasconde delle difficolt\`a.
+Prendiamo in considerazione \texttt{aren't}, qual \`e la tokenizzazione corretta? Possiamo infatti avvere \texttt{aren't}, \texttt{arent}, \texttt{are nt} e \texttt{aren t}.
+
+I dizionari poi, vengono costruiti a partire alle parole presenti nel corpus.
+La fase di preprocessing \`e fondamentale nella costruzione di un dizionario efficiente, altrimenti si avrebbero dizionari enormi con un elevto numero di parole che, pur avendo quasi lo stesso significato (es. \emph{lavoro}, \emph{lavori}) sono rappresentatio in maniera del tutto differente e senza alcuna correlazione.
+
+In questa tesi si cercher\`a di cambiare approccio. L'unit\`a base sar\`a il singolo carattere, piuttosto che il token.
+Questo approccio semplifica di molto la fase di preprocessing del testo, eliminandola del tutto.
+Non sar\`a pi\`u necessario ne tokenizzare ne lemmatizzare il corpus in input.
+
+Tuttavia sorgono alcuni problemi. La totalit\`a dei corpus taggati nonch\`e dei tagset esistenti, prevedono dei tag per le parole e non per i caratteri.
+Quindi, per poter addestrare con successo la rete LSTM, risulta comunque necessario effettuare un minimo di preprocessing sui soli dataset utilizzati per l'addestramento.
+
+Il preprocessing adottato consiste nel dividere le singole parole in singoli caratteri.
+Ad ogni carattere \`e stato poi assegnato un tag che corrisponde al tag della parola dalla quale \`e stato estratto pi\`u un suffisso che ne indica la posizione nella parola:
+
+\begin{itemize}
+  \item il suffisso \emph{-S} (\emph{S}tart) per indicare il primo carattere di una parola
+  \item il suffissio \emph{-I} (\emph{I}nner) per gli altri caratteri della parola
+\end{itemize}
+
+Ad esempio la
+
+\begin{center}
+  \begin{minipage}{5cm}
+    \begin{verbatim}
+     .
+     reckons   VBZ
+     .
+     .
+    \end{verbatim}
+  \end{minipage}
+\end{center}
+
+diventa
+
+\begin{center}
+  \begin{minipage}{5cm}
+    \begin{verbatim}
+     .
+     r   VBZ-S
+     e   VBZ-I
+     c   VBZ-I
+     k   VBZ-I
+     o   VBZ-I
+     n   VBZ-I
+     s   VBZ-I
+     .
+     .
+    \end{verbatim}
+  \end{minipage}
+\end{center}
+
+Un altro possibile problema riguarda la separazione fra le parole.
+Nel PoS-Tagging tradizionale la separazione fra le parole \`e implicita, ogni token corrisponde ad una parola.
+Nel nostro caso, non essendoci alcun tipo di tokenizzazione, si rischia di perdere un'informazione importante, ossia dove termina una parola e inizia un'altra.
+Una soluzione consiste nell'aggiungere un carattere di spazio fra i caratteri delle singole parole ed assegnare a questo carattere il tag speciale \emph{S}.
+Inoltre, non \`e che questa sia strettamente necessaria, la rete, infatti, potrebbe apprendere lo stesso questa informazione, grazie al suffissio dato ai tag (-S indica implicitamente l'inizio di una parola).
+Difficile determinare a priori quale sia la scelta migliore, pertanto si \`e optato per adottarle entrambe addestrando pi\`u reti, met\`a delle quali con la soluzione dell'aggiungere il carattere di spazio e l'altra met\`a senza.
+
+Dopo aver preprocessato i dataset, si passa alla creazione del dizionario.
+Per ogni dataset sono stati creati 2 dizionari, uno contenente i soli tag, l'altro contenente tutti i caratteri dell'intero corpus.
+
+Dal training set \`e stato estratto un piccolo insieme (~10\%) da usare come validation set.
+La restante parte del training set \`e stato dato in input alla rete un carattere alla volta utilizzando la codifica \emph{one-hot}.
+
+Questa consiste nel rappresentare una determinata informazione, nel nostro caso un carattere, mediante una sequenza di bit tutti posti a zero tranne uno.
+In particolare, ipotizzando di avere un dizionario composto da $n$ caratteri, ciascun carattere sar\`a rappresentato mediante una sequenza di $n$ bit in questo modo:
+
+\begin{itemize}
+  \item il primo carattere sar\`a codificato con $1000000\dots0_{n}$
+  \item il secondo carattere sar\`a codificato con $0100000\dots0_{n}$
+  \item il terzo carattere sar\`a codificato con $0010000\dots0_{n}$
+  \item e cos\`i via...
+\end{itemize}
+
+Il validation set \`e stato usato durante tutta la fase di addestramento per monitorarne l'andamento, calcolando periodicamente, su questo insieme di dati, il \emph{loss} (il valore dell'errore calcolato dalla funzione di perdita).
+
+Per ogni dataset sono state addestrate 96 reti LSTM, ciascuna delle quali differisce dalle altre per:
+
+\begin{itemize}
+  \item numero di livelli (2, 3, 4, 5)
+  \item numero di nodi (128, 256, 512, 1024)
+  \item numero di fasi temporali (60, 80, 100)
+  \item uso o meno del carattere di spazio
+\end{itemize}
+
+Ogni rete neurale \`e stata interrotta alla 150\textsuperscript{$\circ$} epoca.
+Un epoca inizia quando viene dato in input alla rete il primo carattere del dataset e termina quando viene dato in input l'ultimo carattere.
+
+Per valutare le prestazioni di ciascuna rete, sono stati usati i pesi corrispondenti all'epoca con il loss pi\`u basso.
