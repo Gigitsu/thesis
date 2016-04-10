@@ -35,10 +35,10 @@ Il valore $v_j$ di ciascun neurone $j$ \`e calcolato applicando la sua funzione 
   \begin{center}
     \includegraphics[width=0.7\textwidth]{./images/artificialNeuron.png}
   \end{center}
-  \caption{Un neurone artificiale calcona una funzione non lineare della somma pesata dei suoi input}
+  \caption{Un neurone artificiale calcola una funzione non lineare della somma pesata dei suoi input}
   \label{fig:artificialNeuron}
 \end{figure}
-Per comodit\`a, ci riferiremo alla somma pesata all'interno delle parentesi come l'\emph{attivazione in arrivo} e la indicheremo con $a_j$. Rappresentiamo l'intero processo in figura disegnando i neuromi coe dei cerchi mentre gli archi come delle frecce che li collegano.
+Per comodit\`a, ci riferiremo alla somma pesata all'interno delle parentesi come l'\emph{attivazione in arrivo} e la indicheremo con $a_j$. Rappresentiamo l'intero processo in figura disegnando i neuroni con dei cerchi mentre gli archi come delle frecce che li collegano.
 Quando possibile, verr\`a utilizato un simbolo per indicare l'esatta funzione di attivazione utilizzata, ad esempio $\sigma$ per la fnzione sigmoide.
 
 Scelte abbastanza comuni per la funzione di attivazione includono la funzione sigmoide $\sigma(z) = 1/(1+e^{-z})$ e la funzione \emph{tanh} $\phi(z)=(e^z-e^{-z})/(e^z+e^{-z})$ che \`e diventata molto comune nelle reti neurali di tipo \emph{feedforward} ma \`e stata utilizzata anche in reti neurali ricorrenti~\cite{Sutskever:2011}.
@@ -117,7 +117,7 @@ Tuttavia, sono stati proposti modelli, come la rete di Jordan, che ammettono la 
   \begin{center}
     \includegraphics[width=0.7\textwidth]{./images/simpleRecurrentNeuralNetwork.png}
   \end{center}
-  \caption{Un seplice rete neuralie ricorrente.
+  \caption{Una semplice rete neuralie ricorrente.
   Ad ogni passo temporle $t$, l'attivazione viene passata lungo gli archi continui, cos\`i come accadrebbe per una normale rete feedforward.
   Gli archi tratteggiati collegano il nodo sorgente $j^{'}$ al tempo $t$, quindi $j^{'(t)}$, al nodo target del successivo passo temporale $j^{(t+1)}$.}
   \label{fig:simpleRecurrentNeuralNetwork}
@@ -318,7 +318,10 @@ Inoltre, cos\`i come in matlab, pi\`u tipi possono coesistere in Torch7 ed \`e s
 
 \subsection{Pacchetti utilizzati}
 
-Di seguito la lista delle librerie utilizzate nel coros di questa tes:
+Di seguito la lista delle librerie utilizzate nel coros di questa tesi:
+
+\subsubsection{luautf8}
+La libreria \emph{luautf8} espone numerose funzione per manipolare stringhe con codifica utf8.
 
 \subsubsection{torch}
 La libreria principale di Torch7: fornisce la class Tensor, strumenti per la serializzazione e altre funzionalit\`a di base.

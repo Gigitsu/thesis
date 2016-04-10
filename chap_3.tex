@@ -44,7 +44,7 @@ CoNLL (\emph{Conference on Natural Language Learning}), \`e una conferenza organ
 Per ogni edizione della conferenza, sono state proposte delle attivit\`a condivise, ciascuna delle quali comprendeva dati di test e di training forniti direttamente dagli organizzatori.
 In questo modo i partecipanti potevano essere valutati e confrontati in maniera sistematica.
 
-Per gli esperimenti di questa tesi, sono stati usati i dataset do training e test forniti durante la quarta edizione della conferenza, tenutasi nel 2000.
+Per gli esperimenti di questa tesi, sono stati usati i dataset di training e test forniti durante la quarta edizione della conferenza, tenutasi nel 2000.
 I dati forniti consistono in file di testo dove ogni riga corrisponde ad una parola, mentre una riga vuota denota la fine di una frase.
 Ciascuna riga \`e costituita, a sua volta, da 3 colonne:
 \begin{itemize}
@@ -354,9 +354,9 @@ Questo problema \`e stato risolto utilizzando la libreria \emph{luautf8}, che me
 
 \subsubsection{nn}
 La libreria \emph{nn} mette a disposizione una serie di classi con le quali \`e possibile costruire ed addestrare reti neurali, di qualsiasi complessit\`a, in maniera modulare.
-Queste possono essere suddivise in tre macro categorie: moduli, contenitori e criteri.
+Queste possono essere suddivise in tre macro categorie: \emph{moduli}, \emph{contenitori} e \emph{criteri}.
 
-I moduli costituiscono i mattoni con cui \`e possibile costruire reti neurali.
+I \emph{moduli} costituiscono i mattoni con cui \`e possibile costruire reti neurali.
 Ognuno di essi espone i metodi necessari per definire un un livello della rete neurale e fra questi \`e possibile individuarne due di fondamentale importanza (per una descrizione degli altri metodi, rimando alla documentazione ufficiale):
 
 \begin{itemize}
@@ -364,7 +364,7 @@ Ognuno di essi espone i metodi necessari per definire un un livello della rete n
   \item il metodo \emph{backward(input, gradOutput)} che effettua un passaggio di retro propagazione attraverso il modulo, in base ai dati di input forniti
 \end{itemize}
 
-Ciascun modulo \`e, a sua volta, una rete neurale e pu\`o essere combinato con altri moduli per creare reti neurali pi\`u complesse, tramite l'uso di contenitori.
+Ciascun modulo \`e, a sua volta, una rete neurale e pu\`o essere combinato con altri moduli per creare reti neurali pi\`u complesse, tramite l'uso di \emph{contenitori}.
 Questi ultimi sono simili ai moduli, e infatti espongono gli stessi metodi esposti dai moduli, tuttavia il loro scopo non \`e quello di applicare una trasformazione ai dati di input, bens\`i di orchestrare le interazioni fra i moduli contenuti.
 Metodi \emph{forward(input)} e \emph{backward(input, gradOutput)} di un contenitore, infatti, non lavorano direttamente sui dati ma si occupano di chiamare i rispettivi metodi dei moduli contienuti con modalit\`a che dipendono dalla particolare implementazione del contenitore.
 
@@ -398,12 +398,86 @@ La libreria mette a disposizione molti altri moduli, come ad esempio:
     \item \emph{Mul}: moltiplica i dati di input per uno scalare $w$, es. $y = wx$
 \end{itemize}
 
+Infine abbiamo i \emph{criteri}, che sono fondamentali per l'apprendimento di una rete neurale.
+Quest'ultimi, infatti, sono usati per calcolare i gradienti, dati input e output, in base ad una determinata funzione di perdita.
+
+Possono essere raggruppati in:
+\begin{itemize}
+    \item \emph{Classification}
+    \item \emph{Regression}
+    \item \emph{Embedding criterions}
+    \item \emph{Miscelaneous criterions}
+\end{itemize}
+
+Come qualsiasi altro modulo, anche i criteri espongono i metodi:
+\begin{itemize}
+  \item \texttt{forward(predicted, target)} dati i valori calcolati dalla rete neurale (\texttt{predicted}) e quelli reali, obiettivo dell'apprendimento, calcola la perdita in base alla funzione di perdita associata al criterio utilizzato.
+  \item \texttt{backward(input, target)} dati input e target calcola il gradiente in base alla funzione di perdita associata al criterio.
+\end{itemize}
+
+Queste funzioni sono usate per calcolare la perdita e aggiornare di conseguenza i pesi associati a ciascun arco della rete neurale, durante la fase di addestramento.
+
 \subsubsection{nngraph}
+Un estensione della libreria \emph{nn} che semplifica la creazione di architetture neurali complesse.
 
 \subsubsection{optim}
+Questa libreria implementa parecchi algoritmi di ottimizzazione che possono essere utilizzati per addestrare una rete neurale.
 
-\subsection{Cuda e OpenCL}
+Una rete neurale pu\`o essere addestrata usando un semplice ciclo \texttt{for} e una \emph{funzione d'apprendimento}.
+Nella seguente porzione di codice la funzione \texttt{gradientUpgrade} una singola fase di apprendimento, che consiste in una propagazione in avanti seguita da una retro propagazione e un conseguente aggiornamento dei pesi attribuiti agli archi della rete.
+
+\lstinputlisting[language={[5.0]Lua}]{snippets/for_loop_learning.lua}
+
+Tuttavia, la librearia \texttt{Optim}, semplifica il processo di apprendimento mettendo a disposizione una lista completa di algoritmi di ottimizzazione gi\`a implementati, che possono essere utilizzati per addestrare una rete neurale.
+
+Fra questi troviamo:
+
+\begin{itemize}
+  \item \emph{adadelta}
+  \item \emph{adagrad}
+  \item \emph{adam}
+  \item \emph{asgd}
+  \item \emph{fista}
+  \item \emph{lbfgs}
+  \item \emph{lswolfe}
+  \item \emph{rmsprop}
+  \item \emph{rprop}
+  \item \emph{sgd}
+\end{itemize}
+
+Tutti i metodi condividono la stessa interfaccia:
+
+\lstinputlisting[language={[5.0]Lua}]{snippets/optim_interface.lua}
+
+Di seguito, un esempio di come utilizzare la libreria \texttt{optim} per addestrare una rete neurale:
+
+\lstinputlisting[language={[5.0]Lua}]{snippets/optim_example.lua}
+
+\subsubsection{GPGPU}
+La \emph{GPGPU}, sigla di \emph{general-purpose computing on graphics processing units} (letteralmente ``calcolo a scopo generale su unit\`a di elaborazione grafiche'') \`e un settore della ricerca informatica che ha come scopo l'utilizzo della GPU per scopi diversi dalla tradizionale creazione di un'immagine tridimensionale; in tale ambito di utilizzo la GPU viene impiegata per elaborazioni estremamente esigenti in termini di potenza di elaborazione, e per le quali le tradizionali architetture di CPU non hanno una capacit\`a di elaborazione sufficiente.
+
+Tale tipo di elaborazioni sono, per loro natura, di tipo altamente parallelo, e in grado quindi di beneficiare ampiamente dell'architettura tipica delle GPU. A tale caratteristica intrinseca, a partire dal 2007 si \`e aggiunta l'estrema programmabilit\`a offerta dalle ultime soluzioni commerciali, che al succedersi delle generazioni aumentano non solo la propria potenza elaborativa ma anche la propria versatilit\`a. Tale evoluzione delle architetture video si sta gradualmente attuando anche perch\`e la stessa grafica 3D dei videogiochi pi\`u recenti si \`e enormemente trasformata nel tempo; un tempo essi erano basati su un insieme di istruzioni fisse e predefinite, ma progressivamente si sta sviluppando un approccio nel quale le GPU vengono completamente programmate utilizzando gli shader, caratteristica che apre di conseguenza anche nuovi scenari di utilizzo a questo tipo di soluzioni hardware. Tale programmabilit\`a ha preso appunto il nome di Shader model.
+
+\`E evidente che le applicazioni che sono in grado di avvantaggiarsi significativamente della potenza di calcolo delle moderne GPU sono solo un sottoinsieme dell'intero panorama software, in quanto per sfruttare le caratteristiche di tali architetture \`e necessaria un'elevata parallelizzazione del codice, una caratteristica tipica di alcuni problemi scientifici.
+
+L'algoritmo di addestramento di una rete neurale rientra perfettamente in questo sottoinsieme, in quanto altamente paralelizzabile.
+Infatti, per ciascun livello, i calcoli necessari ad eseguire una propagazione di un singolo nodo sono indipendenti da quelli eseguiti per altri nodi dello stesso livello, quindi possono essere eseguiti in parallelo.
+
+Al momento sono due le principali piattaforme che permettono di effettuare calcoli general-purpose su GPU: \emph{CUDA} e \emph{OpenCL}.
+
+CUDA \`e l'architettura di elaborazione in parallelo di NVIDIA.
+Essa permette di sfruttare le GPU compatibli per eseguire processi general-purpose, tuttavia si tratta di una proposta propietaria e, attualmente, gli unici dispositivi compatibili sono le GPU \emph{GeForce}, \emph{ION}, \emph{Quadro} e \emph{Tesla} di NVIDIA.
+
+OpenCL \`e un framework basato sul linguaggio ANSI C e C++ che permette di scrivere software che pu\`o essere eseguito su una molteplicit\`a di piattaforme, comprese CPU e GPU.
+Si tratta di un progetto open source, originariamente proposto dalla Apple, successivamente ratificato dalla stessa assieme alle principali aziende del settore (Intel, NVIDIA, AMD), e infine portato a compimento dal consorzio no-profit Khronos Group.
+Essendo uno standard aperto \`e compatibile con una variet\`a di dispositivi, comprese le GPU AMD, Intel ed NVIDIA.
+
+Torch7 \`e compatibile con entrambe le piattaforme, mettendo a disosizione le librerie \texttt{cutorch} e \texttt{cunn} per CUDA, \texttt{cltorch} e \texttt{clnn} per OpenCl.
 
 \lstinputlisting[language={bash}]{snippets/luarocks_cuda.sh}
 
+Per il supporto alla piattaforma CUDA.
+
 \lstinputlisting[language={bash}]{snippets/luarocks_cltorch.sh}
+
+Per il supporto al framework OpenCL.

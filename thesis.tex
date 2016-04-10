@@ -5,6 +5,7 @@
 %\documentclass[twoside,openright,a4paper,fleqn]{book}
 %\usepackage{a4}
 \documentclass[final,a4paper]{book}
+\usepackage{thesis}
 \usepackage[T1]{fontenc}
 \usepackage[ansinew]{inputenc}
 \usepackage{latexsym,amssymb}
@@ -18,8 +19,8 @@
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 \usepackage{epsfig}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
+%\usepackage{algorithm}
+%\usepackage{algpseudocode}
 \usepackage{url}
 \usepackage{mathtools}
 \usepackage{listings}
@@ -30,6 +31,7 @@
 \usepackage{courier}
 \usepackage{longtable}
 \usepackage{multirow}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
 
 %\usepackage[refpages]{gloss}
 
@@ -87,7 +89,7 @@
 \renewcommand{\chaptermark}[1]{\markboth{\sc\small #1}{}}
 \renewcommand{\sectionmark}[1]{\markright{\sc\small \thesection\ #1}}
 
-\newcommand\mytodo[1]{\textbf{\textcolor{red}{TODO: #1}}}
+\newcommand\mytodo[1]{} % \textbf{\textcolor{red}{TODO: #1}}}
 %\renewcommand\mytodo[1]{} %uncommento to remove todos
 
 \newcommand*{\thead}[1]{\multicolumn{1}{c}{\bfseries #1}}
@@ -95,8 +97,8 @@
 % ----------------------------------------------------------------
 % frontpage
 
-\input{frontpage/g2}
-% \input{frontpage/uniba}
+% \input{frontpage/g2}
+\input{frontpage/uniba}
 
 % ----------------------------------------------------------------
 
@@ -104,52 +106,11 @@
 
 \maketitle
 
+\newpage
+\thispagestyle{empty}
+\mbox{}
+
 \clearpage
-
-\section*{Crediti}
-Questa tesi \`e stata impaginata usando i seguenti programmi open-source:
-\begin{itemize}
-  \item [$\circ$] TeXShop LaTeX Editor \\
-	available at: {\tt http://www.uoregon.edu/$\sim$koch/texshop/}
-  \item [$\circ$] MacTex Distribution \\
-	available at: {\tt http://www.tug.org/mactex/}
-\end{itemize}
-\vspace*{\fill}
-
-
-\noindent
-\begin{tabular}{p{185pt} p{110pt}}
-Supervisore Tesi \hskip 3cm \ & \\ \cline{2-2} & Prof. Donato Malerba \\
-\end{tabular}
-
-\vspace{2cm}
-
-\noindent
-\begin{tabular}{p{185pt} p{110pt}}
-Presidente del Comitato di Supervisione \hskip 2cm \ & \\ \cline{2-2}
-\end{tabular}
-\vspace{1cm}
-
-\noindent
-\begin{tabular}{p{185pt} p{110pt}}
-Membro  del Comitato di Supervisione \hskip 2cm \ & \\ \cline{2-2}
-\end{tabular}
-\vspace{1cm}
-
-\noindent
-\begin{tabular}{p{185pt} p{110pt}}
-Membro  del Comitato di Supervisione  \hskip 2cm \ & \\ \cline{2-2}
-\end{tabular}
-\vspace{2cm}
-
-
-\vspace*{\fill} \noindent \hrule
-\begin{tabular}{l}
-	Presentato il {\sl XXXX Date to define}\\
-	Copyright {\copyright} 2015 Luigi Clemente\\
-\end{tabular}
-\hrule
-
 
 % ----------------------------------------------------------------
 % insert toc
@@ -190,7 +151,7 @@ Membro  del Comitato di Supervisione  \hskip 2cm \ & \\ \cline{2-2}
 \chapter {Stato dell'arte}\label{chap:chap_2}
 \input{chap_2}
 
-\chapter {Progettazione}\label{chap:chap_3}
+\chapter {LSTM applicato a Part-of-speech tagging}\label{chap:chap_3}
 \input{chap_3}
 
 \chapter {Esperimenti}\label{chap:chap_4}
