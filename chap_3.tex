@@ -579,6 +579,9 @@ Per ogni dataset sono state addestrate 96 reti LSTM, ciascuna delle quali differ
 \end{itemize}
 
 Ogni rete neurale \`e stata interrotta alla 150\textsuperscript{$\circ$} epoca.
-Un epoca inizia quando viene dato in input alla rete il primo carattere del dataset e termina quando viene dato in input l'ultimo carattere.
+Un'epoca corrisponde ad un passaggio completo dell'intero dataset attraverso la rete neurale.
 
 Per valutare le prestazioni di ciascuna rete, sono stati usati i pesi corrispondenti all'epoca con il loss pi\`u basso.
+A queste reti \`e stato poi dato in input il test set, un carattere alla volta, utilizzando lo stesso dizionario calcolato durante la fase di addestramento e con codifica one-hot.
+
+La rete ha quindi classificato singolarmente tutti i caratteri del test set, dando
