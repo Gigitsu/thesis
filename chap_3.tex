@@ -295,11 +295,10 @@ Nella forma pi\`u completa Tanl conta 328 classi che includono informazioni morf
   \item \emph{clitico}: c segnala la presenza di clitici aggiuntivi
 \end{itemize}
 
-\section{Esperimenti}
+\section{Configurazione dell'ambiente}
 
 Il codice per l'esperimento \`e stato scritto interamente in Lua, utilizza Torch come framework ed \`e stato eseguito in ambiente linux.
 
-\subsection{Configurazione dell'ambiente}
 Torch \`e stato installato nella cartella home, seguendo la documentazione ufficiale:
 
 \lstinputlisting[language={bash}]{snippets/torch_install.sh}
@@ -308,7 +307,7 @@ Dopo aver installato Torch, \`e necessario installare alcuni pacchetti aggiuntiv
 
 \lstinputlisting[language={bash}]{snippets/luarocks_packages.sh}
 
-\subsubsection{luautf8}
+\subsection{luautf8}
 Lua offre un supporto solo parziale alla codifica utf8.
 Questo, nella maggior parte dei casi, non rappresenta un grosso problema.
 Tuttavia, sviluppando un algoritmo che deve operare sui singoli caratteri di frasi scritte anche in lingua italiana, mi sono imbattuto in alcune limitazioni di Lua.
@@ -352,7 +351,7 @@ La stringa ``\`a\`e\`i\`o\`u'' \`e quindi composta da 10 byte, per questo motivo
 
 Questo problema \`e stato risolto utilizzando la libreria \emph{luautf8}, che mette a disposizione implementazioni delle funzioni di manipolazioni di stringhe compatibili con la codifica utf8.
 
-\subsubsection{nn}
+\subsection{nn}
 La libreria \emph{nn} mette a disposizione una serie di classi con le quali \`e possibile costruire ed addestrare reti neurali, di qualsiasi complessit\`a, in maniera modulare.
 Queste possono essere suddivise in tre macro categorie: \emph{moduli}, \emph{contenitori} e \emph{criteri}.
 
@@ -417,10 +416,10 @@ Come qualsiasi altro modulo, anche i criteri espongono i metodi:
 
 Queste funzioni sono usate per calcolare la perdita e aggiornare di conseguenza i pesi associati a ciascun arco della rete neurale, durante la fase di addestramento.
 
-\subsubsection{nngraph}
+\subsection{nngraph}
 Un estensione della libreria \emph{nn} che semplifica la creazione di architetture neurali complesse.
 
-\subsubsection{optim}
+\subsection{optim}
 Questa libreria implementa parecchi algoritmi di ottimizzazione che possono essere utilizzati per addestrare una rete neurale.
 
 Una rete neurale pu\`o essere addestrata usando un semplice ciclo \texttt{for} e una \emph{funzione d'apprendimento}.
@@ -453,7 +452,7 @@ Di seguito, un esempio di come utilizzare la libreria \texttt{optim} per addestr
 
 \lstinputlisting[language={[5.0]Lua}]{snippets/optim_example.lua}
 
-\subsubsection{GPGPU}
+\subsection{GPGPU}
 La \emph{GPGPU}, sigla di \emph{general-purpose computing on graphics processing units} (letteralmente ``calcolo a scopo generale su unit\`a di elaborazione grafiche'') \`e un settore della ricerca informatica che ha come scopo l'utilizzo della GPU per scopi diversi dalla tradizionale creazione di un'immagine tridimensionale; in tale ambito di utilizzo la GPU viene impiegata per elaborazioni estremamente esigenti in termini di potenza di elaborazione, e per le quali le tradizionali architetture di CPU non hanno una capacit\`a di elaborazione sufficiente.
 
 Tale tipo di elaborazioni sono, per loro natura, di tipo altamente parallelo, e in grado quindi di beneficiare ampiamente dell'architettura tipica delle GPU. A tale caratteristica intrinseca, a partire dal 2007 si \`e aggiunta l'estrema programmabilit\`a offerta dalle ultime soluzioni commerciali, che al succedersi delle generazioni aumentano non solo la propria potenza elaborativa ma anche la propria versatilit\`a. Tale evoluzione delle architetture video si sta gradualmente attuando anche perch\`e la stessa grafica 3D dei videogiochi pi\`u recenti si \`e enormemente trasformata nel tempo; un tempo essi erano basati su un insieme di istruzioni fisse e predefinite, ma progressivamente si sta sviluppando un approccio nel quale le GPU vengono completamente programmate utilizzando gli shader, caratteristica che apre di conseguenza anche nuovi scenari di utilizzo a questo tipo di soluzioni hardware. Tale programmabilit\`a ha preso appunto il nome di Shader model.
@@ -584,4 +583,34 @@ Un'epoca corrisponde ad un passaggio completo dell'intero dataset attraverso la 
 Per valutare le prestazioni di ciascuna rete, sono stati usati i pesi corrispondenti all'epoca con il loss pi\`u basso.
 A queste reti \`e stato poi dato in input il test set, un carattere alla volta, utilizzando lo stesso dizionario calcolato durante la fase di addestramento e con codifica one-hot.
 
-La rete ha quindi classificato singolarmente tutti i caratteri del test set, dando
+La rete ha quindi classificato singolarmente tutti i caratteri del test set, dando a quest'utlimi una classe col suffisso \emph{-S} e \emph{-I}.
+Da questa classificazione \`e stata poi estratta la classe della parola di appartenenza di ogni carattere scegliendola fra la classe di maggioranza dei singoli caratteri
+
+Ad esempio, i caratteri della parola \texttt{reckons} sono stati classificati dalla rete neurale in questo modo:
+
+\begin{center}
+  \begin{minipage}{5cm}
+    \begin{verbatim}
+     .
+     r   VBZ-S
+     e   PRP-I
+     c   VBZ-I
+     k   VBZ-I
+     o   NN-I
+     n   VBZ-I
+     s   VBD-I
+     .
+     .
+    \end{verbatim}
+  \end{minipage}
+\end{center}
+
+La classe che si ripete con pi\`u frequenza in questa sequenza di caratteri, a meno del suffisso, \`e \texttt{VBZ}, di conseguenza l'intera parola \texttt{reckons} \`e stata classificata come
+
+\begin{center}
+  \begin{minipage}{5cm}
+    \begin{verbatim}
+     reckons   VBZ
+    \end{verbatim}
+  \end{minipage}
+\end{center}

@@ -1,10 +1,47 @@
-Innumerevoli compiti richiedono la consapevolezza del tempo. Ad esempio l'assegnare didascialia ad immagini, effettuare una sintesi vocale o giocare ad un video gioco sono tutti compiti che richiedono un modello in grado di generare delle sequenze di output. In altri ambiti, come la predizione ti time series o l'analisi video sono richiesti modelli capaci di apprendere da sequenze di input. Inoltre compiti di gran lunga pi\`u interattivi come la traduzione di testi in linguaggio naturale richiedono modelli che apprendano da sequenze di input e generino sequenze di output.
+Innumerevoli compiti richiedono la consapevolezza del tempo.
+Ad esempio l'assegnare didascialia ad immagini, effettuare una sintesi vocale o giocare ad un video gioco sono tutti compiti che richiedono un modello in grado di generare delle sequenze di output.
+In altri ambiti, come la predizione ti time series o l'analisi video sono richiesti modelli capaci di apprendere da sequenze di input.
+Inoltre compiti di gran lunga pi\`u interattivi come la traduzione di testi in linguaggio naturale richiedono modelli che apprendano da sequenze di input e generino sequenze di output.
 
-
-Le Reti Neurali Ricorrenti (o Recurrent Neural Networks RNNs) costituiscono un sottoinsieme di reti neurali in grado di catturare le dinamiche temporali attraverso l'uso di cicli nel grafo delle connessioni. A differenza delle reti neurali tradizionali, le reti ricorrenti possono analizzare i campioni uno alla volta mantenendo uno stato, o memoria, che riflette una finestra contestuale arbitrariamente lunga. Mentre queste reti sono state a lungo ritenute troppo difficili da addestrare dato che spesso contengono milioni di parametri, i recenti progressi nelle architetture di rete, nelle tecniche di ottimizzazione e nella computazione parallela hanno reso possibile l'apprendimento su larga scala con le RNNs.
-
+Le Reti Neurali Ricorrenti (o Recurrent Neural Networks RNNs) costituiscono un sottoinsieme di reti neurali in grado di catturare le dinamiche temporali attraverso l'uso di cicli nel grafo delle connessioni.
+A differenza delle reti neurali tradizionali, le reti ricorrenti possono analizzare i campioni uno alla volta mantenendo uno stato, o memoria, che riflette una finestra contestuale arbitrariamente lunga.
+Mentre queste reti sono state a lungo ritenute troppo difficili da addestrare dato che spesso contengono milioni di parametri, i recenti progressi nelle architetture di rete, nelle tecniche di ottimizzazione e nella computazione parallela hanno reso possibile l'apprendimento su larga scala con le RNNs.
 
 Negli ultimi anni sistemi basati su architetture di reti ricorrenti come Long Short Term Memory (LSTM) hanno dimostrato delle performance da record in vari compiti come l'image captioning, traduzioni linguistiche e riconoscimento della scrittura.
 
+In questa tesi utilizzeremo una LSTM per creare un Part-Of-Speech (POS) Tagger.
 
-In questa tesi utilizzeremo una LSTM per creare un Part-Of-Speech (POS) Tagger. In linguistica il pos tagging \`e un processo che assegna ad ogni parola di un testo una particolare parte del discorso (es. sostantivio, aggettivo, pronome ecc..). Questa assegnazione viene fatta basandosi sia sulla parola stessa che sul contesto. L'addestramente della rete avverr\`a a livello di carattere e non di parola. Il dataset di training, infatti, verr\`a passato alla rete un carattere alla volta. Lo scopo \`e quello di valutare le performance della rete LSTM cos\`i addestrata.
+In linguistica il pos tagging \`e un processo che assegna ad ogni parola di un testo una particolare parte del discorso (es. sostantivio, aggettivo, pronome ecc..).
+Questa assegnazione viene fatta basandosi sia sulla parola stessa che sul contesto.
+La quasi totalit\`a di algoritmi di PoS-Tagging oggi esistente pu\`o essere divisa in due categorie:
+
+\begin{itemize}
+  \item basati su regole
+  \item probabilistici
+\end{itemize}
+
+Gli algoritmi basati su regole contano un gran numero di regole scritte a mano, basate sulle caratteristiche morfologiche del linguaggio.
+Ad esempio il fatto che ``\emph{quickly}'' finisca in ``\emph{ly}'' o che ``\emph{shopping}'' finisca in ``\emph{ing}'' dovrebbe aiutare ad identificare queste parole come verbi.
+\`E evidente che queste regole sono fortemente dipendenti dal linguaggio per il quale sono state scritte.
+L'esempio precedente vale per l'inglese ma non per l'italiano. Algoritmi di questo tipo, pertanto, dovranno essere scritti manualmente per ogni linguaggio conosciuto dall'uomo.
+
+Gli algoritmi probabilistici, invece, utilizzano un corpus taggato da usare per addestrare un qualche tipo di modello.
+Questi prevedono sempre una fase di preprocessing del testo.
+
+Per essere accurati, infatti, il testo dev'essere \emph{tokenizzato}, ossia il testo dev'essere diviso in parole.
+Questo procedimento non \`e banale come pu\`o sembrare, non sempre ci si pu\`o limitare a dividere una frase in base agli spazi.
+Ad esempio, la forma pi\`u comune di cinese continentale non ha spazi bianchi e non \`e segmentato in alcun modo.
+Ma ci sono problemi anche con un linguaggio morfologicamente non troppo ricco come l'inglese.
+A titolo esemplificativo, tentiamo di dividere (tokenizzare) \texttt{aren't}.
+Abbiamo pi\`u d'una possibilit\`a, \texttt{aren't}, \texttt{arent}, \texttt{are nt} e \texttt{aren t} sono tutte ugualmente valide.
+Altri linguaggio propongono sfide pi\`u grandi, come le parole composte (\emph{Komposita}) del tedesco.
+Gli algoritmi di tokenizzazione esistenti sono per lo pi\`u basati su regole e, per tanto, anche questi dipendenti dal linguaggio per il quale sono stati scritti.
+
+Altri algoritmi di uso coumune durante la fase di preprocessing sono gli algoritmi di \emph{stemming} o \emph{lemmatizzazione}.
+In ogni lingua la flaessione \`e il modo in cui varia morfologicamente a partire da una radice linguistica comune, per indicarne tratti grammaticali o sintattiche.
+Gli algoritmi di lemmatizzazione riportano la forma flessa di ogni parola sotto un unico \emph{lemma}.
+Anche per quanto riguarda questi algoritmi, la maggior parte delle implementazioni \`e basata su regole create ad hoc per una determinata lingua
+
+Lo scopo di questa tesi \`e quello di provare a superare queste limitazioni, addestrando un PoS-Tagger che classifichi il testo a partire dai singoli caratteri, piuttosto che le singole parole.
+Il classificatore verr\`a addestrato a partire da un corpus precedentemente taggato.
+In questo modo sar\`a evitata tutta la parte di preprocessing e tokenizzazione del testo, rendendo il classificatore indipendente dal linguaggio utilizzato
