@@ -35,6 +35,96 @@ Esistono vari modelli comunemente accettati, quelli utilizzati per gli esperimen
   \item Tanll Tagset, che conta fino a 328 classi ed \`e usato per la lingua italiana.
 \end{itemize}
 
+Esistono numerosi approcci al PoS-Tagging automatizzato.
+Il seguente diagramma (Figura~\ref{fig:feedforwardNeuralNetwork}) cerca di raffigurare i vari metodi esistenti.
+Tuttavia, la realt\`a \`e molto pi\`u complicata, in quanto molti sistemi di classificazione usano idee proprie di alcuni o tutti questi metodi.
+
+\begin{figure}[tp]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/tagging_overview.png}
+  \end{center}
+  \caption{Metodi per il PoS-Tagging automatizzato.}
+  \label{fig:feedforwardNeuralNetwork}
+\end{figure}
+
+\subsection{Supervisionato vs. non supervisionato}
+\nocite{BrillMarcus:1993}
+\nocite{Brill:1995}
+\nocite{Shutze:1993}
+
+Una delle prime distinzioni sugli algoritmi di PoS tagger esistanti pu\`o essere fatta in base al grado di automazione dei processi di addestramento e classificazione.
+I termini comunemente utilizzati per questo tipo di distinzione sono \emph{supervisionato} e \emph{non supervisionato}.
+
+I classificatori supervisionati sono tipicamente basati su corpus gi\`a taggati.
+Questi fungono da base per creare qualsiasi strumento da usare durante tutto il processo di classificazione.
+Ad esempio: il dizionario del classificatore, la frequenza parola/tag, la progabilit\`a di una sequanza di classi e/o l'insieme di regole per la classificazione.
+
+I modelli non supervisionati, d'altro canto, non hanno bisogno di corpus taggati bens\`i usano sofisticati algoritmi di computazione per creare gruppi di parole (in altre parole, classi di parole), per poi utilizzare questi gruppi auto generati per calcolare le informazioni probabilistiche necessarie ad un classificatore stocastico oppure per generare le regole di contesto necessarie ad un classificatore basato su regole.
+
+Il motivo principale per predilire un metodo completamente automatizzato (e quindi non supervisionato) al PoS tagging \`e che questo risulta essere estremamente portabile.
+\`E risaputo, inoltre, che i classificatori automatici (supervisionati) tendono a performare meglio se addestrati e testati su una stessa tipologia di testi di quanto non possano fare i metodi completamente automatizzati.
+
+Sfortunatamente, di corpus gi\`a taggati non ne esistono molti, soprattutto se si pensa alla moltitudine di lingue che possono richiedere una classificazione di questo tipo.
+Anzi, il desiderio di automatizzare questo processo nasce proprio dalla necessit\`a di classificare con precisione testi che non sono stati classificati, in virt\`u del fatto che questo processo, se fatto manualmente, comporta un grande dispendio di tempo e risorse.
+
+Tuttavia, l'approccio completamente automatizzato al PoS tagging porta con se altri incovenienti.
+In particolare, i gruppi generati automaticamente da questi algoritmi, tendono ad essere molto grossolani e spessi si perde quella distinzione granulare che si trova in quei tag set appositamente studiati per un determinato linguaggio e utilizzati nei metodi supervisionati.
+
+\subsection{Tagging basato su regole}
+\nocite{Brill:1992}
+\nocite{Greene:1971}
+
+Di solito, gli approcci basati su regole usano informazioni di contesto per assegnare una classe a parole sconosciute o ambigue.
+Queste regole, di solito, sono conosciute come regole \emph{context frame}.
+
+Ad esempio, una regola di questo tipo pu\`o essere qualcosa del genere: se una parola $X$ ambigua/sconosciuta \`e preceduta da un \emph{determinante} ed e seguita da un \emph{nome}, allora $X$ \`e un aggettivo.
+
+In aggiunta a queste informazioni di contesto, molti classificatori utilizzano informazioni di natura morfologica come aiuti nel processi di disambiguazione.
+Una di queste regole potrebbe essere: se la parola ambigua/sconosciuta termina con il suffisso \emph{-ing} ed \`e preceduta da un verbo, allora eticettala come verbo (questo ovviamente \`e valido solo per l'inglese)
+
+Alcuni sistemi si spingo anche oltre l'uso di informazioni morfologiche e contestuali, includendo regole che tengono conto anche della punteggiatura e della capitalizzazione.
+Informazioni di questo tipo possono essere di grande o poca utilit\`a, in base al linguaggio il cui testo dev'essere classificato.
+Per il tedesco, ad esempio, le informazioni riguardo la capitalizzazione delle lettere si \`e dimostrata essere estremamente utile nella classificazione di nomi sconosciuti.
+
+I classificatori basati su regole molto spesso richiedono un addestramento di tipo supervisionato.
+Tuttavia, recentemente, \`e aumentato l'interesse nei confronti dell'induzione automatica di regole.
+
+Un approcco alla induzione automatica di regole consiste nel far classificare, ad un classificatore, del testo non classificato.
+Un essere umano, poi, analizza il risultato della classificazione e corregge ogni parola erroneamente classificata.
+Il testo, correttamente classificato, viene poi dato nuovamente in input al classificatore, che impara le regole di correzione confrontando i due insiemi di dati.
+
+A volte \`e necessario ripetere questo processo pi\`u volte.
+
+\subsection{Taggin stocastico}
+
+Il termine ``tagger stocastico'' pu\`o essere utilizzato per indicare una grande variet\`a di approcci al problema del PoS tagging.
+Infatti, ogni modello che, in qualche modo, utilizza il concetto di probabilit\`a o frequenza pu\`o essere etichettato correttamente come stocastico.
+
+Il classificatore stocastico pi\`u semplice, disambigua le parole solamente in base alla probabilit\`a che una determinata parola occora con un particolare tag.
+Quindi, per una determinata parola, il tag incontrato pi\`u di frequente nel training set, sar\`a anche quello assegnato a quella parola nel caso in cui la sua classificazione in un determinato contesto fosse ambigua.
+
+Il problema con questo approccio \`e che, nonostante possa di certo restituire un tag valido per una data parola, pu\`o anche restituire una sequenza di tag del tutto non corretta.
+
+Un'alternativa all'approccio basato sulla frequnza delle coppie parola/tag consiste nel calcolare la probabilit\`a dell'occorrenza di una data sequenza di tag.
+Di solito, ci si riferisce a questo approccio con il termine \emph{n-gram}, il nome \`e dovuto al fatto che il tag migliore per una data parola viene determinato dalla probabilit\`a condizionata che questo occora dati gli \emph{n} tag precedenti.
+
+L'algoritmo pi\`u comune per implementare l'approccio n-gram \`e conosciuto come \emph{Algoritmo Viterbi}.
+Si tratta di un algoritmo di ricerca che evita l'espansione polinomiale di una ricerca per ampiezza ``potando'' l'albero di ricerca ad ogni livello usando le migliori $n$ \emph{Stime di Massima Verosomiglianza} (dove $n$ rappresenta il numero di possibili tag della parola seguente).
+
+Il livello di complessit\`a successivo che pu\`o essere introdotto in un classificatore stocastico combina entrambi gli approcci precedenti, usando sia la probabilit\`a di una sequnza di tag che le misure della frequenza delle parole.
+Questo approccio \`e conosciuto come \emph{Hidden Markov Model}.
+Ogni stato nascosto di un tag produce una parola nella frase.
+
+Le assunzioni alla base di questo modello sono le seguenti.
+
+\begin{itemize}
+  \item Ogni parola non \`e correlata con nessuna delle altre parole della frase e i rispettivi tag
+  \item La probabilit\`a che una parola sia taggata in un determinato modo dipende dagli $n$ tag precedenti.
+\end{itemize}
+
+\subsection{Parole sconosciute}
+
 \section{Dataset utilizzati}
 \nocite{Zanchetta:2005}
 \nocite{Attardi:2008}

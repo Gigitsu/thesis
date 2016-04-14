@@ -6,6 +6,7 @@
 %\usepackage{a4}
 \documentclass[final,a4paper,11pt]{report}
 \usepackage{thesis}
+\usepackage{calligra}
 \usepackage[T1]{fontenc}
 \usepackage[ansinew]{inputenc}
 \usepackage{latexsym,amssymb}
@@ -93,6 +94,7 @@
 %\renewcommand\mytodo[1]{} %uncommento to remove todos
 
 \newcommand*{\thead}[1]{\multicolumn{1}{c}{\bfseries #1}}
+\newcommand*\chancery{\fontfamily{pzc}\selectfont}
 
 % ----------------------------------------------------------------
 % frontpage
@@ -107,6 +109,8 @@
 \maketitle
 
 \newpage
+\begin{center}
+\par\vspace*{.25\textheight}{\chancery \centering Alla mia famiglia\par}\end{center}
 \vspace*{\fill}
 Made with \LaTeX
 %\thispagestyle{empty}
@@ -141,7 +145,7 @@ Made with \LaTeX
 \input{abstract}
 
 % ----------------------------------------------------------------
-%\clearpage
+\clearpage
 % ----------------------------------------------------------------
 
 
@@ -153,6 +157,10 @@ Made with \LaTeX
 \chapter {Stato dell'arte}\label{chap:chap_2}
 \input{chap_2}
 
+\begin{savequote}[45mm]
+  You shall know a word by the company it keeps
+  \qauthor{Firth, 1957}
+\end{savequote}
 \chapter {LSTM applicato al PoS tagging}\label{chap:chap_3}
 \input{chap_3}
 
