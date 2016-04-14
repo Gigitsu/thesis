@@ -125,6 +125,184 @@ Le assunzioni alla base di questo modello sono le seguenti.
 
 \subsection{Parole sconosciute}
 
+Un problema rimane ancora in sospeso in relazione agli approcci descritti fino ad ora: come ci si dovrebbe comportare con le parole sconosciute?
+Alcune delle regole di un classificatore basato su regole sono in grado di gestire questo problema, ma cosa accade in un modello stocastico?
+Come \`e possibiel calcolare la probabilita che una data parola occorra con un dato tag, se quella parola e sconosciuta al classificatore?
+
+Ci sono diversi possibili soluzioni a questo problema.
+Uno consiste nell'usare informazioni di tipo morfologico.
+In questo caso il classificatore calcola le probabilit\`a che un determinato suffisso, appartenente ad una parola sconosciuta, possa presentarsi con un particolare tag.
+
+Un'altra soluzione consiste nell'assegnare, alla parola sconosciuta, un insieme di tag predefiniti (di solito si usa Nome, Verbo, Aggettivo e Avverbio), poi si cerca di disambiguare la parola usando la probabilit\`a che tale classe occorra dell'n-gram preso in considerazione.
+
+Ancora, un'altra possibilit\`a \`e quella di calcolare la probabilit\`a che ogni tag del tag set ha di presentarsi alla fine dell'n-gram di riferimento, e di selezionare la calsse con la probabilit\`a pi\`a alta.
+Tuttavia questa non \`e la soluzione ottimale, soprattutto quandi si utilizza un tag set molto grande.
+
+\subsection{Preprocessing del testo}
+
+\subsubsection{Tokenizzazione}
+Il flusso di caratteri di un testo scritto in linguaggio naturale dev'essere necessariamente diviso in unit\`a di testo distinte e significative (detti token) prima che un qualsiasi tipo di processamento del linguaggio, che vada oltre il livello del carattere, possa essere eseguito.
+Questo processo prende il nome di \emph{tokenizzazione}
+
+Se un linguaggio \`e perfettamente punteggiato, la tokenizzazione \`e una cosa semplice da fare: un programma potrebbe estrarre parole e punteggiatura dal testo semplicemente dividendolo ad ogni spazio bianco e segno ti punteggiatura.
+
+Ma nessun linguaggio reale \`e perfettamente punteggiato, e la situazione \`e sempre pi\`u complicata do cos\`i.
+Anche in linguaggi ben (ma non perfettamente) punteggiato, come l'inglese, ci sono casi in cui la corretta tokenizzazione non pu\`o essere determinata semplicemente conoscendo la classificazione individuale di ciascun singolo carattere oltre a casi in cui sono possibili pi\`u tokenizzazioni per una stessa porzione di testo.
+
+Ad esempio consideriamo la stringa, in inglese, ``\emph{chap.}'' .
+Questa pu\`o essere interpretata sia come l'abbreviazione della parola \emph{chapter} che come la parola \emph{chap} alla fine di una frase.
+Stessa cosa per la stringa ``\emph{Jan.}'', pu\`o essere interpretata sia come abbreviazione di \emph{January} che come il nome proprio \emph{Jan} alla fine di una frase.
+
+Nel primo caso, il punto dev'essere considerato come parte del token mentre nel secondo caso dovrebbe essere considerato come un token a parte.
+
+Nonostante lo spazio sia un indicatore abbastanza affidabile per individuare i confini dei token, ci sono parole, in inglese, che sono composte da pi\`u termini separate da uno spazio (ad esempio \emph{to and for}, \emph{jack rabbit}, \emph{General Motors}, \emph{a priori}).
+
+Tutte queste difficolt\`a incontrate in un linguaggio come l'inglese sono relativamente limitate e alcune applicazioni di text-processing semplicemente le ignorano o le affrontano con algoritmi fatti ad hoc.
+
+Ma tutte queste considerazioni sono state fatte su un solo linguaggio, altri linguaggi presentano problemi simili.
+L'italiano, ad esempio, usa l'\emph{elisione} per gli articoli \emph{lo} e \emph{la}, quando questi incontrino una parola iniziante per vocale.
+Il tedesco scrive i \emph{nomi composti}, ossia nomi formati dall'unione di pi\`u parole, senza spazi: \emph{Computerlinguistik} (linguistica computazionale).
+
+Altri linguaggi offrono sfide ben pi\`u serie.
+Il cinese, ad esempio, risulta essere scarsamente punteggiato e la forma pi\`u comune di cinese continentale non ha spazi bianchi e non \`e segmentato in alcun modo (come il greco che sulla stele di Rosetta).
+Inoltre nel cinese la segmentazione \`e ambigua: due caratteri possono essere trattati come distinti ed avere un significato, oppure come un unico token ed averne un altro.
+
+\`E evidente come il problema della tokenizzazione sia un problema fortemente dipendente dal linguaggio e va risolto caso per caso.
+
+\section{Algoritmo utilizzato}
+
+Tutti i PoS tagger esistenti, considerano la parola, o pi\`u generalmente il \emph{token}, come l'unit\`a fondamentale dell'apprendimento.
+Molti algoritmi prevedono delle fasi di preprocessing del testo atte a semplificarlo, eliminando molte delle varianti tipiche di una lingua naturale, come ad esempio la \emph{lemmatizzazione}.
+
+La lemmatizzazione consiste nel ridurre una forma \emph{flessa}\footnote{In linguistica si chiama \emph{flessione} una qualsiasi variazione morfologica delle parole realizzata per indicarne i tratti grammaticali o sintattici. Avremo ad esempio diverse forme flesse di un verbo (\emph{io lavoro}, \emph{tu lavori}) oppure di un nome (\emph{il lavoro}, \emph{i lavori}).} di una parola alla sua forma canonica (non marcata), detta \emph{lemma}\footnote{In linguistica si dice lemma la citazione di una parola, ossia quella parola che per convenzione è scelta per rappresentare tutte le forme di una flessione.}.
+Esistono numerosi algoritmi di lemmatizzazione come, ad esempio, \emph{Lovins} e \emph{Porter}.
+Entrambi sono algoritmi di \emph{suffix stripping} che rimuovono, quindi, i suffissi alle parole a partire da un dizionario di suffissi comuni.
+
+Altro problema \`e la tokenizzazione, ossia la suddivisione del testo in token. Processo che all'apparenza sembra di semplice soluzione ma che nasconde delle difficolt\`a.
+Prendiamo in considerazione \texttt{aren't}, qual \`e la tokenizzazione corretta? Possiamo infatti avvere \texttt{aren't}, \texttt{arent}, \texttt{are nt} e \texttt{aren t}.
+
+I dizionari poi, vengono costruiti a partire alle parole presenti nel corpus.
+La fase di preprocessing \`e fondamentale nella costruzione di un dizionario efficiente, altrimenti si avrebbero dizionari enormi con un elevto numero di parole che, pur avendo quasi lo stesso significato (es. \emph{lavoro}, \emph{lavori}) sono rappresentatio in maniera del tutto differente e senza alcuna correlazione.
+
+In questa tesi si cercher\`a di cambiare approccio. L'unit\`a base sar\`a il singolo carattere, piuttosto che il token.
+Questo approccio semplifica di molto la fase di preprocessing del testo, eliminandola del tutto.
+Non sar\`a pi\`u necessario ne tokenizzare ne lemmatizzare il corpus in input.
+
+Tuttavia sorgono alcuni problemi. La totalit\`a dei corpus taggati nonch\`e dei tagset esistenti, prevedono dei tag per le parole e non per i caratteri.
+Quindi, per poter addestrare con successo la rete LSTM, risulta comunque necessario effettuare un minimo di preprocessing sui soli dataset utilizzati per l'addestramento.
+
+Il preprocessing adottato consiste nel dividere le singole parole in singoli caratteri.
+Ad ogni carattere \`e stato poi assegnato un tag che corrisponde al tag della parola dalla quale \`e stato estratto pi\`u un suffisso che ne indica la posizione nella parola:
+
+\begin{itemize}
+  \item il suffisso \emph{-S} (\emph{S}tart) per indicare il primo carattere di una parola
+  \item il suffissio \emph{-I} (\emph{I}nner) per gli altri caratteri della parola
+\end{itemize}
+
+Ad esempio la
+
+\begin{center}
+  \begin{minipage}{5cm}
+    \begin{verbatim}
+     .
+     reckons   VBZ
+     .
+     .
+    \end{verbatim}
+  \end{minipage}
+\end{center}
+
+diventa
+
+\begin{center}
+  \begin{minipage}{5cm}
+    \begin{verbatim}
+     .
+     r   VBZ-S
+     e   VBZ-I
+     c   VBZ-I
+     k   VBZ-I
+     o   VBZ-I
+     n   VBZ-I
+     s   VBZ-I
+     .
+     .
+    \end{verbatim}
+  \end{minipage}
+\end{center}
+
+Un altro possibile problema riguarda la separazione fra le parole.
+Nel PoS-Tagging tradizionale la separazione fra le parole \`e implicita, ogni token corrisponde ad una parola.
+Nel nostro caso, non essendoci alcun tipo di tokenizzazione, si rischia di perdere un'informazione importante, ossia dove termina una parola e inizia un'altra.
+Una soluzione consiste nell'aggiungere un carattere di spazio fra i caratteri delle singole parole ed assegnare a questo carattere il tag speciale \emph{S}.
+Inoltre, non \`e che questa sia strettamente necessaria, la rete, infatti, potrebbe apprendere lo stesso questa informazione, grazie al suffissio dato ai tag (-S indica implicitamente l'inizio di una parola).
+Difficile determinare a priori quale sia la scelta migliore, pertanto si \`e optato per adottarle entrambe addestrando pi\`u reti, met\`a delle quali con la soluzione dell'aggiungere il carattere di spazio e l'altra met\`a senza.
+
+Dopo aver preprocessato i dataset, si passa alla creazione del dizionario.
+Per ogni dataset sono stati creati 2 dizionari, uno contenente i soli tag, l'altro contenente tutti i caratteri dell'intero corpus.
+
+Dal training set \`e stato estratto un piccolo insieme (~10\%) da usare come validation set.
+La restante parte del training set \`e stato dato in input alla rete un carattere alla volta utilizzando la codifica \emph{one-hot}.
+
+Questa consiste nel rappresentare una determinata informazione, nel nostro caso un carattere, mediante una sequenza di bit tutti posti a zero tranne uno.
+In particolare, ipotizzando di avere un dizionario composto da $n$ caratteri, ciascun carattere sar\`a rappresentato mediante una sequenza di $n$ bit in questo modo:
+
+\begin{itemize}
+  \item il primo carattere sar\`a codificato con $1000000\dots0_{n}$
+  \item il secondo carattere sar\`a codificato con $0100000\dots0_{n}$
+  \item il terzo carattere sar\`a codificato con $0010000\dots0_{n}$
+  \item e cos\`i via...
+\end{itemize}
+
+Il validation set \`e stato usato durante tutta la fase di addestramento per monitorarne l'andamento, calcolando periodicamente, su questo insieme di dati, il \emph{loss} (il valore dell'errore calcolato dalla funzione di perdita).
+
+Per ogni dataset sono state addestrate 96 reti LSTM, ciascuna delle quali differisce dalle altre per:
+
+\begin{itemize}
+  \item numero di livelli (2, 3, 4, 5)
+  \item numero di nodi (128, 256, 512, 1024)
+  \item numero di fasi temporali (60, 80, 100)
+  \item uso o meno del carattere di spazio
+\end{itemize}
+
+Ogni rete neurale \`e stata interrotta alla 150\textsuperscript{$\circ$} epoca.
+Un'epoca corrisponde ad un passaggio completo dell'intero dataset attraverso la rete neurale.
+
+Per valutare le prestazioni di ciascuna rete, sono stati usati i pesi corrispondenti all'epoca con il loss pi\`u basso.
+A queste reti \`e stato poi dato in input il test set, un carattere alla volta, utilizzando lo stesso dizionario calcolato durante la fase di addestramento e con codifica one-hot.
+
+La rete ha quindi classificato singolarmente tutti i caratteri del test set, dando a quest'utlimi una classe col suffisso \emph{-S} e \emph{-I}.
+Da questa classificazione \`e stata poi estratta la classe della parola di appartenenza di ogni carattere scegliendola fra la classe di maggioranza dei singoli caratteri
+
+Ad esempio, i caratteri della parola \texttt{reckons} sono stati classificati dalla rete neurale in questo modo:
+
+\begin{center}
+  \begin{minipage}{5cm}
+    \begin{verbatim}
+     .
+     r   VBZ-S
+     e   PRP-I
+     c   VBZ-I
+     k   VBZ-I
+     o   NN-I
+     n   VBZ-I
+     s   VBD-I
+     .
+     .
+    \end{verbatim}
+  \end{minipage}
+\end{center}
+
+La classe che si ripete con pi\`u frequenza in questa sequenza di caratteri, a meno del suffisso, \`e \texttt{VBZ}, di conseguenza l'intera parola \texttt{reckons} \`e stata classificata come
+
+\begin{center}
+  \begin{minipage}{5cm}
+    \begin{verbatim}
+     reckons   VBZ
+    \end{verbatim}
+  \end{minipage}
+\end{center}
+
 \section{Dataset utilizzati}
 \nocite{Zanchetta:2005}
 \nocite{Attardi:2008}
@@ -570,137 +748,3 @@ Per il supporto alla piattaforma CUDA.
 \lstinputlisting[language={bash}]{snippets/luarocks_cltorch.sh}
 
 Per il supporto al framework OpenCL.
-
-\section{Algoritmo utilizzato}
-
-Tutti i PoS tagger esistenti, considerano la parola, o pi\`u generalmente il \emph{token}, come l'unit\`a fondamentale dell'apprendimento.
-Molti algoritmi prevedono delle fasi di preprocessing del testo atte a semplificarlo, eliminando molte delle varianti tipiche di una lingua naturale, come ad esempio la \emph{lemmatizzazione}.
-
-La lemmatizzazione consiste nel ridurre una forma \emph{flessa}\footnote{In linguistica si chiama \emph{flessione} una qualsiasi variazione morfologica delle parole realizzata per indicarne i tratti grammaticali o sintattici. Avremo ad esempio diverse forme flesse di un verbo (\emph{io lavoro}, \emph{tu lavori}) oppure di un nome (\emph{il lavoro}, \emph{i lavori}).} di una parola alla sua forma canonica (non marcata), detta \emph{lemma}\footnote{In linguistica si dice lemma la citazione di una parola, ossia quella parola che per convenzione è scelta per rappresentare tutte le forme di una flessione.}.
-Esistono numerosi algoritmi di lemmatizzazione come, ad esempio, \emph{Lovins} e \emph{Porter}.
-Entrambi sono algoritmi di \emph{suffix stripping} che rimuovono, quindi, i suffissi alle parole a partire da un dizionario di suffissi comuni.
-
-Altro problema \`e la tokenizzazione, ossia la suddivisione del testo in token. Processo che all'apparenza sembra di semplice soluzione ma che nasconde delle difficolt\`a.
-Prendiamo in considerazione \texttt{aren't}, qual \`e la tokenizzazione corretta? Possiamo infatti avvere \texttt{aren't}, \texttt{arent}, \texttt{are nt} e \texttt{aren t}.
-
-I dizionari poi, vengono costruiti a partire alle parole presenti nel corpus.
-La fase di preprocessing \`e fondamentale nella costruzione di un dizionario efficiente, altrimenti si avrebbero dizionari enormi con un elevto numero di parole che, pur avendo quasi lo stesso significato (es. \emph{lavoro}, \emph{lavori}) sono rappresentatio in maniera del tutto differente e senza alcuna correlazione.
-
-In questa tesi si cercher\`a di cambiare approccio. L'unit\`a base sar\`a il singolo carattere, piuttosto che il token.
-Questo approccio semplifica di molto la fase di preprocessing del testo, eliminandola del tutto.
-Non sar\`a pi\`u necessario ne tokenizzare ne lemmatizzare il corpus in input.
-
-Tuttavia sorgono alcuni problemi. La totalit\`a dei corpus taggati nonch\`e dei tagset esistenti, prevedono dei tag per le parole e non per i caratteri.
-Quindi, per poter addestrare con successo la rete LSTM, risulta comunque necessario effettuare un minimo di preprocessing sui soli dataset utilizzati per l'addestramento.
-
-Il preprocessing adottato consiste nel dividere le singole parole in singoli caratteri.
-Ad ogni carattere \`e stato poi assegnato un tag che corrisponde al tag della parola dalla quale \`e stato estratto pi\`u un suffisso che ne indica la posizione nella parola:
-
-\begin{itemize}
-  \item il suffisso \emph{-S} (\emph{S}tart) per indicare il primo carattere di una parola
-  \item il suffissio \emph{-I} (\emph{I}nner) per gli altri caratteri della parola
-\end{itemize}
-
-Ad esempio la
-
-\begin{center}
-  \begin{minipage}{5cm}
-    \begin{verbatim}
-     .
-     reckons   VBZ
-     .
-     .
-    \end{verbatim}
-  \end{minipage}
-\end{center}
-
-diventa
-
-\begin{center}
-  \begin{minipage}{5cm}
-    \begin{verbatim}
-     .
-     r   VBZ-S
-     e   VBZ-I
-     c   VBZ-I
-     k   VBZ-I
-     o   VBZ-I
-     n   VBZ-I
-     s   VBZ-I
-     .
-     .
-    \end{verbatim}
-  \end{minipage}
-\end{center}
-
-Un altro possibile problema riguarda la separazione fra le parole.
-Nel PoS-Tagging tradizionale la separazione fra le parole \`e implicita, ogni token corrisponde ad una parola.
-Nel nostro caso, non essendoci alcun tipo di tokenizzazione, si rischia di perdere un'informazione importante, ossia dove termina una parola e inizia un'altra.
-Una soluzione consiste nell'aggiungere un carattere di spazio fra i caratteri delle singole parole ed assegnare a questo carattere il tag speciale \emph{S}.
-Inoltre, non \`e che questa sia strettamente necessaria, la rete, infatti, potrebbe apprendere lo stesso questa informazione, grazie al suffissio dato ai tag (-S indica implicitamente l'inizio di una parola).
-Difficile determinare a priori quale sia la scelta migliore, pertanto si \`e optato per adottarle entrambe addestrando pi\`u reti, met\`a delle quali con la soluzione dell'aggiungere il carattere di spazio e l'altra met\`a senza.
-
-Dopo aver preprocessato i dataset, si passa alla creazione del dizionario.
-Per ogni dataset sono stati creati 2 dizionari, uno contenente i soli tag, l'altro contenente tutti i caratteri dell'intero corpus.
-
-Dal training set \`e stato estratto un piccolo insieme (~10\%) da usare come validation set.
-La restante parte del training set \`e stato dato in input alla rete un carattere alla volta utilizzando la codifica \emph{one-hot}.
-
-Questa consiste nel rappresentare una determinata informazione, nel nostro caso un carattere, mediante una sequenza di bit tutti posti a zero tranne uno.
-In particolare, ipotizzando di avere un dizionario composto da $n$ caratteri, ciascun carattere sar\`a rappresentato mediante una sequenza di $n$ bit in questo modo:
-
-\begin{itemize}
-  \item il primo carattere sar\`a codificato con $1000000\dots0_{n}$
-  \item il secondo carattere sar\`a codificato con $0100000\dots0_{n}$
-  \item il terzo carattere sar\`a codificato con $0010000\dots0_{n}$
-  \item e cos\`i via...
-\end{itemize}
-
-Il validation set \`e stato usato durante tutta la fase di addestramento per monitorarne l'andamento, calcolando periodicamente, su questo insieme di dati, il \emph{loss} (il valore dell'errore calcolato dalla funzione di perdita).
-
-Per ogni dataset sono state addestrate 96 reti LSTM, ciascuna delle quali differisce dalle altre per:
-
-\begin{itemize}
-  \item numero di livelli (2, 3, 4, 5)
-  \item numero di nodi (128, 256, 512, 1024)
-  \item numero di fasi temporali (60, 80, 100)
-  \item uso o meno del carattere di spazio
-\end{itemize}
-
-Ogni rete neurale \`e stata interrotta alla 150\textsuperscript{$\circ$} epoca.
-Un'epoca corrisponde ad un passaggio completo dell'intero dataset attraverso la rete neurale.
-
-Per valutare le prestazioni di ciascuna rete, sono stati usati i pesi corrispondenti all'epoca con il loss pi\`u basso.
-A queste reti \`e stato poi dato in input il test set, un carattere alla volta, utilizzando lo stesso dizionario calcolato durante la fase di addestramento e con codifica one-hot.
-
-La rete ha quindi classificato singolarmente tutti i caratteri del test set, dando a quest'utlimi una classe col suffisso \emph{-S} e \emph{-I}.
-Da questa classificazione \`e stata poi estratta la classe della parola di appartenenza di ogni carattere scegliendola fra la classe di maggioranza dei singoli caratteri
-
-Ad esempio, i caratteri della parola \texttt{reckons} sono stati classificati dalla rete neurale in questo modo:
-
-\begin{center}
-  \begin{minipage}{5cm}
-    \begin{verbatim}
-     .
-     r   VBZ-S
-     e   PRP-I
-     c   VBZ-I
-     k   VBZ-I
-     o   NN-I
-     n   VBZ-I
-     s   VBD-I
-     .
-     .
-    \end{verbatim}
-  \end{minipage}
-\end{center}
-
-La classe che si ripete con pi\`u frequenza in questa sequenza di caratteri, a meno del suffisso, \`e \texttt{VBZ}, di conseguenza l'intera parola \texttt{reckons} \`e stata classificata come
-
-\begin{center}
-  \begin{minipage}{5cm}
-    \begin{verbatim}
-     reckons   VBZ
-    \end{verbatim}
-  \end{minipage}
-\end{center}

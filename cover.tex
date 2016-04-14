@@ -1,6 +1,40 @@
+\documentclass[pdftex,a4paper,12pt]{article}
+
+\usepackage{calligra}
+\usepackage[T1]{fontenc}
+\usepackage[ansinew]{inputenc}
+\usepackage{latexsym,amssymb}
+\usepackage{makeidx}
+\usepackage[chapter]{tocbibind}
+\usepackage{color}
+\usepackage{float}
+\usepackage{listingsutf8}
+
+\usepackage[active]{srcltx}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{epsfig}
+
+\usepackage{url}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{eso-pic}
+\usepackage{transparent}
+
+\usepackage[italian]{babel}
+\usepackage{courier}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+
+\linespread{1.3}
+
+\begin{document}
+
+\pagenumbering{gobble}
+
 \title{
-	\vspace{-4cm}
-	\linespread{1.3}
+	\vspace{-2.5cm}
 	\begin{figure}[h]
 	 \centering
 		\includegraphics[width=3cm]{images/logo.png}
@@ -13,10 +47,9 @@
 	\sc \small Algoritmi e Strutture Dati\\
 	\vspace{2cm}
 	\sc \Large \input{frontpage/title}
-	\vspace{1cm}
+	\vspace{2cm}
 }
 \author{
-	\linespread{1.3}
 	\sc laureando\\
 	\Large \textit{Luigi Clemente}\\
 	\vspace{0.01cm}\\
@@ -28,8 +61,10 @@
 }
 \date{
 	\small
-	\linespread{1.3}
 	\noindent\rule{\textwidth}{0.2mm} \\
 	\input{frontpage/date}
-	\vspace{-1cm}
 }
+
+\maketitle
+
+\end{document}
