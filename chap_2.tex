@@ -3,8 +3,8 @@ In questo capitolo introduciamo notazioni formali e diamo una breve spiegazione 
 \section{Il Tempo}
 
 Le RNN non sono limitate a sequenze indicizzate in maniera temporale.
-Sono state usate con successo anche per seqenze di dati non temporali, come ad esempio i dati genetici.
-In ongi caso, la computazione procede nel tempo e molte importanti applicazioni hanno un aspetto temporale esplicito o implicito.
+Sono state usate con successo anche per sequenze di dati non temporali, come ad esempio i dati genetici.
+In ogni caso, la computazione procede nel tempo e molte importanti applicazioni hanno un aspetto temporale esplicito o implicito.
 
 Nonostante, in questa tesi, ci riferiremo al tempo i metodi descritti sono applicabili ad una famiglia pi\`u ampia di compiti.
 Parlando di tempo ci riferiamo ad un campione $x^{(t)}$ in input e ad un valore atteso $y^{(t)}$ in output che sono generati in \emph{sequenze di fasi temporali} discrete indicate da $t$
@@ -13,7 +13,7 @@ Se abbiamo a che fare con un numero finito di campioni allora possiamo indicare 
 Quindi una sequenza di valori di input consecutivi pu\`o essere scritta come $(x^{(1)}, x^{(2)}, \dots, x^{(T)})$ mentre gli output come $(y^{(1)}, y^{(2)}, \dots, y^{(T)})$.
 Questi valori possono essere dei campioni, presi ad intervalli regolari di tempo, di un processo reale continuo come ad esempio i fotogrammi che compongono un video.
 Gli intervalli di tempo possono anche essere dei semplici valori ordinali senza una durata esatta.
-\`E il caso, ad esempio, delle sequenze genetiche che hanno un ordine ma non un ordine temporale o ancora del linguaggio naturale dove le parole hanno un ordine logico ben preciso che, tuttavia, non corrisponde ad intervalli di temporali ben defniti.
+\`E il caso, ad esempio, delle sequenze genetiche che hanno un ordine ma non un ordine temporale o ancora del linguaggio naturale dove le parole hanno un ordine logico ben preciso che, tuttavia, non corrisponde ad intervalli di temporali ben definiti.
 Ad esempio nella frase ``\emph{Lisa suona il sassofono}'' abbiamo che $x^{(1)}$ = Lisa, $x^{(2)}$ = suona, ecc. Ciascuna parola corrisponde ad intervalli di tempo che non sono costanti, ``\emph{il}'' e ``\emph{sassofono}'' hanno bisogno di tempi diversi per essere pronunciati.
 
 \section{Reti Neurali}
@@ -22,7 +22,7 @@ Generalmente una rete neurale \`e formata da un insieme di \emph{neuroni artific
 Associato ad ogni neurone $j$ vi \`e una funzione di attivazione $l_j$, chiamata anche funzione di collegamento (o funzione link).
 In questa tesi user\`o la notazione ``$l_j$'' invece di ``$h_j$'' (notazione usata in altri documenti) per distinguere la funzione di attivazione $l_j$ dal valore dei nodi nascosti in una rete, che vengono comunemente indicati con \textbf{h} nella letteratura delle RNN.
 
-Associato ad ogni arco dal nodo $j^{'}$ al nodo $j$ vi \`e un peso $w_{jj^{'}}$. Seguento la convenzione adottata in molti altri documenti che trattano reti neurali, indicheremo i neuroni con $j$ e $j^{'}$ mentre, con $w_{jj^{'}}$, indicheremo il peso corrispondente all'arco diretto che parte dal nodo $j^{'}$ e arriva al nodo $j$.
+Associato ad ogni arco dal nodo $j^{'}$ al nodo $j$ vi \`e un peso $w_{jj^{'}}$. Seguendo la convenzione adottata in molti altri documenti che trattano reti neurali, indicheremo i neuroni con $j$ e $j^{'}$ mentre, con $w_{jj^{'}}$, indicheremo il peso corrispondente all'arco diretto che parte dal nodo $j^{'}$ e arriva al nodo $j$.
 \`E importante notare che in altri documenti e libri, come ad esempio su Wikipedia, gli indici dei pesi sono invertiti e che $w_{j^{'}j} \neq w_{jj^{'}}$ indica il peso sull'arco diretto dal nodo $j^{'}$ al nodo $j$.
 
 Il valore $v_j$ di ciascun neurone $j$ \`e calcolato applicando la sua funzione di attivazione ad una somma pesata dei suoi valori di input (Fugura~\ref{fig:artificialNeuron}): %TODO pensare ad un titolo piu' appropiato
@@ -39,7 +39,7 @@ Il valore $v_j$ di ciascun neurone $j$ \`e calcolato applicando la sua funzione 
   \label{fig:artificialNeuron}
 \end{figure}
 Per comodit\`a, ci riferiremo alla somma pesata all'interno delle parentesi come l'\emph{attivazione in arrivo} e la indicheremo con $a_j$. Rappresentiamo l'intero processo in figura disegnando i neuroni con dei cerchi mentre gli archi come delle frecce che li collegano.
-Quando possibile, verr\`a utilizato un simbolo per indicare l'esatta funzione di attivazione utilizzata, ad esempio $\sigma$ per la fnzione sigmoide.
+Quando possibile, verr\`a utilizato un simbolo per indicare l'esatta funzione di attivazione utilizzata, ad esempio $\sigma$ per la funzione sigmoide.
 
 Scelte abbastanza comuni per la funzione di attivazione includono la funzione sigmoide $\sigma(z) = 1/(1+e^{-z})$ e la funzione \emph{tanh} $\phi(z)=(e^z-e^{-z})/(e^z+e^{-z})$ che \`e diventata molto comune nelle reti neurali di tipo \emph{feedforward} ma \`e stata utilizzata anche in reti neurali ricorrenti~\cite{Sutskever:2011}.
 Un'altra funzione di attivazione che \`e diventata lo stato dell'arte nella ricerca di deep learning \`e la funzione ReLU (\emph{rectified linear unit}) $l_j(z)=\operatorname{max}(0, z)$.
@@ -51,14 +51,14 @@ La funzione softmax calcola l'output come:
 \begin{equation}
   \hat{y_k} = \frac{e^{a_k}}{\sum_{k^{'}=1}^{K} e^{a_{k^{'}}}}
 \end{equation}
-dove $K$ \`e il numero totale di possibili output (classi). Il denominatore \`e una funzione di normalizzazione che consiste nella somma di funzioni esponenziali dei valori dati in output da tutti i nodi e serve per assicrarsi che l'output totale sommi ad 1.
+dove $K$ \`e il numero totale di possibili output (classi). Il denominatore \`e una funzione di normalizzazione che consiste nella somma di funzioni esponenziali dei valori dati in output da tutti i nodi e serve per assicurarsi che l'output totale sommi ad 1.
 Nel caso di regressioni invece viene comunemente utilizzata una funzione lineare come output.
-Dato che nella maggioranza dei casi le reti neurali, specialmente quelle ricorrenti, vengono utilizzate per applicazioni che coinvolgono la classificazione, durante questa tesi, a meno che diversamente specificato, daremo per scontato l'uso della funzioen softmax come output.
+Dato che nella maggioranza dei casi le reti neurali, specialmente quelle ricorrenti, vengono utilizzate per applicazioni che coinvolgono la classificazione, durante questa tesi, a meno che diversamente specificato, daremo per scontato l'uso della funzione softmax come output.
 
 \section{Reti Neurali Feedforward}
 Con un modello computazionale a rete neurali, \`e necessario determinare l'ordine con cui la computazione dovrebbe procedere.
-I nodi dovrebbero essere calcolati uno alla volta e poi aggiornati, oppure i valori di tutti i nodi dovrebbero essere calcolati iniseme per poi applicare tutti gli aggiornamenti simultaneamente?
-Le \emph{reti neurali feedforward} (Figura~\ref{fig:feedforwardNeuralNetwork}) sono una classe ristretta di reti neurali che affrontano questo prolema proibnedo i cicli dal grafo delle connessioni neurali.
+I nodi dovrebbero essere calcolati uno alla volta e poi aggiornati, oppure i valori di tutti i nodi dovrebbero essere calcolati insieme per poi applicare tutti gli aggiornamenti simultaneamente?
+Le \emph{reti neurali feedforward} (Figura~\ref{fig:feedforwardNeuralNetwork}) sono una classe ristretta di reti neurali che affrontano questo prolema proibendo i cicli dal grafo delle connessioni neurali.
 In questo modo tutti i nodi possono essere disposti in livelli.
 I valori in output di ciascun livello possono essere calcolati solo a partire dai valori di output dei livelli precedenti.
 \begin{figure}[tp]
@@ -78,10 +78,10 @@ Queste tipologie di reti sono usate di frequente per applicazioni di apprendimen
 L'apprendimento \`e ottenuto aggiornando iterativamente i pesi dei singoli archi in modo da minimizzare una funzione di perdita, $\mathcal{L}(\hat{y},y)$, che penalizza la distanza fra l'output desiderato $y$ e l'output predetto $\hat{y}$ tramite tecniche di ottimizzazione.
 Nonostante l'algoritmo di ottimizzazione esatto \`e un noto problema NP-Completo, una grande quantit\`a di euristiche pre addestramento e avanzate tecniche di ottimizzazione hanno condotto ad un impressionante numero di successi empirici su molte applicazioni di apprendimento supervisionato.
 
-L'algoritmo utilizzato con maggiore successo per addestrare una rete neurale \`e l'algoritmo di backpropagation, introdotto da Rumelhart et al. nel 1985~\cite{Rumelhart:1985}.
-Questo algoritmo usa la regola della catena per calcolare la derivata di una funzione di perdita $\mathcal{L}$ rispetto ciascun parametro nella rete.
+L'algoritmo utilizzato con maggiore successo per addestrare una rete neurale \`e l'algoritmo di back-propagation, introdotto da Rumelhart et al. nel 1985~\cite{Rumelhart:1985}.
+Questo algoritmo usa la regola della \emph{catena} per calcolare la derivata di una funzione di perdita $\mathcal{L}$ rispetto ciascun parametro nella rete.
 I pesi sui singoli archi vengono poi tramite la discesa dei gradienti.
-Dato che la superficie di perdita non \`e convessa non vi \`e alcuna garanzia che l'algoritmo di backpropagation riesca a trovare un minimo globale.
+Dato che la superficie di perdita non \`e convessa non vi \`e alcuna garanzia che l'algoritmo di back-propagation riesca a trovare un minimo globale.
 Ci\`o nonostante, nella pratica, reti addestrate in questo modo hanno ottenuto notevoli successi.
 
 Tuttavia le reti feedforward sono limitate.
@@ -91,7 +91,7 @@ Ma se i dati sono in una relazione temporale, questo non \`e accettabile.
 I fotogrammi di un video o le parole di una frase rappresentano situazioni in cui l'assunzione di indipendenza fallisce.
 
 \section{Reti Neurali Ricorrenti}
-Le \emph{reti neurali ricorrenti} costituiscono un sovrainsieme proprio delle reti neurali feedforward che, a differenza di quest'ultime, includono degli archi ricorrenti.
+Le \emph{reti neurali ricorrenti} costituiscono una estensione proprio delle reti neurali feedforward che, a differenza di quest'ultime, includono degli archi ricorrenti.
 Questi archi ricorrenti si estendono su intervalli temporali adiacenti e introducono il concetto di tempo nel modello.
 Mentre le RNN possono non contenere cicli tra gli archi convenzionali, gli archi ricorrenti possono formare cicli.
 Al tempo $t$, i nodi che ricevono un input da un arco ricorrente, ricevono un \emph{input di attivazione} sia dal campione corrente $x^{(t)}$ che dai nodi nascosti $h^{(t-1)}$ del precedente stato della rete.
@@ -106,7 +106,7 @@ Le seguenti due equazioni, mostrano i calcoli necessari per eseguire, per ogni f
   \hat{y}^{(t)} = \operatorname{softmax}(W_{yh}h^{(t)} + b_y)
 \end{equation}
 
-dove $W_{hx}$ \`e la matrice dei pesi tra il livello di input e il livelo nascosto mentre $W_{hh}$ \`e la matrice dei pesi ricorrenti fra i livelli nascosti di due fasi temporali adiacenti.
+dove $W_{hx}$ \`e la matrice dei pesi tra il livello di input e il livello nascosto mentre $W_{hh}$ \`e la matrice dei pesi ricorrenti fra i livelli nascosti di due fasi temporali adiacenti.
 I vettori $b_h$ e $b_y$ rappresentano uno scostamento (\emph{bias}) che permettono a ciascun nodo di apprendere un offset.
 
 I modelli discussi in questa tesi consistono in reti con livelli nascosti ricorrenti.
@@ -117,17 +117,17 @@ Tuttavia, sono stati proposti modelli, come la rete di Jordan, che ammettono la 
   \begin{center}
     \includegraphics[width=0.7\textwidth]{./images/simpleRecurrentNeuralNetwork.png}
   \end{center}
-  \caption{Una semplice rete neuralie ricorrente.
-  Ad ogni passo temporle $t$, l'attivazione viene passata lungo gli archi continui, cos\`i come accadrebbe per una normale rete feedforward.
+  \caption{Una semplice rete neurale ricorrente.
+  Ad ogni passo temporale $t$, l'attivazione viene passata lungo gli archi continui, cos\`i come accadrebbe per una normale rete feedforward.
   Gli archi tratteggiati collegano il nodo sorgente $j^{'}$ al tempo $t$, quindi $j^{'(t)}$, al nodo target del successivo passo temporale $j^{(t+1)}$.}
   \label{fig:simpleRecurrentNeuralNetwork}
 \end{figure}
 
 Una semplice rete neurale \`e mostrata in Figura~\ref{fig:simpleRecurrentNeuralNetwork}.
-La dinamica di questa rete attravesso pi\`u fasi temporali pu\`o essere visualizzata \emph{dispiegando} la rete (Figura~\ref{fig:unfoldedSimpleRecurrentNeuralNetwork}).
+La dinamica di questa rete attraverso pi\`u fasi temporali pu\`o essere visualizzata \emph{dispiegando} la rete (Figura~\ref{fig:unfoldedSimpleRecurrentNeuralNetwork}).
 Con questa visualizzazione, il modello pu\`o essere interpretata come una rete non ciclica, ma piuttosto come una rete con un livello per intervallo di tempo a dei pesi condivisi tra gli intervalli temporali.
-Diventa quindi chiaro come una rete dispiegata in questo modo pu\`o essere addestrata attraverso pi\`u fasi temporali usando l'algoritmo di backpropagation.
-Questo algoritmo viene chiamato \emph{backpropagation through time} (BPTT, backpropagation attraverso il tempo), ed \`e stata introdotta nel 1990~\cite{Werbos:1990}
+Diventa quindi chiaro come una rete dispiegata in questo modo pu\`o essere addestrata attraverso pi\`u fasi temporali usando l'algoritmo di back-propagation.
+Questo algoritmo viene chiamato \emph{back-propagation through time} (BPTT, back-propagation attraverso il tempo), ed \`e stata introdotta nel 1990~\cite{Werbos:1990}
 
 \begin{figure}[tp]
   \centering
@@ -138,15 +138,18 @@ Questo algoritmo viene chiamato \emph{backpropagation through time} (BPTT, backp
   \label{fig:unfoldedSimpleRecurrentNeuralNetwork}
 \end{figure}
 
+% TODO QUI MANCA TUTTA LA PARTE DELLE JORDAN NETWORKS e tutta la letteratura sulle RNN
+% http://arxiv.org/abs/1506.00019 ad esempio
+
 \subsection{Addestramento}
 L'apprendimento con le reti neurali ricorrenti \`e stato a lungo visto come qualcosa di difficile.
 Cos\`i come per tutte le reti neurali, l'ottimizzazione della funzione di perdita \`e un problema NP-Completo.
 Ma l'apprendimento con le reti ricorrenti pu\`o essere reso ancora pi\`u complesso a causa della difficolt\`a nell'apprendere delle dipendenze a lungo raggio.
 Il noto problema della \emph{scomparsa} ed \emph{esplosione} dei gradienti si verifica quando l'errore viene propagato attraverso molte fasi temporali.
-\mytodo{dire di pi\`u a riguardo?} L'impatto dell'input al tempo $\mathcal{T}$ sull'output al tempo $t$ esploder\`a esponenzialmente oppure raggiunger\`a rapidamente zero al crescere di $\mathcal{T} - t$, a seconda se il peso $\abs{w_{jj}}>1$ oppure $\abs{w_{jj}}<1$ ma anche in base alla funzione di attivazione utilizzata %TODO dire di piu
-(ad esempio con una funzione di attivazione $l_j = \sigma$ si verificher\`a maggiormente il problema della sparizione del gradeinte, viceversa con la funzione ReLU $\operatorname{max}(0, x)$ il gradiente esploder\`a).
+\mytodo{dire di pi\`u a riguardo?} L'impatto dell'input al tempo $\mathcal{T}$ sull'output al tempo $t$ esploder\`a esponenzialmente oppure raggiunger\`a rapidamente zero al crescere di $\mathcal{T} - t$, a seconda se il peso $\abs{w_{jj}}>1$ oppure $\abs{w_{jj}}<1$ ma anche in base alla funzione di attivazione utilizzata
+(ad esempio con una funzione di attivazione $l_j = \sigma$ si verificher\`a maggiormente il problema della sparizione del gradiente, viceversa con la funzione ReLU $\operatorname{max}(0, x)$ il gradiente esploder\`a).
 
-Una possibile soluzione al problema consiste nell'usare una versione leggermente modificate dell'algoritmo BPTT che prende il nome di \emph{truncated backpropagation through time} (TBPTT)~\cite{Williams:1989}.
+Una possibile soluzione al problema consiste nell'usare una versione leggermente modificate dell'algoritmo BPTT che prende il nome di \emph{truncated back-propagation through time} (TBPTT)~\cite{Williams:1989}.
 Con l'algoritmo TBPTT viene impostato un valore che indicia il numero massimo di temporali lungo le quali pu\`o essere propagato l'errore.
 In questo modo si attenua il problema dell'esplosione del gradiente perdendo, tuttavia, la capacit\`a di apprendere dipendenze a lungo raggio.
 
@@ -155,7 +158,8 @@ Il problema dell'ottimizzazione rappresenta un fondamentale ostacolo che non pu\
 Tuttavia, recenti studi sia teorici che empirici, suggeriscono che il problema non \`e cos\`i insormontabile nella pratica come si potrebbe pensare.
 
 Inoltre implementazioni sempre pi\`u performanti ed migliorate euristiche per il calcolo dei gradienti hanno reso l'addestramento delle RNN fattibile.
-Ad esempio, implementazioni degli algorotmi di forward a backward propagation che sfruttano la GPU, come Theano e Torch (Sezione~\ref{sec:torch}), hanno semplificato la realizzazione di veloci algoritmi di apprendimento.
+Ad esempio, implementazioni degli algoritmi di forward a backward propagation che sfruttano la GPU, come \emph{Theano} e \emph{Torch} (Sezione~\ref{sec:torch}), hanno semplificato la realizzazione di veloci algoritmi di apprendimento.
+%Potresti parlare un po del modello di calcolo della GPU
 
 \subsection{Architetture moderne}
 Sono due le architetture RNN di maggior successo per l'apprendimento di dati sequenziali e risalgono entrambe al 1997.
@@ -200,7 +204,7 @@ Di seguito sono descritti tutti gli elementi che compongono una cella di memoria
   \item \emph{Constant Error Carousel:} Lo stato interno $c_s$ ha un arco connesso a se stesso (ricorrente) con peso pari ad 1.
   Quest'arco, chiamato \emph{constant error carousel}, si estende tra fasi temporali adiacenti con un peso costante, questo assicura che l'errore possa passare attraverso le fasi temporali senza sparire o esplodere.
   \item \emph{Input Node:} Questo nodo si comporta come un normale nodo, prendendo gli input tanto dal resto della rete alla fase temporale precedente quanto dagli input al tempo corrente.
-  Solitamente questo nodo viene indicato con $g$ e questa tesi non far\`a eccezione, anche se potrebbe generare confusione dato che sarebbe pi\`u appropiato usare $g$ per indicare i cancelli.
+  Solitamente questo nodo viene indicato con $g$ e questa tesi non far\`a eccezione, anche se potrebbe generare confusione dato che sarebbe pi\`u appropriato usare $g$ per indicare i cancelli.
   \`E importante notare che quando usiamo la notazione vettoriale ci riferiamo ad un intero livello di celle.
   Ad esempio, $g$ \`e un vettore che contiene i valori di $g_c$ di tutte le celle in un dato livello.
   Quando, invece, usiamo il pedice $c$, allora ci riferiamo ad una singola cella di memoria.
@@ -213,7 +217,7 @@ Di seguito sono descritti tutti gli elementi che compongono una cella di memoria
   \begin{itemize}
     \item \emph{Input Gate:} Il primo \`e l'\emph{input gate} $i_c$, che \`e moltiplicato per il nodo input $g_c$
     \item \emph{Output Gate:} Il secondo cancello \`e chiamato \emph{output gate} $o_c$.
-    Questo viene moltiplicato per il valore dello stato intenro $s_c$ per produrre il valore in output $v_c$ della cella di memoria.
+    Questo viene moltiplicato per il valore dello stato interno $s_c$ per produrre il valore in output $v_c$ della cella di memoria.
     Questo poi viene dato in pasto al livello nascosto della LSTM nel prossimo passo temporale $h^{(t+1)}$ insieme all'output $\hat{y}^(t)$ generato al passo corrente.
   \end{itemize}
   Questi cancelli vengono indicati con $y_{in}$ e $y_{out}$, tuttavia questa notazione genera confusione perch\`e $y$ \`e solitamente utilizzato per indicare l'output nella letteratura di machine learning.
@@ -229,10 +233,10 @@ Di seguito sono descritti tutti gli elementi che compongono una cella di memoria
   \label{fig:memoryCellWithForgetGate}
 \end{figure}
 
-Fin da quando \`e stato proposto il modello LSTM originale, molte varianto sono state proposte.
+Fin da quando \`e stato proposto il modello LSTM originale, molte varianti sono state proposte.
 Il \emph{forget gate}, proposti nel 2000 da Gers e Schmidhuber~\cite{Gers:2000}, aggiunge un cancello simile a quelli di input e output che permette, alla rete neurale, di svuotare le informazioni presenti nel \emph{constant error carousel}.
-In altre parole, questo ulteriore cancello da alla LSTM la capacit\`a di apprendere quando ``dimenticare'' le informazioni ottenute dalle precendit fasi temporali.
-Il \emph{forget gate} \`e diventato di uso comune, un pilastro dei sucessivi lavori sulle LSTM.
+In altre parole, questo ulteriore cancello da alla LSTM la capacit\`a di apprendere quando ``dimenticare'' le informazioni ottenute dalle precedenti fasi temporali.
+Il \emph{forget gate} \`e diventato di uso comune, un pilastro dei successivi lavori sulle LSTM.
 
 Formalmente, la computazione in una LSTM procede in accordo ai seguenti calcoli che devono essere valutati ad ogni fase temporale.
 Queste equazioni forniscono l'algoritmo completo per una moderna LSTM, comprensiva di forget gate.
@@ -257,14 +261,14 @@ Queste equazioni forniscono l'algoritmo completo per una moderna LSTM, comprensi
 
 dove $\odot$ sta per moltiplicazione elemento per elemento.
 Il calcolo di una LSTM semplice, senza forget gate, \`e dato impostando $f^{(t)} = 1$ per ogni $t$.
-Seguendi l'ultimo stato dell'arte abbiamo usato la funzione tanh $\phi$ per i nodi di input $g$, nonostante l'implementazione originale del modello LSTM prevedesse l'uso di una funzione sigmoide $\sigma$~\cite{Hochreiter:1997}.
+Seguendo l'ultimo stato dell'arte abbiamo usato la funzione tanh $\phi$ per i nodi di input $g$, nonostante l'implementazione originale del modello LSTM prevedesse l'uso di una funzione sigmoide $\sigma$~\cite{Hochreiter:1997}.
 Ancora, $h^{(t-1)}$ \`e un vettore contenente i valori $v_c$ dati in output da ciascuna cella di memoria $c$ del livello nascosto dalla precedente fase temporale.
 
 Intuitivamente, in termini di forward pass dei dati, il modello LSTM pu\`o apprendere quando lasciar passare l'attivazione nello stato interno.
-Finttantoch\`e il cancello di input (\emph{input gate}) resta chiuso (da in output 0), nessuna attivazione pu\`o passare.
-Allo stesso modo, il cancello di output (\emph{output gate}) apprende quando lasciar uscire il valore dello stato intenro.
+Fintantoch\`e il cancello di input (\emph{input gate}) resta chiuso (da in output 0), nessuna attivazione pu\`o passare.
+Allo stesso modo, il cancello di output (\emph{output gate}) apprende quando lasciar uscire il valore dello stato interno.
 Quando entrambi i cancelli sono \emph{chiusi}, l'attivazione rimane confinata, senza subire modifiche ne, tantomeno, influenzare l'output delle fasi temporali intermedie.
-In terminidi backward pass, il \emph{constant error carousel} permette al gradiente di poter essere propagato attraverso molte fasi temporali, senza sparire o esplodere.
+In termini di \emph{backward pass}, il \emph{constant error carousel} permette al gradiente di poter essere propagato attraverso molte fasi temporali, senza sparire o esplodere.
 In quest'ottica, quindi, i cancelli apprendono quando lasciar entrare l'\emph{errore} e quando lasciarlo uscire.
 Nella pratica, il modello LSTM ha dimostrato un'abilit\`a superiore nell'apprendere dinepndenze a lungo raggio, rispetto alle normali RNN.
 Di conseguenza, questo modello, \`e diventato l'attuale stato dell'arte nel campo delle reti neurali.
