@@ -1,31 +1,58 @@
-In questo capitolo introduciamo notazioni formali e diamo una breve spiegazione del funzionamento delle reti neurali e degli strumenti utilizzati.
+In questo capitolo introduciamo notazioni formali e diamo una breve spiegazione
+del funzionamento delle reti neurali e degli strumenti utilizzati.
 
 \section{Il Tempo}
 
 Le RNN non sono limitate a sequenze indicizzate in maniera temporale.
-Sono state usate con successo anche per sequenze di dati non temporali, come ad esempio i dati genetici.
-In ogni caso, la computazione procede nel tempo e molte importanti applicazioni hanno un aspetto temporale esplicito o implicito.
+Sono state usate con successo anche per sequenze di dati non temporali,
+come ad esempio i dati genetici. In ogni caso, la computazione procede nel tempo
+e molte importanti applicazioni hanno un aspetto temporale esplicito o implicito.
 
-Nonostante, in questa tesi, ci riferiremo al tempo i metodi descritti sono applicabili ad una famiglia pi\`u ampia di compiti.
-Parlando di tempo ci riferiamo ad un campione $x^{(t)}$ in input e ad un valore atteso $y^{(t)}$ in output che sono generati in \emph{sequenze di fasi temporali} discrete indicate da $t$
-La nostra sequenza pu\`o essere formata da un numero finito di campioni o da un numero infinito ma numerabile di campioni.
-Se abbiamo a che fare con un numero finito di campioni allora possiamo indicare con $T$ il massimo indice temporale.
-Quindi una sequenza di valori di input consecutivi pu\`o essere scritta come $(x^{(1)}, x^{(2)}, \dots, x^{(T)})$ mentre gli output come $(y^{(1)}, y^{(2)}, \dots, y^{(T)})$.
-Questi valori possono essere dei campioni, presi ad intervalli regolari di tempo, di un processo reale continuo come ad esempio i fotogrammi che compongono un video.
-Gli intervalli di tempo possono anche essere dei semplici valori ordinali senza una durata esatta.
-\`E il caso, ad esempio, delle sequenze genetiche che hanno un ordine ma non un ordine temporale o ancora del linguaggio naturale dove le parole hanno un ordine logico ben preciso che, tuttavia, non corrisponde ad intervalli di temporali ben definiti.
-Ad esempio nella frase ``\emph{Lisa suona il sassofono}'' abbiamo che $x^{(1)}$ = Lisa, $x^{(2)}$ = suona, ecc. Ciascuna parola corrisponde ad intervalli di tempo che non sono costanti, ``\emph{il}'' e ``\emph{sassofono}'' hanno bisogno di tempi diversi per essere pronunciati.
+Nonostante, in questa tesi, ci riferiremo al tempo, i metodi descritti sono
+applicabili ad una famiglia pi\`u ampia di compiti. Parlando di tempo ci riferiamo
+ad un campione $x^{(t)}$ in input e ad un valore atteso $y^{(t)}$ in output che
+sono generati in \emph{sequenze di fasi temporali} discrete indicate da $t$.
+La nostra sequenza pu\`o essere formata da un numero finito di campioni o da un
+numero infinito ma numerabile di campioni. Se abbiamo a che fare con un numero
+finito di campioni allora possiamo indicare con $T$ il massimo indice temporale.
+Quindi una sequenza di valori di input consecutivi pu\`o essere scritta come
+$(x^{(1)}, x^{(2)}, \dots, x^{(T)})$ mentre gli output come
+$(y^{(1)}, y^{(2)}, \dots, y^{(T)})$. Questi valori possono essere dei campioni,
+presi ad intervalli regolari di tempo, di un processo reale continuo come ad
+esempio i fotogrammi che compongono un video. Gli intervalli di tempo possono
+anche essere dei semplici valori ordinali senza una durata esatta. \`E il caso,
+ad esempio, delle sequenze genetiche che hanno un ordine ma non un ordine
+temporale o ancora del linguaggio naturale dove le parole hanno un ordine logico
+ben preciso che, tuttavia, non corrisponde ad intervalli di temporali ben definiti.
+Ad esempio nella frase ``\emph{Lisa suona il sassofono}'' abbiamo
+che $x^{(1)}$ = Lisa, $x^{(2)}$ = suona, ecc. Ciascuna parola corrisponde ad
+intervalli di tempo che non sono costanti, ``\emph{il}'' e ``\emph{sassofono}''
+hanno bisogno di tempi diversi per essere pronunciati.
 
 \section{Reti Neurali}
-Le reti neurali sono modelli computazionali ispirati dalla biologia del sistema nervoso centrale.
-Generalmente una rete neurale \`e formata da un insieme di \emph{neuroni artificiali}, comunemente chiamati \emph{nodi} o \emph{unit\`a}, collegati da un insieme di archi diretti che, intuitivamente, rappresentano le \emph{sinapsi} di una rete neurale biologica.
-Associato ad ogni neurone $j$ vi \`e una funzione di attivazione $l_j$, chiamata anche funzione di collegamento (o funzione link).
-In questa tesi user\`o la notazione ``$l_j$'' invece di ``$h_j$'' (notazione usata in altri documenti) per distinguere la funzione di attivazione $l_j$ dal valore dei nodi nascosti in una rete, che vengono comunemente indicati con \textbf{h} nella letteratura delle RNN.
+Le reti neurali sono modelli computazionali ispirati dalla biologia del sistema
+nervoso centrale. Generalmente una rete neurale \`e formata da un insieme di
+\emph{neuroni artificiali}, comunemente chiamati \emph{nodi} o \emph{unit\`a},
+collegati da un insieme di archi diretti che, intuitivamente, rappresentano le
+\emph{sinapsi} di una rete neurale biologica. Associato ad ogni neurone $j$ vi
+\`e una funzione di attivazione $l_j$, chiamata anche funzione di collegamento
+(o funzione link). In questa tesi user\`o la notazione ``$l_j$'' invece
+di ``$h_j$'' (notazione usata in altri documenti) per distinguere la funzione di
+attivazione $l_j$ dal valore dei nodi nascosti in una rete, che vengono
+comunemente indicati con \textbf{h} nella letteratura delle RNN.
 
-Associato ad ogni arco dal nodo $j^{'}$ al nodo $j$ vi \`e un peso $w_{jj^{'}}$. Seguendo la convenzione adottata in molti altri documenti che trattano reti neurali, indicheremo i neuroni con $j$ e $j^{'}$ mentre, con $w_{jj^{'}}$, indicheremo il peso corrispondente all'arco diretto che parte dal nodo $j^{'}$ e arriva al nodo $j$.
-\`E importante notare che in altri documenti e libri, come ad esempio su Wikipedia, gli indici dei pesi sono invertiti e che $w_{j^{'}j} \neq w_{jj^{'}}$ indica il peso sull'arco diretto dal nodo $j^{'}$ al nodo $j$.
+Associato ad ogni arco dal nodo $j^{'}$ al nodo $j$ vi \`e un peso $w_{jj^{'}}$.
+Seguendo la convenzione adottata in molti altri documenti che trattano reti neurali,
+indicheremo i neuroni con $j$ e $j^{'}$ mentre, con $w_{jj^{'}}$, indicheremo il
+peso corrispondente all'arco diretto che parte dal nodo $j^{'}$ e arriva al nodo $j$.
+\`E importante notare che in altri documenti e libri, come ad esempio su Wikipedia,
+gli indici dei pesi sono invertiti e che $w_{j^{'}j} \neq w_{jj^{'}}$ indica il
+peso sull'arco diretto dal nodo $j^{'}$ al nodo $j$.
 
-Il valore $v_j$ di ciascun neurone $j$ \`e calcolato applicando la sua funzione di attivazione ad una somma pesata dei suoi valori di input (Fugura~\ref{fig:artificialNeuron}): %TODO pensare ad un titolo piu' appropiato
+Il valore $v_j$ di ciascun neurone $j$ \`e calcolato applicando la sua funzione
+di attivazione ad una somma pesata dei suoi valori di input
+(Fugura~\ref{fig:artificialNeuron}): %TODO pensare ad un titolo piu' appropiato
+
 \begin{equation} % \begin{equantion*} per non numerare l'equazione
   v_j = l_j\left( \sum_{j^{'}} w_{jj^{'}} \cdot v_{j^{'}} \right)
 \end{equation}
@@ -38,29 +65,56 @@ Il valore $v_j$ di ciascun neurone $j$ \`e calcolato applicando la sua funzione 
   \caption{Un neurone artificiale calcola una funzione non lineare della somma pesata dei suoi input}
   \label{fig:artificialNeuron}
 \end{figure}
-Per comodit\`a, ci riferiremo alla somma pesata all'interno delle parentesi come l'\emph{attivazione in arrivo} e la indicheremo con $a_j$. Rappresentiamo l'intero processo in figura disegnando i neuroni con dei cerchi mentre gli archi come delle frecce che li collegano.
-Quando possibile, verr\`a utilizato un simbolo per indicare l'esatta funzione di attivazione utilizzata, ad esempio $\sigma$ per la funzione sigmoide.
 
-Scelte abbastanza comuni per la funzione di attivazione includono la funzione sigmoide $\sigma(z) = 1/(1+e^{-z})$ e la funzione \emph{tanh} $\phi(z)=(e^z-e^{-z})/(e^z+e^{-z})$ che \`e diventata molto comune nelle reti neurali di tipo \emph{feedforward} ma \`e stata utilizzata anche in reti neurali ricorrenti~\cite{Sutskever:2011}.
-Un'altra funzione di attivazione che \`e diventata lo stato dell'arte nella ricerca di deep learning \`e la funzione ReLU (\emph{rectified linear unit}) $l_j(z)=\operatorname{max}(0, z)$.
-Questa funzione ha dimostrato di poter migliorare le prestazioni di molte reti neurali in una grande variet\`a di applicazioni, che spaziano dal riconoscimento vocale al riconoscimento di oggetti, ed \`e stata utilizzata anche in reti neurali ricorrenti~\cite{Bengio:2013}.
+Per comodit\`a, ci riferiremo alla somma pesata all'interno delle parentesi come
+l'\emph{attivazione in arrivo} e la indicheremo con $a_j$. Rappresentiamo
+l'intero processo in figura disegnando i neuroni con dei cerchi mentre gli archi
+come delle frecce che li collegano. Quando possibile, verr\`a utilizato un simbolo
+per indicare l'esatta funzione di attivazione utilizzata, ad esempio $\sigma$ per
+la funzione sigmoide.
+
+Scelte abbastanza comuni per la funzione di attivazione includono la funzione
+sigmoide $\sigma(z) = 1/(1+e^{-z})$ e la funzione \emph{tanh}
+$\phi(z)=(e^z-e^{-z})/(e^z+e^{-z})$ che \`e diventata molto comune nelle reti
+neurali di tipo \emph{feedforward} ma \`e stata utilizzata anche in reti neurali
+ricorrenti~\cite{Sutskever:2011}. Un'altra funzione di attivazione che \`e
+diventata lo stato dell'arte nella ricerca di deep learning \`e la funzione
+ReLU (\emph{rectified linear unit}) $l_j(z)=\operatorname{max}(0, z)$. Questa
+funzione ha dimostrato di poter migliorare le prestazioni di molte reti neurali
+in una grande variet\`a di applicazioni, che spaziano dal riconoscimento vocale
+al riconoscimento di oggetti, ed \`e stata utilizzata anche in reti neurali
+ricorrenti~\cite{Bengio:2013}.
 
 La funzione di attivazione da applicare sui nodi di output dipende dall'applicazione.
-Per una classificazione a pi\`u classi, applichiamo al livello di output una funzione non lineare softmax.
-La funzione softmax calcola l'output come:
+Per una classificazione a pi\`u classi, applichiamo al livello di output una
+funzione non lineare softmax. La funzione softmax calcola l'output come:
+
 \begin{equation}
   \hat{y_k} = \frac{e^{a_k}}{\sum_{k^{'}=1}^{K} e^{a_{k^{'}}}}
 \end{equation}
-dove $K$ \`e il numero totale di possibili output (classi). Il denominatore \`e una funzione di normalizzazione che consiste nella somma di funzioni esponenziali dei valori dati in output da tutti i nodi e serve per assicurarsi che l'output totale sommi ad 1.
-Nel caso di regressioni invece viene comunemente utilizzata una funzione lineare come output.
-Dato che nella maggioranza dei casi le reti neurali, specialmente quelle ricorrenti, vengono utilizzate per applicazioni che coinvolgono la classificazione, durante questa tesi, a meno che diversamente specificato, daremo per scontato l'uso della funzione softmax come output.
+
+dove $K$ \`e il numero totale di possibili output (classi). Il denominatore \`e
+una funzione di normalizzazione che consiste nella somma di funzioni esponenziali
+dei valori dati in output da tutti i nodi e serve per assicurarsi che l'output
+totale sommi ad 1. Nel caso di regressioni invece viene comunemente utilizzata
+una funzione lineare come output. Dato che nella maggioranza dei casi le reti
+neurali, specialmente quelle ricorrenti, vengono utilizzate per applicazioni che
+coinvolgono la classificazione, durante questa tesi, a meno che diversamente
+specificato, daremo per scontato l'uso della funzione softmax come output.
 
 \section{Reti Neurali Feedforward}
-Con un modello computazionale a rete neurali, \`e necessario determinare l'ordine con cui la computazione dovrebbe procedere.
-I nodi dovrebbero essere calcolati uno alla volta e poi aggiornati, oppure i valori di tutti i nodi dovrebbero essere calcolati insieme per poi applicare tutti gli aggiornamenti simultaneamente?
-Le \emph{reti neurali feedforward} (Figura~\ref{fig:feedforwardNeuralNetwork}) sono una classe ristretta di reti neurali che affrontano questo prolema proibendo i cicli dal grafo delle connessioni neurali.
-In questo modo tutti i nodi possono essere disposti in livelli.
-I valori in output di ciascun livello possono essere calcolati solo a partire dai valori di output dei livelli precedenti.
+
+Con un modello computazionale a rete neurali, \`e necessario determinare
+l'ordine con cui la computazione dovrebbe procedere. I nodi dovrebbero essere
+calcolati uno alla volta e poi aggiornati, oppure i valori di tutti i nodi
+dovrebbero essere calcolati insieme per poi applicare tutti gli aggiornamenti
+simultaneamente? Le \emph{reti neurali feedforward}
+(Figura~\ref{fig:feedforwardNeuralNetwork}) sono una classe ristretta di reti
+neurali che affrontano questo prolema proibendo i cicli dal grafo delle
+connessioni neurali. In questo modo tutti i nodi possono essere disposti in
+livelli. I valori in output di ciascun livello possono essere calcolati solo a
+partire dai valori di output dei livelli precedenti.
+
 \begin{figure}[tp]
   \centering
   \begin{center}
@@ -72,8 +126,9 @@ I valori in output di ciascun livello possono essere calcolati solo a partire da
   \label{fig:feedforwardNeuralNetwork}
 \end{figure}
 
-L'input $x$ viene dato in pasto ad una rete neurale feedforward impostando i valori dei nodi del livello pi\`u in basso.
-I valori dei nodi di ciascuno dei livelli superiori non potranno essere calcolati finch\`e non saranno disponibili i valori in output $\hat{y}$ dei livelli inferiori.
+L'input $x$ viene dato in pasto ad una rete neurale feedforward impostando i
+valori dei nodi del livello pi\`u in basso. I valori dei nodi di ciascuno dei
+livelli superiori non potranno essere calcolati finch\`e non saranno disponibili i valori in output $\hat{y}$ dei livelli inferiori.
 Queste tipologie di reti sono usate di frequente per applicazioni di apprendimento supervisionato come classificazione e regressione.
 L'apprendimento \`e ottenuto aggiornando iterativamente i pesi dei singoli archi in modo da minimizzare una funzione di perdita, $\mathcal{L}(\hat{y},y)$, che penalizza la distanza fra l'output desiderato $y$ e l'output predetto $\hat{y}$ tramite tecniche di ottimizzazione.
 Nonostante l'algoritmo di ottimizzazione esatto \`e un noto problema NP-Completo, una grande quantit\`a di euristiche pre addestramento e avanzate tecniche di ottimizzazione hanno condotto ad un impressionante numero di successi empirici su molte applicazioni di apprendimento supervisionato.
@@ -138,8 +193,86 @@ Questo algoritmo viene chiamato \emph{back-propagation through time} (BPTT, back
   \label{fig:unfoldedSimpleRecurrentNeuralNetwork}
 \end{figure}
 
+\subsection{Prime architetture di reti ricorrenti}
+
 % TODO QUI MANCA TUTTA LA PARTE DELLE JORDAN NETWORKS e tutta la letteratura sulle RNN
 % http://arxiv.org/abs/1506.00019 ad esempio
+Le basi della ricerca sulle reti ricorrenti risalgono agli anni '80. Nel 1982,
+Hopfield introdusse una famiglia di reti neurali ricorrent con la capacit\`a di
+fare pattern recognition~\cite{Hopfield:1982}.
+
+Queste reti sono definite dai valori dei pesi associati a ciascun arco, mentre la
+funzione d'attivazione \`e una seplice funzione soglia con soglia pari a zero.
+
+In queste reti, un pattern viene passato alla rete tramite l'impostazione dei
+valori dei suoi nodi. Quindi la rete gli algoritmi che aggiornano i pesi della
+rete vengono eseguiti per del tempo, ed eventualmente viene dato in input alla
+rete un altro pattern.
+
+Le reti di Hopfield sono particolarmente utili nel recupero di pattern da dati
+corrotti e sono i precursori delle macchine di Boltzmann e degli auto-encoders.
+
+\begin{figure}[tp]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/jordanNetwork.png}
+  \end{center}
+  \caption{Una rete neurale ricorrente, cos\`i come proposta da Jordan.
+  I nodi di output sono collegati a speciali unit\`a che, nella sequenza temporale
+  successiva, vanno in input a se stessi e ai nodi dei livelli nascosti.}
+  \label{fig:jordanNetwork}
+\end{figure}
+
+Una prima architettura in grado di fare apprendimento supervisionato su dati
+sequenziali fu introdotta da Jordan~\cite{Jordan:1986}.
+
+Si tratta di una rete (Figura~\ref{fig:jordanNetwork}) di tipo feed forward
+con un solo livello nascosto che \`e esteso da speciali unit\`a. I valori proditti
+dai nodi di output vengono dati in pasto a queste unit\`a speciali che, a loro
+volta, danno questi valori in pasto ai nodi del livello nascosto al passo temporale
+successivo. In pi\`u, le unit\`a in una rete di Jordan, sono collegate a se stesse.
+Questo, intuitivamente, permette alla rete di mantenere delle informazioni attraverso
+pi\`u fasi temporali senza che queste abbiano ripercursioni sugli output di ogni
+fase temporale intermedia.
+
+\begin{figure}[tp]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/elmanNetwork.png}
+  \end{center}
+  \caption{Una rete neurale ricorrente, cos\`i come descritta da Elman.
+  I nodi nascosti sono collegati ai nodi di contesto che, nella sequenza temporale
+  successiva, vanno in input ai nodi dei livelli nascosti.}
+  \label{fig:elmanNetwork}
+\end{figure}
+
+L'Architettura introdotta da Elman~\cite{Elman:1990} (Figura~\ref{fig:elmanNetwork}) \`e pi\`u semplice delle prime
+architetture di Jordan. Associato a ciascun nodo del livello nascosto vi \`e una
+unit\`a di contesto\footnote{Jordan chiama le unit\`a speciali ``\emph{state units}''
+mentre Elman chiama le sue corrispondenti strutture ``\emph{context unit}''.}
+Ciascuna di queste unt\`a $j^{'}$ prende in input lo stato del corrispondente
+nodo nascosto $j$ alla precedente fase temporale, attraverso un arco con un peso
+fisso $w_{j^{'}j} = 1$. Questo valore viene poi dato nuovamente in input allo
+stesso nodo nascosto $j$ attraverso un arco normale. Questa architettura \`e
+equivalente a quella di una semplice rete neurale ricorrente nella quale ogni
+nodo nascosto ha un singolo arco ricorrente connesso a se stesso. L'idea di un
+arco ricorrente con peso non variabile che collega i nodi nascosti a se stessi
+sar\`a poi fondamentale nei successivi lavoro sulle reti \emph{LSTM}~\cite{Hochreiter:1997}.
+
+Elman riesce ad addestrare la rete usando l'algoritmo di retro propagazione e
+dimostra, cos\`i, che le reti neurali sono in grado di apprendere delle dipendenze
+temporali. Elman descrive due insiemi di esperimenti. Il primo estende l'operatore
+logico \emph{or esclusivo} (XOR) nel dominio temporale concatenando delle sequenze
+di tre esempi. Per ogni tripla di esempi, ad esempio ``001'' i primi due (``01'')
+vengono scelti casualmente mentre il terzo (``1'') viene impostato eseguendo uno
+xor sui primi due.
+
+Un algoritmo che sceglie in maniera assolutamente aleatorio uno valore fra ``0''
+e ``1'', e ripete questa scelta per tre volte, dovrebbe raggiungere un'accuratezza,
+per questo problema, del 50\%. Invece, un sistema perfetto, dovrebbe operare allo
+stesso modo per i primi due valori, ma indovinare perfettamente il terzo valore,
+ottenendo un'accuratezza del 66.7\%. La semplice rete addestrata da Elman, di fatto
+si avvicina a questo valore massimo ottenibile.
 
 \subsection{Addestramento}
 L'apprendimento con le reti neurali ricorrenti \`e stato a lungo visto come qualcosa di difficile.
@@ -159,7 +292,7 @@ Tuttavia, recenti studi sia teorici che empirici, suggeriscono che il problema n
 
 Inoltre implementazioni sempre pi\`u performanti ed migliorate euristiche per il calcolo dei gradienti hanno reso l'addestramento delle RNN fattibile.
 Ad esempio, implementazioni degli algoritmi di forward a backward propagation che sfruttano la GPU, come \emph{Theano} e \emph{Torch} (Sezione~\ref{sec:torch}), hanno semplificato la realizzazione di veloci algoritmi di apprendimento.
-%Potresti parlare un po del modello di calcolo della GPU
+% TODO Potresti parlare un po del modello di calcolo della GPU
 
 \subsection{Architetture moderne}
 Sono due le architetture RNN di maggior successo per l'apprendimento di dati sequenziali e risalgono entrambe al 1997.
