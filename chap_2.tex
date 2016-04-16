@@ -49,14 +49,6 @@ peso corrispondente all'arco diretto che parte dal nodo $j^{'}$ e arriva al nodo
 gli indici dei pesi sono invertiti e che $w_{j^{'}j} \neq w_{jj^{'}}$ indica il
 peso sull'arco diretto dal nodo $j^{'}$ al nodo $j$.
 
-Il valore $v_j$ di ciascun neurone $j$ \`e calcolato applicando la sua funzione
-di attivazione ad una somma pesata dei suoi valori di input
-(Fugura~\ref{fig:artificialNeuron}): %TODO pensare ad un titolo piu' appropiato
-
-\begin{equation} % \begin{equantion*} per non numerare l'equazione
-  v_j = l_j\left( \sum_{j^{'}} w_{jj^{'}} \cdot v_{j^{'}} \right)
-\end{equation}
-
 \begin{figure}[tp]
   \centering
   \begin{center}
@@ -67,6 +59,12 @@ di attivazione ad una somma pesata dei suoi valori di input
   \label{fig:artificialNeuron}
 \end{figure}
 
+Il valore $v_j$ di ciascun neurone $j$ \`e calcolato applicando la sua funzione
+di attivazione ad una somma pesata dei suoi valori di input
+(Fugura~\ref{fig:artificialNeuron}):
+\begin{equation} % \begin{equantion*} per non numerare l'equazione
+  v_j = l_j\left( \sum_{j^{'}} w_{jj^{'}} \cdot v_{j^{'}} \right)
+\end{equation}
 Per comodit\`a, ci riferiremo alla somma pesata all'interno delle parentesi come
 l'\emph{attivazione in arrivo} e la indicheremo con $a_j$. Rappresentiamo
 l'intero processo in figura disegnando i neuroni con dei cerchi mentre gli archi
@@ -89,11 +87,9 @@ ricorrenti~\cite{Bengio:2013}.
 La funzione di attivazione da applicare sui nodi di output dipende dall'applicazione.
 Per una classificazione a pi\`u classi, applichiamo al livello di output una
 funzione non lineare softmax. La funzione softmax calcola l'output come:
-
 \begin{equation}
   \hat{y_k} = \frac{e^{a_k}}{\sum_{k^{'}=1}^{K} e^{a_{k^{'}}}}
 \end{equation}
-
 dove $K$ \`e il numero totale di possibili output (classi). Il denominatore \`e
 una funzione di normalizzazione che consiste nella somma di funzioni esponenziali
 dei valori dati in output da tutti i nodi e serve per assicurarsi che l'output
@@ -176,14 +172,12 @@ a queste connessioni ricorrenti.
 Le seguenti due equazioni, mostrano i calcoli necessari per eseguire, per ogni
 fase temporale, il passaggio in avanti dei dati di una semplice rete neurale
 ricorrente:
-
 \begin{equation}
   h^{(t)} = \sigma(W_{hx}x + W_{hh}h^{(t-1)} + b_h)
 \end{equation}
 \begin{equation}
   \hat{y}^{(t)} = \operatorname{softmax}(W_{yh}h^{(t)} + b_y)
 \end{equation}
-
 dove $W_{hx}$ \`e la matrice dei pesi tra il livello di input e il livello nascosto
 mentre $W_{hh}$ \`e la matrice dei pesi ricorrenti fra i livelli nascosti di due
 fasi temporali adiacenti. I vettori $b_h$ e $b_y$ rappresentano uno scostamento
@@ -467,7 +461,6 @@ lavori sulle LSTM.
 Formalmente, la computazione in una LSTM procede in accordo ai seguenti calcoli
 che devono essere valutati ad ogni fase temporale. Queste equazioni forniscono
 l'algoritmo completo per una moderna LSTM, comprensiva di forget gate.
-
 \begin{equation}
   g^{(t)} = \phi(W_{gx}x^{(t)} + W_{ih}h^{(t-1)} + b_g)
 \end{equation}
@@ -486,7 +479,6 @@ l'algoritmo completo per una moderna LSTM, comprensiva di forget gate.
 \begin{equation}
   h^{(t)} = s^{(t)} \odot o^{(t)}
 \end{equation}
-
 dove $\odot$ sta per moltiplicazione elemento per elemento.
 Il calcolo di una LSTM semplice, senza forget gate, \`e dato impostando
 $f^{(t)} = 1$ per ogni $t$. Seguendo l'ultimo stato dell'arte abbiamo usato la
