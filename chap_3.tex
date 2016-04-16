@@ -268,13 +268,23 @@ Per ogni dataset sono state addestrate 96 reti LSTM, ciascuna delle quali differ
 Ogni rete neurale \`e stata interrotta alla 150\textsuperscript{$\circ$} epoca.
 Un'epoca corrisponde ad un passaggio completo dell'intero dataset attraverso la rete neurale.
 
-Per valutare le prestazioni di ciascuna rete, sono stati usati i pesi corrispondenti all'epoca con il loss pi\`u basso.
-A queste reti \`e stato poi dato in input il test set, un carattere alla volta, utilizzando lo stesso dizionario calcolato durante la fase di addestramento e con codifica one-hot.
+Per valutare le prestazioni di ciascuna rete, sono stati usati i pesi corrispondenti
+all'epoca con il loss pi\`u basso. A queste reti \`e stato poi dato in input il
+test set, un carattere alla volta, utilizzando lo stesso dizionario calcolato
+durante la fase di addestramento e con codifica one-hot.
 
-La rete ha quindi classificato singolarmente tutti i caratteri del test set, dando a quest'utlimi una classe col suffisso \emph{-S} e \emph{-I}.
-Da questa classificazione \`e stata poi estratta la classe della parola di appartenenza di ogni carattere scegliendola fra la classe di maggioranza dei singoli caratteri
+La rete ha quindi classificato singolarmente tutti i caratteri del test set,
+dando a quest'utlimi una classe col suffisso \emph{-S} e \emph{-I}. L'output
+dato dalla rete per ciascun carattere consiste in un vettore di probabilit\`a.
+Ciascun elemento del vettore corrisponde ad una determinata classe, e il valore
+dell'elemento corrisponde alla probabilit\`a che quella determinata classe sia la
+classe corretta per quel carattere. A partire da questo vettore \`e stata quindi
+seleziona la classe corrispondente alla probabilit\`a pi\`u alta. Una volta ottenute
+le classi di ciascun carattere, \`e stata estratta la classe della parola di appartenenza
+di ogni carattere scegliendola fra la classe di maggioranza dei singoli caratteri.
 
-Ad esempio, i caratteri della parola \texttt{reckons} sono stati classificati dalla rete neurale in questo modo:
+Ad esempio, i caratteri della parola \texttt{reckons} sono stati classificati
+dalla rete neurale in questo modo:
 
 \begin{center}
   \begin{minipage}{5cm}
@@ -569,7 +579,7 @@ Il codice per l'esperimento \`e stato scritto interamente in Lua, utilizza Torch
 
 Torch \`e stato installato nella cartella home, seguendo la documentazione ufficiale:
 
-\lstinputlisting[language={bash}]{snippets/torch_install.sh}
+\lstinputlisting[language={bash}, basicstyle=\small]{snippets/torch_install.sh}
 
 Dopo aver installato Torch, \`e necessario installare alcuni pacchetti aggiuntivi per lua:
 
@@ -592,23 +602,23 @@ Eseguendo questo codice in una REPL Lua, otteniamo come output:
 
 \lstinputlisting[language={[5.0]Lua}]{snippets/gmatch_english_output.lua}
 
-che \`e esattamente ci\`o che ci si aspetterebbe.
+\noindent che \`e esattamente ci\`o che ci si aspetterebbe.
 
 Tuttavia, eseguendo questo codice
 
 \begin{samepage}
-\lstset{inputencoding=utf8/latin1}
-\lstinputlisting[language={[5.0]Lua}]{snippets/gmatch_italian.lua}
+  \lstset{inputencoding=utf8/latin1}
+  \lstinputlisting[language={[5.0]Lua}]{snippets/gmatch_italian.lua}
 \end{samepage}
 
-otteniamo come output
+\noindent otteniamo come output
 
-\begin{minipage}{\textwidth}
-\lstset{inputencoding=utf8/latin1}
-\lstinputlisting[language={[5.0]Lua}]{snippets/gmatch_italian_output.lua}
-\end{minipage}
+% \begin{minipage}{\textwidth}
+  \lstset{inputencoding=utf8/latin1}
+  \lstinputlisting[language={[5.0]Lua}]{snippets/gmatch_italian_output.lua}
+% \end{minipage}
 
-al posto delle lettere accentate di cui \`e composta la stringa.
+\noindent al posto delle lettere accentate di cui \`e composta la stringa.
 Inoltre, nonostante la stringa sia composta da 5 caratteri, l'iteratore ne ha restituiti 10.
 
 Tutto ci\`o \`e dovuto al fatto che lua \`e, come viene definito nella documentazione ufficiale, unicode-agnostic.

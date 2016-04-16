@@ -1,0 +1,57 @@
+Gli attuali algoritmi di PoS-Tagging raggiungono un livello di accuratezza per
+parola davvero ragguardevole, quasi al livello umano. Il PoS-Tagger fornito con il
+progetto open source \emph{NLP4J}, ad esempio, raggiunge un'accuratezza pari al
+97.64\% (valore che scende fino al 92.03\% nel caso di parole sconosciute).
+
+Le configurazini di reti LSTM che, durante gli esperimenti svolti per questa
+tesi, hanno ottenuti i risultati migliori sono arrivati ad un'accuratezza di circa
+il 90\%.
+
+Valore che \`e sostanzialmente lontano da quello che \`e lo stato dell'arte attuale
+nel PoS-Tagging.
+
+In primo luogo, bisogna notare che il 97.64\% si riferisce all'accuratezza
+ottenuta con quelle parole per le quali il PoS-Tagger ha delle stime di
+probabilit\`a, mentre per le altre scende al 92.03\%. Il PoS-Tagger addestrato
+per questa tesi non ha il concetto di parola ma solo quello di carattere. Questo
+implica che si comporter\`a allo stesso modo tanto con parole incontrate nel
+training set durante la fase di addestramento che con parole nuove, mai incontrate
+prima. In una situazione del genere un'accuratezza di circa il 90\% non \`e poi
+cos\`i distante dal 92.03\% di NLP4J. L'unico dizionario che PoS-Tagger basato su
+caratteri deve costruire \`e quello, appunto, dei caratteri. Questi sono in numero
+decisamente pi\`u limitato rispetto al numero di parole (e relative flessi) che
+un linguaggio naturale pu\`o contare. \`E molto improbabile che l'algoritmo non
+riesca a costruire un dizionario completo, durante la fase di addestramento, a
+partire dal training set, a meno che non si stia utilizzando un corpus molto
+limitato. E questo mi porta ad un possibile punto di miglioramento degli
+esperimenti svolti.
+
+I dataset utilizzati, anche se pi\`u che sufficienti per creare dei dizionari
+completi di caratteri, risultano essere nom molto corposi. Il training set pi\`u
+grande, il CoNLL in lingua inglese, arriva a soli 2.8MB di dimensioni. L'addestramento
+della rete neurale avrebbe tratto sicuramente vantaggio dall'uso di un dataset di
+maggiorni dimensioni.
+
+Ancora, sul training set si sarebbe potuto utilizzare un approccio diverso, che
+avrebbe potuto portare a migliramenti anche con dataset modesti come quelli utilizzati.
+I dataset sono stati dati in input alla rete, per intero, pi\`u e pi\`u volte,
+durante la fase di addestramento, ma sempre nello stesso ordine. La peculiarit\`a
+delle reti neurali ricorrenti sta proprio nella loro capacit\`a di apprendere a
+partire da dati sequenziali, ed in particolare le LSTM sono capaci anche di
+``dimenticare''. Non \`e da escludere la possibilit\`a che la rete abbia appreso
+relazioni errate, ad esempio potrebbe aver apprese delle relazioni fra gli ultimi
+caratteri di una frase e i primi caratteri della frase successiva, relazioni che
+ovviamente, sono del tutto casuali e non utili. Questo potrebbe aver deteriorato
+la capacit\`a della rete di classificare correttamente i dati del test set. Un
+modo per ovviare, o limitare, questo problema consiste nel rimescolare le frasi
+del training set tra un epoca e l'altra in modo da spingere la rete neurale a
+dimenticare i dati non pi\`u necessari.
+
+In conclusione, posso affermare che i risultati ottenuti, pur non essendo ai livelli
+di quello che \`e, attualmente, lo stato dell'arte, sono incoraggianti e meritano una
+maggiore investigazione. Bisogna, infatti, sempre tener conto di quanto, gli altri
+algoritmi di PoS-Tagging, siano dipendenti dal linguaggio utilizzato e dalla sua
+particolare morfologia. Gli algoritmi di preprocessing del testo influiscono molto
+sui risultati ottenuti dagli algoritmi di PoS-Tagging, mentre, l'algoritmo proposto
+in questa tesi, non effettua alcun tipo di preprocessing e pu\`o essere, pertanto,
+utilizzato con qualsiasi linguaggio, a patto di avere un training set.
