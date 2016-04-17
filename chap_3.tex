@@ -114,7 +114,7 @@ seguita da un \emph{nome}, allora $X$ \`e un aggettivo.
 In aggiunta a queste informazioni di contesto, molti classificatori utilizzano
 informazioni di natura morfologica come aiuti nel processi di disambiguazione.
 Una di queste regole potrebbe essere: se la parola ambigua/sconosciuta termina
-con il suffisso \emph{-ing} ed \`e preceduta da un verbo, allora eticettala come
+con il suffisso \emph{-ing} ed \`e preceduta da un verbo, allora etichettala come
 verbo (questo ovviamente \`e valido solo per l'inglese)
 
 Alcuni sistemi si spingo anche oltre l'uso di informazioni morfologiche e contestuali,
@@ -164,7 +164,7 @@ tag precedenti.
 L'algoritmo pi\`u comune per implementare l'approccio n-gram \`e conosciuto come
 \emph{Algoritmo Viterbi}. Si tratta di un algoritmo di ricerca che evita
 l'espansione polinomiale di una ricerca per ampiezza ``potando'' l'albero di
-ricerca ad ogni livello usando le migliori $n$ \emph{Stime di Massima Verosomiglianza}
+ricerca ad ogni livello usando le migliori $n$ \emph{Stime di Massima Verosimiglianza}
 (dove $n$ rappresenta il numero di possibili tag della parola seguente).
 
 Il livello di complessit\`a successivo che pu\`o essere introdotto in un
@@ -187,8 +187,8 @@ Le assunzioni alla base di questo modello sono le seguenti.
 Un problema rimane ancora in sospeso in relazione agli approcci descritti fino
 ad ora: come ci si dovrebbe comportare con le parole sconosciute? Alcune delle
 regole di un classificatore basato su regole sono in grado di gestire questo
-problema, ma cosa accade in un modello stocastico? Come \`e possibiel calcolare
-la probabilita che una data parola occorra con un dato tag, se quella parola e
+problema, ma cosa accade in un modello stocastico? Come \`e possibile calcolare
+la probabilit\`a che una data parola occorra con un dato tag, se quella parola e
 sconosciuta al classificatore?
 
 Ci sono diversi possibili soluzioni a questo problema.
@@ -204,8 +204,8 @@ dell'n-gram preso in considerazione.
 
 Ancora, un'altra possibilit\`a \`e quella di calcolare la probabilit\`a che ogni
 tag del tag set ha di presentarsi alla fine dell'n-gram di riferimento, e di
-selezionare la calsse con la probabilit\`a pi\`a alta. Tuttavia questa non \`e
-la soluzione ottimale, soprattutto quandi si utilizza un tag set molto grande.
+selezionare la classe con la probabilit\`a pi\`a alta. Tuttavia questa non \`e
+la soluzione ottimale, soprattutto quando si utilizza un tag set molto grande.
 
 \subsection{Tokenizzazione}
 
@@ -220,7 +220,7 @@ semplice da fare: un programma potrebbe estrarre parole e punteggiatura dal test
 semplicemente dividendolo ad ogni spazio bianco e segno ti punteggiatura.
 
 Ma nessun linguaggio reale \`e perfettamente punteggiato, e la situazione \`e
-sempre pi\`u complicata do cos\`i. Anche in linguaggi ben (ma non perfettamente)
+sempre pi\`u complicata di cos\`i. Anche in linguaggi ben (ma non perfettamente)
 punteggiato, come l'inglese, ci sono casi in cui la corretta tokenizzazione non
 pu\`o essere determinata semplicemente conoscendo la classificazione individuale
 di ciascun singolo carattere oltre a casi in cui sono possibili pi\`u tokenizzazioni

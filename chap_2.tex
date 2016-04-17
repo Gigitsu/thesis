@@ -61,14 +61,14 @@ peso sull'arco diretto dal nodo $j^{'}$ al nodo $j$.
 
 Il valore $v_j$ di ciascun neurone $j$ \`e calcolato applicando la sua funzione
 di attivazione ad una somma pesata dei suoi valori di input
-(Fugura~\ref{fig:artificialNeuron}):
+(Figura~\ref{fig:artificialNeuron}):
 \begin{equation} % \begin{equantion*} per non numerare l'equazione
   v_j = l_j\left( \sum_{j^{'}} w_{jj^{'}} \cdot v_{j^{'}} \right)
 \end{equation}
 Per comodit\`a, ci riferiremo alla somma pesata all'interno delle parentesi come
 l'\emph{attivazione in arrivo} e la indicheremo con $a_j$. Rappresentiamo
 l'intero processo in figura disegnando i neuroni con dei cerchi mentre gli archi
-come delle frecce che li collegano. Quando possibile, verr\`a utilizato un simbolo
+come delle frecce che li collegano. Quando possibile, verr\`a utilizzato un simbolo
 per indicare l'esatta funzione di attivazione utilizzata, ad esempio $\sigma$ per
 la funzione sigmoide.
 
@@ -107,7 +107,7 @@ calcolati uno alla volta e poi aggiornati, oppure i valori di tutti i nodi
 dovrebbero essere calcolati insieme per poi applicare tutti gli aggiornamenti
 simultaneamente? Le \emph{reti neurali feedforward}
 (Figura~\ref{fig:feedforwardNeuralNetwork}) sono una classe ristretta di reti
-neurali che affrontano questo prolema proibendo i cicli dal grafo delle
+neurali che affrontano questo problema proibendo i cicli dal grafo delle
 connessioni neurali. In questo modo tutti i nodi possono essere disposti in
 livelli. I valori in output di ciascun livello possono essere calcolati solo a
 partire dai valori di output dei livelli precedenti.
@@ -158,7 +158,7 @@ indipendenza fallisce.
 \section{Reti Neurali Ricorrenti}
 
 Le \emph{reti neurali ricorrenti} costituiscono una estensione proprio delle reti
-neurali feedforward che, a differenza di quest'ultime, includono degli archi ricorrenti.
+neurali feedforward che, a differenza di queste ultime, includono degli archi ricorrenti.
 Questi archi ricorrenti si estendono su intervalli temporali adiacenti e introducono
 il concetto di tempo nel modello. Mentre le RNN possono non contenere cicli tra
 gli archi convenzionali, gli archi ricorrenti possono formare cicli. Al tempo $t$,
@@ -255,12 +255,12 @@ Una prima architettura in grado di fare apprendimento supervisionato su dati
 sequenziali fu introdotta da Jordan~\cite{Jordan:1986}.
 
 Si tratta di una rete (Figura~\ref{fig:jordanNetwork}) di tipo feed forward
-con un solo livello nascosto che \`e esteso da speciali unit\`a. I valori proditti
+con un solo livello nascosto che \`e esteso da speciali unit\`a. I valori prodotti
 dai nodi di output vengono dati in pasto a queste unit\`a speciali che, a loro
 volta, danno questi valori in pasto ai nodi del livello nascosto al passo temporale
 successivo. In pi\`u, le unit\`a in una rete di Jordan, sono collegate a se stesse.
 Questo, intuitivamente, permette alla rete di mantenere delle informazioni attraverso
-pi\`u fasi temporali senza che queste abbiano ripercursioni sugli output di ogni
+pi\`u fasi temporali senza che queste abbiano ripercussioni sugli output di ogni
 fase temporale intermedia.
 
 \begin{figure}[tp]
@@ -320,7 +320,7 @@ con la funzione ReLU $\operatorname{max}(0, x)$ il gradiente esploder\`a).
 Una possibile soluzione al problema consiste nell'usare una versione leggermente
 modificate dell'algoritmo BPTT che prende il nome di \emph{truncated back-propagation
 through time} (TBPTT)~\cite{Williams:1989}. Con l'algoritmo TBPTT viene impostato
-un valore che indicia il numero massimo di temporali lungo le quali pu\`o essere
+un valore che indica il numero massimo di temporali lungo le quali pu\`o essere
 propagato l'errore. In questo modo si attenua il problema dell'esplosione del
 gradiente perdendo, tuttavia, la capacit\`a di apprendere dipendenze a lungo raggio.
 
@@ -330,7 +330,7 @@ essere risolto semplicemente modificando l'architettura della rete. \`E noto dal
 problema NP-Completo. Tuttavia, recenti studi sia teorici che empirici, suggeriscono
 che il problema non \`e cos\`i insormontabile nella pratica come si potrebbe pensare.
 
-Inoltre implementazioni sempre pi\`u performanti ed migliorate euristiche per il
+Inoltre implementazioni sempre pi\`u performanti e migliorate euristiche per il
 calcolo dei gradienti hanno reso l'addestramento delle RNN fattibile. Ad esempio,
 implementazioni degli algoritmi di forward a backward propagation che sfruttano
 la GPU, come \emph{Theano} e \emph{Torch} (Sezione~\ref{sec:torch}), hanno
@@ -498,7 +498,7 @@ In termini di \emph{backward pass}, il \emph{constant error carousel} permette a
 gradiente di poter essere propagato attraverso molte fasi temporali, senza sparire
 o esplodere. In quest'ottica, quindi, i cancelli apprendono quando lasciar entrare
 l'\emph{errore} e quando lasciarlo uscire. Nella pratica, il modello LSTM ha
-dimostrato un'abilit\`a superiore nell'apprendere dinepndenze a lungo raggio,
+dimostrato un'abilit\`a superiore nell'apprendere dipendenze a lungo raggio,
 rispetto alle normali RNN. Di conseguenza, questo modello, \`e diventato
 l'attuale stato dell'arte nel campo delle reti neurali.
 
@@ -519,7 +519,7 @@ che estende \emph{Lua}, progettato per rispondere, principalmente, a tre esigenz
 L'uso di un linguaggio di scripting (interpretato) con \emph{buone API C} sembra
 essere la scelta migliore per soddisfare il requisito (2). Innanzitutto, un
 linguaggio ad alto livello rende lo sviluppo di programmi pi\`u semplice e pi\`u
-comprensibile rispetto ad uno a basso livello. In secondo luigo, se il linguaggio
+comprensibile rispetto ad uno a basso livello. In secondo luogo, se il linguaggio
 di programmazione \`e \emph{interpretato}, diventa pi\`u facile provare velocemente
 varie idee in maniera interattiva. In fine, con la presenza di buone API C, il
 linguaggio di scripting diventa il ``collante'' fra varie librerie in diversi
@@ -531,7 +531,7 @@ Fra tutti i linguaggi di scripting l'unico che pu\`o soddisfare il vincolo (3)
 \`e Lua. Lua \`e, infatti, il linguaggio interpretato pi\`u veloce (con anche il
 pi\`u veloce compilatore Just In Time (JIT)). Lua ha anche il vantaggio di essere
 stato progettato per essere facilmente \emph{incorporato} in applicazioni scritti
-in C, e fornisce dele ottime API C.
+in C, e fornisce delle ottime API C.
 
 \textbf{Lua} \`e stato pensato per essere usato come un potente e leggero
 linguaggio di scripting per ogni programma che ne avesse bisogno, ed \`e stato
@@ -549,14 +549,14 @@ Lua offre un discreto supporto alla programmazione object-oriented, alla
 programmazione funzionale e alla programmazione data-driven. Il tipo principale
 di Lua \`e la tabella, che implementa un array associativo in maniera molto
 efficiente. Un array associativo altro non \`e che un array i cui indici possono
-essere non solo numeri, ma anche stringhe o qualsiasi altro dipo di valore che
+essere non solo numeri, ma anche stringhe o qualsiasi altro tipo di valore che
 il linguaggio mette a disposizione. Queste tabelle non hanno una dimensione fissa,
 possono essere ridimensionate in maniera dinamica, e possono essere usate come
 ``tabelle virtuali'' per altre tabelle, permettendo, in questo modo, di simulare
 alcune delle caratteristiche del paradigma object-oriented (come ad esempio
 l'ereditariet\`a). Inoltre \`e l'unica struttura dati presente in Lua, ma \`e
 molto potente e flessibile, viene utilizzata per rappresentare semplici array,
-insiemi, record, code e molte altre strutture dati, in maniera semplice, unoforme
+insiemi, record, code e molte altre strutture dati, in maniera semplice, uniforme
 ed efficiente.
 
 \subsection{La Classe Tensor}
@@ -567,7 +567,7 @@ array multi dimensionale. Gran parte delle librerie scritte per Torch7 usano la
 sua classe Tensor per rappresentare dati come segnali, immagini, video ecc. . La
 libreria Tensor di Torch7 fornisce numerose operazioni (fra cui molte operazioni
 di algebra lineare), implementate efficientemente in C, che sfruttano l'insieme
-di istruzioni SSE su piattaforma Intel e, optionalmente, sfruttando le performanti
+di istruzioni SSE su piattaforma Intel e, opzionalmente, sfruttando le performanti
 implementazioni BLAS/Lapack (come Intel MKL) per eseguire operazioni di algebra
 lineare.
 
@@ -610,7 +610,7 @@ definisce una rete neurale sequenziale, mentre \lstinline[language={[5.0]Lua}]|n
 sono i moduli che definiscono i singoli livelli del percettrone. Ogni modulo, o
 contenitore, mette a disposizione delle funzioni standard per calcolare il suo
 output, e funzioni per calcolare le derivate da propagare indietro verso propri
-input e i prori parametri interni durante la backward pass. Data la rete definita
+input e i propri parametri interni durante la backward pass. Data la rete definita
 in precedenza, un input $X$, il gradiente $\partial E / \partial \hat{Y}$ calcolato
 da un errore $E$ e da un output generato $\hat{Y}$, queste tre funzioni possono
 essere eseguiti nel seguente modo:
@@ -646,14 +646,14 @@ CUDA. CUDA (Compute Unified Device Architecture) \`e un framework proprietario
 nVidia, utilizzato per programmare i loro processori grafici e sfruttarli per
 eseguire calcoli general purpose, non legati strettamente alla grafica. CUDA
 permette di controllare l'intera gerarchia di memoria disponibile al processore
-grafico, di cui, i due maggiori componento sono la DRAM, una grande memoria esterna
+grafico, di cui, i due maggiori componenti sono la DRAM, una grande memoria esterna
 ad alta latenza, e la memoria interna al processore, a bassa latenza ma dell'ordine
-di qualche KB. Inoltre permette di controllare anche l'intera gerarchida dei core
+di qualche KB. Inoltre permette di controllare anche l'intera gerarchia dei core
 del processore, nonch\`e i meccanismi di interazione con ciascun core, e con le
 differenti tipologie di memoria.
 
 Per sfruttare CUDA, Torch7 mette a disposizione un nuovo tipo di tensore:
 \lstinline[language={[5.0]Lua}]|torch.CudaTensor|.
-Una volta creato, questo tensore viene memorizzato nella memora DRAM della GPU.
+Una volta creato, questo tensore viene memorizzato nella memoria DRAM della GPU.
 Tutte le operazioni valide per un normale Tensor lo sono anche per un CudaTensor,
 che astrae completamente l'uso del processore grafico.

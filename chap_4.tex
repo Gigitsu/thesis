@@ -16,7 +16,7 @@ parole realizzata per indicarne i tratti grammaticali o sintattici. Avremo ad
 esempio diverse forme flesse di un verbo (\emph{io lavoro}, \emph{tu lavori})
 oppure di un nome (\emph{il lavoro}, \emph{i lavori}).} di una parola alla sua
 forma canonica (non marcata), detta \emph{lemma}\footnote{In linguistica si dice
-emma la citazione di una parola, ossia quella parola che per convenzione è scelta
+lemma la citazione di una parola, ossia quella parola che per convenzione è scelta
 per rappresentare tutte le forme di una flessione.}. Esistono numerosi algoritmi
 di lemmatizzazione come, ad esempio, \emph{Lovins} e \emph{Porter}. Entrambi sono
 algoritmi di \emph{suffix stripping} che rimuovono, quindi, i suffissi alle
@@ -25,14 +25,14 @@ parole a partire da un dizionario di suffissi comuni.
 Altro problema \`e la tokenizzazione, ossia la suddivisione del testo in token.
 Processo che all'apparenza sembra di semplice soluzione ma che nasconde delle
 difficolt\`a. Prendiamo in considerazione \texttt{aren't}, qual \`e la tokenizzazione
-corretta? Possiamo infatti avvere \texttt{aren't}, \texttt{arent}, \texttt{are nt}
+corretta? Possiamo infatti avere \texttt{aren't}, \texttt{arent}, \texttt{are nt}
 e \texttt{aren t}.
 
 I dizionari poi, vengono costruiti a partire alle parole presenti nel corpus.
 La fase di preprocessing \`e fondamentale nella costruzione di un dizionario
-efficiente, altrimenti si avrebbero dizionari enormi con un elevto numero di
+efficiente, altrimenti si avrebbero dizionari enormi con un elevato numero di
 parole che, pur avendo quasi lo stesso significato (es. \emph{lavoro}, \emph{lavori})
-sono rappresentatio in maniera del tutto differente e senza alcuna correlazione.
+sono rappresentati in maniera del tutto differente e senza alcuna correlazione.
 
 In questa tesi si cercher\`a di cambiare approccio. L'unit\`a base sar\`a il
 singolo carattere, piuttosto che il token. Questo approccio semplifica di molto
@@ -52,7 +52,7 @@ la posizione nella parola:
 \begin{itemize}
   \item il suffisso \emph{-S} (\emph{S}tart) per indicare il primo carattere di
         una parola
-  \item il suffissio \emph{-I} (\emph{I}nner) per gli altri caratteri della parola
+  \item il suffisso \emph{-I} (\emph{I}nner) per gli altri caratteri della parola
 \end{itemize}
 
 Ad esempio la
@@ -95,7 +95,7 @@ termina una parola e inizia un'altra. Una soluzione consiste nell'aggiungere un
 carattere di spazio fra i caratteri delle singole parole ed assegnare a questo
 carattere il tag speciale \emph{S}. Inoltre, non \`e che questa sia strettamente
 necessaria, la rete, infatti, potrebbe apprendere lo stesso questa informazione,
-grazie al suffissio dato ai tag (-S indica implicitamente l'inizio di una parola).
+grazie al suffisso dato ai tag (-S indica implicitamente l'inizio di una parola).
 Difficile determinare a priori quale sia la scelta migliore, pertanto si \`e optato
 per adottarle entrambe addestrando pi\`u reti, met\`a delle quali con la soluzione
 dell'aggiungere il carattere di spazio e l'altra met\`a senza.
@@ -144,7 +144,7 @@ test set, un carattere alla volta, utilizzando lo stesso dizionario calcolato
 durante la fase di addestramento e con codifica one-hot.
 
 La rete ha quindi classificato singolarmente tutti i caratteri del test set,
-dando a quest'utlimi una classe col suffisso \emph{-S} e \emph{-I}. L'output
+dando a questi utlimi una classe col suffisso \emph{-S} e \emph{-I}. L'output
 dato dalla rete per ciascun carattere consiste in un vettore di probabilit\`a.
 Ciascun elemento del vettore corrisponde ad una determinata classe, e il valore
 dell'elemento corrisponde alla probabilit\`a che quella determinata classe sia la
@@ -708,7 +708,7 @@ panorama software, in quanto per sfruttare le caratteristiche di tali architettu
 di alcuni problemi scientifici.
 
 L'algoritmo di addestramento di una rete neurale rientra perfettamente in questo
-sottoinsieme, in quanto altamente paralelizzabile. Infatti, per ciascun livello,
+sottoinsieme, in quanto altamente parallelizzabile. Infatti, per ciascun livello,
 i calcoli necessari ad eseguire una propagazione di un singolo nodo sono indipendenti
 da quelli eseguiti per altri nodi dello stesso livello, quindi possono essere
 eseguiti in parallelo.
@@ -717,8 +717,8 @@ Al momento sono due le principali piattaforme che permettono di effettuare calco
 general-purpose su GPU: \emph{CUDA} e \emph{OpenCL}.
 
 CUDA \`e l'architettura di elaborazione in parallelo di NVIDIA.
-Essa permette di sfruttare le GPU compatibli per eseguire processi general-purpose,
-tuttavia si tratta di una proposta propietaria e, attualmente, gli unici dispositivi
+Essa permette di sfruttare le GPU compatibili per eseguire processi general-purpose,
+tuttavia si tratta di una proposta proprietaria e, attualmente, gli unici dispositivi
 compatibili sono le GPU \emph{GeForce}, \emph{ION}, \emph{Quadro} e \emph{Tesla}
 di NVIDIA.
 
@@ -730,7 +730,7 @@ del settore (Intel, NVIDIA, AMD), e infine portato a compimento dal consorzio
 o-profit Khronos Group. Essendo uno standard aperto \`e compatibile con una
 variet\`a di dispositivi, comprese le GPU AMD, Intel ed NVIDIA.
 
-Torch7 \`e compatibile con entrambe le piattaforme, mettendo a disosizione le
+Torch7 \`e compatibile con entrambe le piattaforme, mettendo a disposizione le
 librerie \texttt{cutorch} e \texttt{cunn} per CUDA, \texttt{cltorch} e \texttt{clnn}
 per OpenCl.
 
@@ -743,3 +743,222 @@ Per il supporto alla piattaforma CUDA.
 Per il supporto al framework OpenCL.
 
 \section{Risultati}
+
+Per ciascun dataset \`e stata addestrata una batteria di 96 reti neurali, tutte
+con differenti architetture. Queste reti sono poi state testate utilizzando il
+test set fornito con i dataset. Alla fine dei test, per ogni rete neurale,
+abbiamo ottenuto due insiemi di dati.
+
+Nel primo vi sono tutte le coppie token/tag fornite direttamente dal test set e,
+per tanto, corrette. Queste rappresentano l'obiettivo del nostro classificatore.
+
+Nel secondo vi sono, invece, tutte le coppie token/tag calcolate dalle nostre
+reti neurali.
+
+A partire da questi due insiemi di dati \`e stata, per ogni rete, una matrice di
+confusione dove, ogni colonna della matrice rappresenta i valori predetti, mentre
+ogni riga rappresenta i valori obiettivo della classificazione (quelli del test
+set).
+
+L'elemento sulla riga $i$ e sulla colonna $j$ corrisponde al numero di casi in
+cui il classificatore ha classificato la classe ``vera'' $j$ come classe $i$.
+Attraverso questa matrice \`e osservabile se vi \`e ``confusione'' nella
+classificazione di diverse classi.
+
+Per introdurre alcuni concetti utili alla comprensione dei risultati, facciamo un
+esempio. Immaginiamo di avere una classificatore binario, ossia un classificatore
+che classifica ogni dato in input in sole due classi. Queste classi vengono chiamate,
+comunemente, classe \emph{Positiva} e classe \emph{Negativa}.
+
+La matrice di confusione di un classificatore di questo tipo \`e mostrata nella
+tabella~\ref{tab:bin-conf-matrix}):
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{| c | c | c | c |}
+    \hline
+    & & \multicolumn{2}{c |}{\textbf{Classification}} \\
+    \hline
+    & & Class Pos & Class Neg \\
+    \hline
+    \multirow{2}{*}{\textbf{Status}} & Actual Pos & TP & FN \\
+    \cline{2-4}
+    & Actual Neg & FP & TN \\
+    \hline
+  \end{tabular}
+  \caption{Matrice di confusione binaria} \label{tab:bin-conf-matrix}
+\end{table}
+
+\noindent dove:
+
+\begin{itemize}
+  \item \emph{TP (True Positive)} corrisponde al numero di elementi correttamente classificati
+                  nella classe Positiva
+  \item \emph{FP (False Positive)} corrisponde al numero di elementi classificati, dal classificatore,
+                  nella classe Positiva ma che, in realt\`a, appartengono alla
+                  classe Negativa
+  \item \emph{TN (True Negative)} corrisponde al numero di elementi correttamente classificati
+                  nella classe Negativa
+  \item \emph{FN (False Negative)} corrisponde al numero di elementi classificati, dal classificatore,
+                  nella classe Negativa ma che, in realt\`a, appartengono alla
+                  classe Positiva
+\end{itemize}
+
+Come si pu\`o facilmente notare, i valori presenti sulla diagonale di questa matrice,
+corrispondono al numero di elementi correttamente classificati.
+
+Dalla matrice di confusione possiamo estrarre alcune metriche utili a valutare le
+prestazioni del classificatore.
+
+Per gli esperimenti di questa tesi si \`e scelto di utilizzare l'\emph{accuratezza}
+come metrica.
+
+L'accuratezza ($ACC$) non \`e altro che il rapporto fra il numero di elementi correttamente
+classificate dal classificatore e il numero di elementi totali.
+\begin{equation} \label{eq:accuracy}
+ACC = \frac{(TP + TN)}{(TP + TN + FP + FN)}
+\end{equation}
+
+Questi esempi si riferisco ad una matrice di classificazione binaria, ma sono
+facilmente estendibili ad un numero $n$ di classi. Per un classificatore ad $n$
+classi, infatti, la matrice di confusione sar\`a una matrice $n\times{}n$
+Per calcolare l'accuratezza di un classificatore ad $n$ classi, basti notare
+che il numeratore dell'equazione (\ref{eq:accuracy}) corrisponde alla somma di tutti
+i valori sulla diagonale della matrice, mentre il denominatore alla somma totale
+di tutti gli elementi della matrice.
+
+Di seguito i risultati delle configurazioni pi\`u esemplificative per il dataset
+CoNLL2000.
+
+Partiamo dall'architettura pi\`u modesta in termini di nodi, ossia quella da 128
+nodi.
+
+\begin{figure}[H]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/plots/english/accuracy_128n_word_min_loss.png}
+  \end{center}
+  \caption{L'accuratezza di una rete LSTM da 128 nodi, raggruppata per livelli e
+          lunghezza di sequenza. Per l'addestramento di questa rete \`e stato
+          utilizzato il dataset CoNLL ma non si \`e tenuto conto degli spazi fra
+          un token e l'altro}
+  \label{fig:accEng128nosp}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/plots/english/accuracy_128n_word_min_loss_using_spaces.png}
+  \end{center}
+  \caption{L'accuratezza di una rete LSTM da 128 nodi, raggruppata per livelli e
+          lunghezza di sequenza. Per l'addestramento di questa rete \`e stato
+          utilizzato il dataset CoNLL e si \`e tenuto conto degli spazi fra un
+          token e l'altro}
+  \label{fig:accEng128sp}
+\end{figure}
+
+Dai grafici \ref{fig:accEng128nosp} e \ref{fig:accEng128sp} risulta evidente che
+l'architettura a 128 nodi non offre prestazioni di rilievo, inoltre, la scarsa
+varianza data dalla modifica degli altri parametri (livelli e lunghezza di sequenza)
+suggerisce che il numero di nodi \`e eccessivamente limitato per riuscire a
+gestire adeguatamente la complessit\`a di un PoS-Tagger. Tuttavia questi grafici
+sono molto utili per mostrare un fenomeno che \`e costante anche in tutte le altre
+reti addestrate. Infatti, le prestazioni delle reti addestrate senza l'uso dello
+spazio risultano essere sempre inferiore rispetto alle stesse configurazioni
+addestrate, per\`o, introducendo un carattere di spazio fra un token e l'altro.
+
+Altro aspetto notabile \`e che con l'aumentare del numero di nodi migliorano,
+mediamente, anche le prestazioni delle reti (figure~\ref{fig:accEng256sp},
+ ~\ref{fig:accEng512sp} e ~\ref{fig:accEng1024sp}).
+
+\begin{figure}[H]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/plots/english/accuracy_256n_word_min_loss_using_spaces.png}
+  \end{center}
+  \caption{L'accuratezza di una rete LSTM da 256 nodi, raggruppata per livelli e
+          lunghezza di sequenza. Per l'addestramento di questa rete \`e stato
+          utilizzato il dataset CoNLL e si \`e tenuto conto degli spazi fra un
+          token e l'altro}
+  \label{fig:accEng256sp}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/plots/english/accuracy_512n_word_min_loss_using_spaces.png}
+  \end{center}
+  \caption{L'accuratezza di una rete LSTM da 512 nodi, raggruppata per livelli e
+          lunghezza di sequenza. Per l'addestramento di questa rete \`e stato
+          utilizzato il dataset CoNLL e si \`e tenuto conto degli spazi fra un
+          token e l'altro}
+  \label{fig:accEng512sp}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/plots/english/accuracy_1024n_word_min_loss_using_spaces.png}
+  \end{center}
+  \caption{L'accuratezza di una rete LSTM da 1024 nodi, raggruppata per livelli e
+          lunghezza di sequenza. Per l'addestramento di questa rete \`e stato
+          utilizzato il dataset CoNLL e si \`e tenuto conto degli spazi fra un
+          token e l'altro}
+  \label{fig:accEng1024sp}
+\end{figure}
+
+Con queste due configurazioni, infatti, si raggiunge anche l'85\% di accuratezza
+sul dataset CoNLL2000. Valutare l'impatto che hanno avuto gli altri parametri
+nell'apprendimento \`e, tuttavia, pi\`u difficile.
+
+Si pu\`o notare come, nelle configurazioni da 128 e 256 nodi, il numero di livelli
+e la lunghezza di sequenza non abbia praticamente alcun impatto di rilievo nelle
+performance, mentre nella configurazione da 1024 nodi la lunghezza di sequenza
+sembra avere un minimo impatto. Ma si tratta sempre di valori molto piccoli.
+
+Per quanto riguarda la lunghezza di sequenza, il motivo per cui non ha avuto un
+grosso impatto nelle performance generali, si pu\`o ricercare nel fatto che
+difficilmente le frasi del dataset sono pi\`u lunghe di 60 caratteri. Questo si
+traduce nel fatto che la classe assegnata all'ennesimo carattere della sequenza,
+non sar\`a influenzato dai 60 o pi\`u caratteri che l'hanno preceduto nella
+sequenza. Quindi, aumentare questo valore, non porta a reali benefici.
+
+Tuttavia, non so dare una motivazione adeguata alla poca influenza che hanno avuto
+i livelli nei risultati ottenuti.
+
+I risultati mostrati fino ad ora sono riferiti al dataset CoNLL che, ricordiamo,
+\`e taggato con un tagset che conta, circa, 40 classi. I risultati ottenuti con
+il dataset Evalita presentano le medesime caratteristiche dei risultati precedenti
+ma risultano essere mediamente pi\`u bassi. Ad esempio si prendano in considerazione
+i grafici \ref{fig:accEva512sp} e \ref{fig:accEva1024sp}:
+
+\begin{figure}[H]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/plots/evalita/accuracy_512n_word_min_loss_using_spaces.png}
+  \end{center}
+  \caption{L'accuratezza di una rete LSTM da 512 nodi, raggruppata per livelli e
+          lunghezza di sequenza. Per l'addestramento di questa rete \`e stato
+          utilizzato il dataset Evalita e si \`e tenuto conto degli spazi fra un
+          token e l'altro}
+  \label{fig:accEva512sp}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{./images/plots/evalita/accuracy_1024n_word_min_loss_using_spaces.png}
+  \end{center}
+  \caption{L'accuratezza di una rete LSTM da 1024 nodi, raggruppata per livelli e
+          lunghezza di sequenza. Per l'addestramento di questa rete \`e stato
+          utilizzato il dataset Evalita e si \`e tenuto conto degli spazi fra un
+          token e l'altro}
+  \label{fig:accEva1024sp}
+\end{figure}
+
+
+Questi risultati, sostanzialmente pi\`u bassi rispetto a quelli ottenuti con CoNLL,
+sono di certo motivati dal fatto che il dataset Evalita \`e stato taggato usando
+un tagset con pi\`u di 300 classi. Questo, unito alle modeste dimensioni del dataset
+usato per l'addestramento, hanno sicuramente portato a risultati in generale pi\`u
+bassi.

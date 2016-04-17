@@ -3,7 +3,7 @@ parola davvero ragguardevole, quasi al livello umano. Il PoS-Tagger fornito con 
 progetto open source \emph{NLP4J}, ad esempio, raggiunge un'accuratezza pari al
 97.64\% (valore che scende fino al 92.03\% nel caso di parole sconosciute).
 
-Le configurazini di reti LSTM che, durante gli esperimenti svolti per questa
+Le configurazioni di reti LSTM che, durante gli esperimenti svolti per questa
 tesi, hanno ottenuti i risultati migliori sono arrivati ad un'accuratezza di circa
 il 90\%.
 
@@ -27,13 +27,13 @@ limitato. E questo mi porta ad un possibile punto di miglioramento degli
 esperimenti svolti.
 
 I dataset utilizzati, anche se pi\`u che sufficienti per creare dei dizionari
-completi di caratteri, risultano essere nom molto corposi. Il training set pi\`u
+completi di caratteri, risultano essere non molto corposi. Il training set pi\`u
 grande, il CoNLL in lingua inglese, arriva a soli 2.8MB di dimensioni. L'addestramento
 della rete neurale avrebbe tratto sicuramente vantaggio dall'uso di un dataset di
-maggiorni dimensioni.
+maggiori dimensioni.
 
 Ancora, sul training set si sarebbe potuto utilizzare un approccio diverso, che
-avrebbe potuto portare a migliramenti anche con dataset modesti come quelli utilizzati.
+avrebbe potuto portare a miglioramenti anche con dataset modesti come quelli utilizzati.
 I dataset sono stati dati in input alla rete, per intero, pi\`u e pi\`u volte,
 durante la fase di addestramento, ma sempre nello stesso ordine. La peculiarit\`a
 delle reti neurali ricorrenti sta proprio nella loro capacit\`a di apprendere a
@@ -48,8 +48,8 @@ del training set tra un epoca e l'altra in modo da spingere la rete neurale a
 dimenticare i dati non pi\`u necessari.
 
 In conclusione, posso affermare che i risultati ottenuti, pur non essendo ai livelli
-di quello che \`e, attualmente, lo stato dell'arte, sono incoraggianti e meritano una
-maggiore investigazione. Bisogna, infatti, sempre tener conto di quanto, gli altri
+di quello che \`e, attualmente, lo stato dell'arte, sono incoraggianti e meritano
+ulteriori investigazioni. Bisogna, infatti, sempre tener conto di quanto, gli altri
 algoritmi di PoS-Tagging, siano dipendenti dal linguaggio utilizzato e dalla sua
 particolare morfologia. Gli algoritmi di preprocessing del testo influiscono molto
 sui risultati ottenuti dagli algoritmi di PoS-Tagging, mentre, l'algoritmo proposto
