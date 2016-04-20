@@ -67,7 +67,7 @@ fatta in base al grado di automazione dei processi di addestramento e classifica
 I termini comunemente utilizzati per questo tipo di distinzione sono \emph{supervisionato}
 e \emph{non supervisionato}.
 
-I classificatori supervisionati sono tipicamente basati su corpus gi\`a taggati.
+I classificatori ottenuti mediante approcci supervisionati richiedono la presenza di corpus gi\`a taggati.
 Questi fungono da base per creare qualsiasi strumento da usare durante tutto il
 processo di classificazione. Ad esempio: il dizionario del classificatore, la
 frequenza parola/tag, la probabilit\`a di una sequenza di classi e/o l'insieme
@@ -156,13 +156,13 @@ tutto non corretta.
 
 Un'alternativa all'approccio basato sulla frequenza delle coppie parola/tag
 consiste nel calcolare la probabilit\`a dell'occorrenza di una data sequenza di
-tag. Di solito, ci si riferisce a questo approccio con il termine \emph{n-gram},
+tag. Di solito, ci si riferisce \underline{a questo approccio con il termine \emph{n-gram},} VEDI WIKIPEDIA https://en.wikipedia.org/wiki/N-gram
 il nome \`e dovuto al fatto che il tag migliore per una data parola viene
 determinato dalla probabilit\`a condizionata che questo occorra dati gli \emph{n}
 tag precedenti.
 
 L'algoritmo pi\`u comune per implementare l'approccio n-gram \`e conosciuto come
-\emph{Algoritmo Viterbi}. Si tratta di un algoritmo di ricerca che evita
+\emph{Algoritmo Viterbi} (VITERBI ed NGRAM SONO COSE DIVERSE). Si tratta di un algoritmo di ricerca che evita
 l'espansione polinomiale di una ricerca per ampiezza ``potando'' l'albero di
 ricerca ad ogni livello usando le migliori $n$ \emph{Stime di Massima Verosimiglianza}
 (dove $n$ rappresenta il numero di possibili tag della parola seguente).
