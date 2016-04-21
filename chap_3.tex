@@ -156,12 +156,12 @@ tutto non corretta.
 
 Un'alternativa all'approccio basato sulla frequenza delle coppie parola/tag
 consiste nel calcolare la probabilit\`a dell'occorrenza di una data sequenza di
-tag. Di solito, ci si riferisce a questo approccio con il termine \emph{n-gram},
-il nome \`e dovuto al fatto che il tag migliore per una data parola viene
-determinato dalla probabilit\`a condizionata che questo occorra dati gli \emph{n}
-tag precedenti.
+tag. A volte, ci si riferisce a questo approccio come \emph{approccio n-gram}.
+QUesto \`e dovuto al fatto che il tag migliore per una data parola viene determinato
+in base alla probabilit\`a condizionata che questo occorra dati i tag delle \emph{n}
+parole precedenti.
 
-L'algoritmo pi\`u comune per implementare l'approccio n-gram \`e conosciuto come
+L'algoritmo pi\`u comune per implementare l'approccio \`e conosciuto come
 \emph{Algoritmo Viterbi}. Si tratta di un algoritmo di ricerca che evita
 l'espansione polinomiale di una ricerca per ampiezza ``potando'' l'albero di
 ricerca ad ogni livello usando le migliori $n$ \emph{Stime di Massima Verosimiglianza}

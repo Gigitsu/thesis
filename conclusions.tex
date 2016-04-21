@@ -5,7 +5,7 @@ progetto open source \emph{NLP4J}, ad esempio, raggiunge un'accuratezza pari al
 
 Le configurazioni di reti LSTM che, durante gli esperimenti svolti per questa
 tesi, hanno ottenuti i risultati migliori sono arrivati ad un'accuratezza di circa
-il 90\%.
+il 91\%.
 
 Valore che \`e sostanzialmente lontano da quello che \`e lo stato dell'arte attuale
 nel PoS-Tagging.
@@ -16,7 +16,7 @@ probabilit\`a, mentre per le altre scende al 92.03\%. Il PoS-Tagger addestrato
 per questa tesi non ha il concetto di parola ma solo quello di carattere. Questo
 implica che si comporter\`a allo stesso modo tanto con parole incontrate nel
 training set durante la fase di addestramento che con parole nuove, mai incontrate
-prima. In una situazione del genere un'accuratezza di circa il 90\% non \`e poi
+prima. In una situazione del genere un'accuratezza di circa il 91\% non \`e poi
 cos\`i distante dal 92.03\% di NLP4J. L'unico dizionario che PoS-Tagger basato su
 caratteri deve costruire \`e quello, appunto, dei caratteri. Questi sono in numero
 decisamente pi\`u limitato rispetto al numero di parole (e relative flessi) che
@@ -38,7 +38,7 @@ I dataset sono stati dati in input alla rete, per intero, pi\`u e pi\`u volte,
 durante la fase di addestramento, ma sempre nello stesso ordine. La peculiarit\`a
 delle reti neurali ricorrenti sta proprio nella loro capacit\`a di apprendere a
 partire da dati sequenziali, ed in particolare le LSTM sono capaci anche di
-``dimenticare''. Non \`e da escludere la possibilit\`a che la rete abbia appreso
+``dimenticare". Non \`e da escludere la possibilit\`a che la rete abbia appreso
 relazioni errate, ad esempio potrebbe aver apprese delle relazioni fra gli ultimi
 caratteri di una frase e i primi caratteri della frase successiva, relazioni che
 ovviamente, sono del tutto casuali e non utili. Questo potrebbe aver deteriorato
