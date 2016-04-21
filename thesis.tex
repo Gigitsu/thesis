@@ -73,8 +73,8 @@
 \lstset{basicstyle=\normalsize}
 
 % TODO only for report
-%\oddsidemargin=54pt
-%\evensidemargin=54pt
+\oddsidemargin=54pt
+\evensidemargin=54pt
 % TODO end only for report
 
 \begin{document}
@@ -92,7 +92,7 @@
 \renewcommand{\chaptermark}[1]{\markboth{\sc\small #1}{}}
 \renewcommand{\sectionmark}[1]{\markright{\sc\small \thesection\ #1}}
 
-\newcommand\mytodo[1]{} % \textbf{\textcolor{red}{TODO: #1}}}
+%\newcommand\mytodo[1]{} % \textbf{\textcolor{red}{TODO: #1}}}
 %\renewcommand\mytodo[1]{} %uncommento to remove todos
 
 \newcommand*{\thead}[1]{\multicolumn{1}{c}{\bfseries #1}}
@@ -115,7 +115,9 @@
 \par\vspace*{.25\textheight}{\chancery \centering Alla mia famiglia\par}\end{center}
 \vspace*{\fill}
 Made with \LaTeX
+% TODO only for book
 %\thispagestyle{empty}
+% TODO end only for book
 \mbox{}
 
 %\clearpage
@@ -149,7 +151,7 @@ Made with \LaTeX
 % ----------------------------------------------------------------
 \clearpage
 % TODO only for book
-\newpage\mbox{}\thispagestyle{empty}\newpage
+%\newpage\null\newpage
 % TODO end only for book
 % ----------------------------------------------------------------
 
