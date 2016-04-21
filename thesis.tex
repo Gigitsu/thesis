@@ -4,7 +4,7 @@
 % ----------------------------------------------------------------
 %\documentclass[twoside,openright,a4paper,fleqn]{book}
 %\usepackage{a4}
-\documentclass[final,a4paper,12pt]{report}
+\documentclass[final,a4paper,12pt]{book}
 \usepackage{thesis}
 \usepackage{calligra}
 \usepackage[T1]{fontenc}
@@ -72,8 +72,10 @@
 \linespread {1.5}
 \lstset{basicstyle=\normalsize}
 
-\oddsidemargin=54pt
-\evensidemargin=54pt
+% TODO only for report
+%\oddsidemargin=54pt
+%\evensidemargin=54pt
+% TODO end only for report
 
 \begin{document}
 %\layout
@@ -146,6 +148,9 @@ Made with \LaTeX
 
 % ----------------------------------------------------------------
 \clearpage
+% TODO only for book
+\newpage\mbox{}\thispagestyle{empty}\newpage
+% TODO end only for book
 % ----------------------------------------------------------------
 
 
